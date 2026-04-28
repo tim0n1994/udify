@@ -1,0 +1,103 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "udify"
+version = "0.1.0"
+description = "Intent-driven automated content transformation platform"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+authors = [
+    {name = "Udify Contributors"},
+]
+keywords = ["ai", "modding", "content", "diff", "patch", "mcts", "llm"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "numpy>=1.26",
+    "typing-extensions>=4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.0",
+    "pytest-asyncio>=0.23",
+    "hypothesis>=6.0",
+    "mypy>=1.8",
+    "ruff>=0.2",
+]
+graph = [
+    "neo4j>=5.0",
+]
+ml = [
+    "torch>=2.0",
+    "transformers>=4.30",
+    "sentence-transformers>=2.0",
+]
+server = [
+    "fastapi>=0.109",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.0",
+]
+all = [
+    "udify[dev,graph,ml,server]",
+]
+
+[project.scripts]
+udify = "udify.cli:cli_entry"
+
+[tool.hatch.build.targets.wheel]
+packages = ["udify"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+select = [
+    "E",  # pycodestyle errors
+    "F",  # Pyflakes
+    "I",  # isort
+    "N",  # pep8-naming
+    "W",  # pycodestyle warnings
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "SIM",# flake8-simplify
+]
+ignore = ["E501"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
