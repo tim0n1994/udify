@@ -55,6 +55,7 @@ logs/
 .gstack/
 *.patch.json
 *.mod_backup/
+.udify/
 
 # Database
 *.db

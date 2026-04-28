@@ -66,6 +66,32 @@ class ToolchainManager:
             "download_url": "https://aluigi.altervista.org/quickbms.htm"
         },
         
+        # 反编译工具
+        "dnspy": {
+            "name": "dnSpy",
+            "description": "Unity/.NET 程序集反编译工具",
+            "command": "dnspy",
+            "supported_games": ["Unity"],
+            "output_formats": ["cs", "dll"],
+            "download_url": "https://github.com/dnSpy/dnSpy"
+        },
+        "ilspy": {
+            "name": "ILSpy",
+            "description": ".NET 程序集浏览器和反编译器",
+            "command": "ilspy",
+            "supported_games": ["Unity"],
+            "output_formats": ["cs"],
+            "download_url": "https://github.com/icsharpcode/ILSpy"
+        },
+        "frida": {
+            "name": "Frida",
+            "description": "动态插桩工具，用于运行时分析",
+            "command": "frida",
+            "supported_games": ["Generic"],
+            "output_formats": ["js", "python"],
+            "download_url": "https://frida.re/"
+        },
+        
         # miu2d 特化工具
         "miu2d_converter": {
             "name": "miu2d Converter",
@@ -73,7 +99,7 @@ class ToolchainManager:
             "command": "miu2d-converter",
             "supported_games": ["miu2d"],
             "output_formats": ["json", "png", "wav"],
-            "download_url": "https://github.com/luckyyyyy/miu2d"
+            "download_url": "https://github.com/luckyyyy/miu2d"
         }
     }
     
