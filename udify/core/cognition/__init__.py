@@ -4,10 +4,10 @@
 将用户意图转化为机器可执行的结构化意图。
 """
 
+from udify.core.cognition.conflict_detector import ConflictDetector
+from udify.core.cognition.intent import Constraint, Intent, Reference, StructuredIntent
 from udify.core.cognition.intent_classifier import IntentClassifier
 from udify.core.cognition.reference_resolver import ReferenceResolver
-from udify.core.cognition.conflict_detector import ConflictDetector
-from udify.core.cognition.intent import StructuredIntent, Intent, Constraint, Reference
 
 __all__ = [
     "IntentClassifier",
