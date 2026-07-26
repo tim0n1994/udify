@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 社区与生态深度调研报告
 
 > **来源**: X/Twitter、Reddit、Substack、Nexus Mods、Steam Workshop、独立开发者社区  

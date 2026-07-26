@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 深度调研报告 v3：GitHub、UGC 平台与 AI Agent 生态
 
 > **来源**: GitHub、SpigotMC、CurseForge、MineDojo/Voyager、AutoGPT、Roblox、Fortnite Creative、学术文献  

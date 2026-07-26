@@ -55,6 +55,18 @@ Udify 的根基深植于多个学科：
 | **[VISION.md](docs/VISION.md)** | 项目愿景、多学科深度推演、核心命题、项目意义 | **第一** |
 | **[PLAN.md](docs/PLAN.md)** | 四阶段路线图、模块拆解、技术栈、里程碑、风险 | **第二** |
 | **[ARCHITECTURE.md](docs/ARCHITECTURE.md)** | 系统架构、组件设计、数据模型、接口协议 | **第三** |
+| **[TECHNICAL-DOCUMENTATION-INDEX.md](docs/TECHNICAL-DOCUMENTATION-INDEX.md)** | v3 技术文档索引、阅读顺序、维护规则 | **工程入口** |
+| **[RESEARCH-OSS-INTEGRATION-2026.md](docs/RESEARCH-OSS-INTEGRATION-2026.md)** | 开源生态调研、可集成框架、自研算法突破点 | **v3 调研** |
+| **[ARCHITECTURE-OSS-OPTIMIZED-v3.md](docs/ARCHITECTURE-OSS-OPTIMIZED-v3.md)** | 开源优先的 v3 优化架构 | **v3 架构** |
+| **[MODULE-ATTACK-MAP-v3.md](docs/MODULE-ATTACK-MAP-v3.md)** | 细化到模块和任务 ID 的攻坚地图 | **v3 执行** |
+| **[RESEARCH-AI-NATIVE-GAME-INDUSTRY-STACK-2026.md](docs/RESEARCH-AI-NATIVE-GAME-INDUSTRY-STACK-2026.md)** | 从芯片、主机、游戏软件栈到云基础设施的 AI 原生游戏工业调研 | **工业调研** |
+| **[BLUEPRINT-AI-NATIVE-GAME-INDUSTRY-v1.md](docs/BLUEPRINT-AI-NATIVE-GAME-INDUSTRY-v1.md)** | AI 原生游戏工业技术框架蓝图 | **工业蓝图** |
+| **[MODULE-ATTACK-MAP-AI-GAME-INDUSTRY.md](docs/MODULE-ATTACK-MAP-AI-GAME-INDUSTRY.md)** | 宏大蓝图拆解到最细模块的攻坚地图 | **工业执行** |
+| **[DEEP-TECHNICAL-MODULE-SPEC-AI-GAME-v1.md](docs/DEEP-TECHNICAL-MODULE-SPEC-AI-GAME-v1.md)** | 底层模块 schema、状态、失败模式、指标、测试夹具 | **深层规格** |
+| **[INTERFACE-CONTRACTS-AI-GAME-INDUSTRY-v1.md](docs/INTERFACE-CONTRACTS-AI-GAME-INDUSTRY-v1.md)** | 模块间接口契约、数据所有权、确认矩阵、错误码 | **接口契约** |
+| **[EXECUTION-PATHS-AI-GAME-INDUSTRY-v1.md](docs/EXECUTION-PATHS-AI-GAME-INDUSTRY-v1.md)** | 端到端执行路径和测试矩阵 | **执行路径** |
+| **[SYSTEM-FUNCTIONAL-DESIGN-GUIDE-v1.md](docs/SYSTEM-FUNCTIONAL-DESIGN-GUIDE-v1.md)** | 从整体到局部的系统功能域、子模块、验收和实施顺序 | **功能设计** |
+| **[PROJECT-RESTRUCTURING-IMPLEMENTATION-MAP-v1.md](docs/PROJECT-RESTRUCTURING-IMPLEMENTATION-MAP-v1.md)** | 目标目录、现有代码迁移、Wave 计划和第一阶段任务卡 | **重拆实施** |
 
 ---
 

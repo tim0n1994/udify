@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 系统架构（初步方向）
 
 > **TL;DR**: 分层、模块化、事件驱动的架构。核心原则是"媒介无关的抽象层 + 媒介特定的实现层"。系统由 Udify Core（后端引擎）、Udiface（前端平台）和 Udiscipline（理论与方法学）三大子系统构成，通过明确的消息协议和 API 接口协作。

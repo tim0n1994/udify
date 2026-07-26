@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify API 架构设计
 
 > **版本**: v1.0 | **日期**: 2026-04-27
@@ -1447,7 +1453,7 @@ export function createUdifyClient(config: UdifyConfig = {}): UdifyClient {
 
 // 使用示例
 const client = createUdifyClient({
-  accessToken: 'eyJhbGciOiJIUzI1NiIs...',
+  accessToken: '<jwt-access-token>',
 });
 
 // Type-safe API 调用
