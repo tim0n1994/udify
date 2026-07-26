@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from udify.models.content_graph import ContentEdge, ContentGraph, ContentNode, EdgeType, NodeType
 
@@ -32,23 +32,68 @@ class NPCScriptParser:
 
     # miu2d DSL 命令（基于研究文档中的 218 个命令）
     DSL_COMMANDS = {
-        "say", "move", "addlife", "addmana", "setlife", "setmana",
-        "if", "else", "endif", "loop", "endloop", "break",
-        "runscript", "runparallelscript", "transport", "summon",
-        "giveitem", "takeitem", "openshop", "closeshop",
-        "setflag", "getflag", "addexp", "levelup",
-        "playanimation", "playsound", "playmusic", "stopmusic",
-        "wait", "delay", "random", "goto", "label",
-        "spawnenemy", "removeenemy", "setenemyproperty",
-        "opendoor", "closedoor", "shakecamera",
-        "showmessage", "hidemessage", "choicedialog",
-        "savegame", "loadgame", "gameover",
-        "setplayerproperty", "getplayerproperty",
-        "addmoney", "takemoney", "setmoney",
-        "teleport", "warp", "changescreen",
-        "enablecontrol", "disablecontrol",
-        "showui", "hideui", "fadein", "fadeout",
-        "setweather", "settime", "setlighting",
+        "say",
+        "move",
+        "addlife",
+        "addmana",
+        "setlife",
+        "setmana",
+        "if",
+        "else",
+        "endif",
+        "loop",
+        "endloop",
+        "break",
+        "runscript",
+        "runparallelscript",
+        "transport",
+        "summon",
+        "giveitem",
+        "takeitem",
+        "openshop",
+        "closeshop",
+        "setflag",
+        "getflag",
+        "addexp",
+        "levelup",
+        "playanimation",
+        "playsound",
+        "playmusic",
+        "stopmusic",
+        "wait",
+        "delay",
+        "random",
+        "goto",
+        "label",
+        "spawnenemy",
+        "removeenemy",
+        "setenemyproperty",
+        "opendoor",
+        "closedoor",
+        "shakecamera",
+        "showmessage",
+        "hidemessage",
+        "choicedialog",
+        "savegame",
+        "loadgame",
+        "gameover",
+        "setplayerproperty",
+        "getplayerproperty",
+        "addmoney",
+        "takemoney",
+        "setmoney",
+        "teleport",
+        "warp",
+        "changescreen",
+        "enablecontrol",
+        "disablecontrol",
+        "showui",
+        "hideui",
+        "fadein",
+        "fadeout",
+        "setweather",
+        "settime",
+        "setlighting",
     }
 
     def __init__(self) -> None:
@@ -64,7 +109,7 @@ class NPCScriptParser:
             "ontimer": "定时触发",
         }
 
-    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> List[ContentNode]:
+    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> list[ContentNode]:
         """解析 NPC 脚本并添加到图谱"""
         content = file_path.read_text(encoding="utf-8")
         nodes = []
@@ -110,11 +155,13 @@ class NPCScriptParser:
                         source_path=rel_path,
                     )
                     graph.add_node(dialogue_node)
-                    graph.add_edge(ContentEdge(
-                        source=node_id,
-                        target=dialogue_node.id,
-                        type=EdgeType.CONTAINS,
-                    ))
+                    graph.add_edge(
+                        ContentEdge(
+                            source=node_id,
+                            target=dialogue_node.id,
+                            type=EdgeType.CONTAINS,
+                        )
+                    )
 
         # 提取全局依赖
         self._extract_global_dependencies(content, rel_path, nodes, graph)
@@ -124,9 +171,9 @@ class NPCScriptParser:
 
         return nodes
 
-    def _parse_script_blocks(self, content: str) -> Dict[str, Dict[str, Any]]:
+    def _parse_script_blocks(self, content: str) -> dict[str, dict[str, Any]]:
         """解析脚本块"""
-        blocks: Dict[str, Dict[str, Any]] = {}
+        blocks: dict[str, dict[str, Any]] = {}
         current_block = "main"
         blocks[current_block] = {
             "type": "main",
@@ -195,12 +242,12 @@ class NPCScriptParser:
         # 过滤空块
         return {k: v for k, v in blocks.items() if v["commands"]}
 
-    def _extract_dialogues(self, commands: List[str]) -> List[str]:
+    def _extract_dialogues(self, commands: list[str]) -> list[str]:
         """提取对话文本"""
         dialogues = []
 
         for cmd in commands:
-            cmd_lower = cmd.lower()
+            cmd.lower()
 
             # Say "text"
             say_match = re.match(r'say\s+["\'](.+)["\']', cmd, re.IGNORECASE)
@@ -226,7 +273,7 @@ class NPCScriptParser:
         self,
         content: str,
         rel_path: str,
-        nodes: List[ContentNode],
+        nodes: list[ContentNode],
         graph: ContentGraph,
     ) -> None:
         """提取全局依赖关系"""
@@ -249,13 +296,15 @@ class NPCScriptParser:
                 graph.add_node(ref_node)
 
             for node in nodes:
-                graph.add_edge(ContentEdge(
-                    source=node.id,
-                    target=ref_id,
-                    type=EdgeType.REFERENCES,
-                ))
+                graph.add_edge(
+                    ContentEdge(
+                        source=node.id,
+                        target=ref_id,
+                        type=EdgeType.REFERENCES,
+                    )
+                )
 
-    def _add_file_node(self, rel_path: str, nodes: List[ContentNode], graph: ContentGraph) -> None:
+    def _add_file_node(self, rel_path: str, nodes: list[ContentNode], graph: ContentGraph) -> None:
         """添加文件节点"""
         file_node_id = f"file:{rel_path}"
         if not any(n.id == file_node_id for n in graph.nodes):
@@ -268,11 +317,13 @@ class NPCScriptParser:
             graph.add_node(file_node)
 
             for node in nodes:
-                graph.add_edge(ContentEdge(
-                    source=file_node_id,
-                    target=node.id,
-                    type=EdgeType.CONTAINS,
-                ))
+                graph.add_edge(
+                    ContentEdge(
+                        source=file_node_id,
+                        target=node.id,
+                        type=EdgeType.CONTAINS,
+                    )
+                )
 
     def _generate_node_id(self, file_path: str, block_name: str) -> str:
         """生成节点 ID"""

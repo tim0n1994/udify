@@ -9,9 +9,8 @@ from __future__ import annotations
 import hashlib
 import os
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any
 
 from udify.core.infrastructure.cache_manager import CacheManager
 from udify.core.perception.parsers import INIParser, LuaParser, NPCScriptParser, OBJParser
@@ -21,9 +20,10 @@ from udify.models.content_graph import ContentGraph
 @dataclass
 class FileDependency:
     """文件依赖关系"""
+
     file_path: str
-    depends_on: Set[str] = field(default_factory=set)
-    depended_by: Set[str] = field(default_factory=set)
+    depends_on: set[str] = field(default_factory=set)
+    depended_by: set[str] = field(default_factory=set)
     last_modified: float = 0.0
     content_hash: str = ""
 
@@ -36,9 +36,9 @@ class DependencyGraph:
     """
 
     def __init__(self) -> None:
-        self._files: Dict[str, FileDependency] = {}
+        self._files: dict[str, FileDependency] = {}
 
-    def add_file(self, file_path: str, depends_on: Optional[Set[str]] = None) -> None:
+    def add_file(self, file_path: str, depends_on: set[str] | None = None) -> None:
         """添加文件"""
         if file_path not in self._files:
             self._files[file_path] = FileDependency(file_path=file_path)
@@ -54,7 +54,7 @@ class DependencyGraph:
                     self._files[dep_file] = FileDependency(file_path=dep_file)
                 self._files[dep_file].depended_by.add(file_path)
 
-    def get_affected_files(self, changed_files: Set[str]) -> Set[str]:
+    def get_affected_files(self, changed_files: set[str]) -> set[str]:
         """获取受变更影响的文件集合"""
         affected = set(changed_files)
         queue = list(changed_files)
@@ -77,7 +77,7 @@ class DependencyGraph:
         with open(file_path, "rb") as f:
             return hashlib.sha256(f.read()).hexdigest()
 
-    def detect_changes(self, game_root: Path) -> Set[str]:
+    def detect_changes(self, game_root: Path) -> set[str]:
         """检测变更的文件"""
         changed = set()
 
@@ -99,7 +99,7 @@ class DependencyGraph:
 
         return changed
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """序列化"""
         return {
             file_path: {
@@ -112,7 +112,7 @@ class DependencyGraph:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DependencyGraph":
+    def from_dict(cls, data: dict[str, Any]) -> DependencyGraph:
         """反序列化"""
         graph = cls()
         for file_path, info in data.items():
@@ -143,7 +143,7 @@ class IncrementalPerception:
         self.cache = CacheManager()
         self.dep_graph = DependencyGraph()
         self._is_first_run = True
-        self._base_graph: Optional[ContentGraph] = None
+        self._base_graph: ContentGraph | None = None
 
         # 初始化解析器
         self._ini_parser = INIParser()
@@ -151,7 +151,7 @@ class IncrementalPerception:
         self._npc_parser = NPCScriptParser()
         self._lua_parser = LuaParser()
 
-    async def perceive(self, game_root: Optional[Path] = None) -> ContentGraph:
+    async def perceive(self, game_root: Path | None = None) -> ContentGraph:
         """
         感知游戏目录
 
@@ -235,7 +235,9 @@ class IncrementalPerception:
         elif ext in [".asf", ".msf", ".mpc", ".map", ".mmf"]:
             await self._parse_binary_asset(file_path, rel_path, graph)
 
-    async def _parse_binary_asset(self, file_path: Path, rel_path: str, graph: ContentGraph) -> None:
+    async def _parse_binary_asset(
+        self, file_path: Path, rel_path: str, graph: ContentGraph
+    ) -> None:
         """解析二进制资产（miu2d 格式）"""
         try:
             raw = file_path.read_bytes()
@@ -250,12 +252,19 @@ class IncrementalPerception:
         file_size = len(raw)
 
         # 创建资产节点
-        asset_id = f"asset_{rel_path.replace('/', '_').replace('\\', '_').replace('.', '_')}"
+        sanitized = rel_path.replace("/", "_").replace("\\", "_").replace(".", "_")
+        asset_id = f"asset_{sanitized}"
 
-        from udify.models.content_graph import ContentAsset, ContentNode, NodeType, ContentEdge, EdgeType
+        from udify.models.content_graph import (
+            ContentAsset,
+            ContentEdge,
+            ContentNode,
+            EdgeType,
+            NodeType,
+        )
 
         # 解析 miu2d 特定格式
-        properties: Dict[str, Any] = {
+        properties: dict[str, Any] = {
             "file_size": file_size,
             "extension": ext,
             "header_hex": header[:8].hex(),
@@ -316,21 +325,23 @@ class IncrementalPerception:
             )
             graph.add_node(file_node)
 
-        graph.add_edge(ContentEdge(
-            source=file_node_id,
-            target=asset_id,
-            type=EdgeType.CONTAINS,
-        ))
+        graph.add_edge(
+            ContentEdge(
+                source=file_node_id,
+                target=asset_id,
+                type=EdgeType.CONTAINS,
+            )
+        )
 
     def _detect_audio_format(self, data: bytes) -> str:
         """检测音频格式"""
-        if data[:4] == b'RIFF' or data[:4] == b'RIFX':
+        if data[:4] == b"RIFF" or data[:4] == b"RIFX":
             return "wav"
-        if data[:3] == b'ID3' or data[:2] == b'\xff\xfb' or data[:2] == b'\xff\xf3':
+        if data[:3] == b"ID3" or data[:2] == b"\xff\xfb" or data[:2] == b"\xff\xf3":
             return "mp3"
-        if data[:4] == b'OggS':
+        if data[:4] == b"OggS":
             return "ogg"
-        if data[:4] == b'fLaC':
+        if data[:4] == b"fLaC":
             return "flac"
         return "unknown"
 
@@ -339,12 +350,12 @@ class IncrementalPerception:
         # MPC 格式通常以文件头开始，后面跟随多个文件块
         # 简化实现：查找常见的文件签名
         count = 0
-        signatures = [b'PK', b'RIFF', b'\x89PNG', b'BM', b'GIF']
+        signatures = [b"PK", b"RIFF", b"\x89PNG", b"BM", b"GIF"]
         for sig in signatures:
             count += data.count(sig)
         return max(1, count // 2)
 
-    def _extract_map_info(self, data: bytes) -> Dict[str, Any]:
+    def _extract_map_info(self, data: bytes) -> dict[str, Any]:
         """提取地图信息（启发式）"""
         # 查找常见的地图维度模式
         info = {"width": 0, "height": 0, "layers": 0}
@@ -352,11 +363,11 @@ class IncrementalPerception:
         header = data[:256]
         # 常见的地图文件会有 width/height 的整数值
         for i in range(len(header) - 8):
-            chunk = header[i:i+8]
+            chunk = header[i : i + 8]
             # 查找合理的维度值（16-1024）
             vals = []
             for j in range(0, 8, 2):
-                val = int.from_bytes(chunk[j:j+2], 'little')
+                val = int.from_bytes(chunk[j : j + 2], "little")
                 if 16 <= val <= 1024:
                     vals.append(val)
             if len(vals) >= 2:
@@ -368,22 +379,22 @@ class IncrementalPerception:
     def _count_mmf_streams(self, data: bytes) -> int:
         """统计 MMF 流数（启发式）"""
         # 统计常见的流头标记
-        video_markers = data.count(b'vide') + data.count(b'VIDE')
-        audio_markers = data.count(b'auds') + data.count(b'AUDS')
+        video_markers = data.count(b"vide") + data.count(b"VIDE")
+        audio_markers = data.count(b"auds") + data.count(b"AUDS")
         return max(1, video_markers + audio_markers)
 
-    def _extract_shader_text(self, data: bytes) -> Optional[str]:
+    def _extract_shader_text(self, data: bytes) -> str | None:
         """提取 Shader 文本（如果是文本格式）"""
         try:
-            text = data.decode('utf-8', errors='ignore')
+            text = data.decode("utf-8", errors="ignore")
             # 检查是否像 shader 代码
-            if 'main' in text or 'void' in text or 'float' in text:
+            if "main" in text or "void" in text or "float" in text:
                 return text[:500]
         except Exception:
             pass
         return None
 
-    def _copy_graph_except(self, graph: ContentGraph, exclude_files: Set[str]) -> ContentGraph:
+    def _copy_graph_except(self, graph: ContentGraph, exclude_files: set[str]) -> ContentGraph:
         """复制图谱，排除指定文件相关的节点"""
         from copy import deepcopy
 
@@ -391,12 +402,12 @@ class IncrementalPerception:
 
         # 移除与受影响文件相关的节点
         new_graph.nodes = [
-            n for n in new_graph.nodes
-            if not n.source_path or n.source_path not in exclude_files
+            n for n in new_graph.nodes if not n.source_path or n.source_path not in exclude_files
         ]
 
         new_graph.edges = [
-            e for e in new_graph.edges
+            e
+            for e in new_graph.edges
             if e.source not in [n.id for n in new_graph.nodes if n.source_path in exclude_files]
         ]
 
@@ -413,7 +424,7 @@ class IncrementalPerception:
         """手动失效文件缓存"""
         self.dep_graph.add_file(file_path)
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         return {
             "is_first_run": self._is_first_run,

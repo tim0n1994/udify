@@ -6,10 +6,9 @@ Udify Perception - Lua Script Parser
 
 from __future__ import annotations
 
-import ast
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from udify.models.content_graph import ContentEdge, ContentGraph, ContentNode, EdgeType, NodeType
 
@@ -46,7 +45,7 @@ class LuaParser:
         r"LoadGame\s*\(": "load",
     }
 
-    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> List[ContentNode]:
+    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> list[ContentNode]:
         """解析 Lua 脚本并添加到图谱"""
         content = file_path.read_text(encoding="utf-8")
         nodes = []
@@ -98,9 +97,9 @@ class LuaParser:
 
         return nodes
 
-    def _extract_functions(self, content: str) -> Dict[str, Dict[str, Any]]:
+    def _extract_functions(self, content: str) -> dict[str, dict[str, Any]]:
         """提取 Lua 函数定义"""
-        functions: Dict[str, Dict[str, Any]] = {}
+        functions: dict[str, dict[str, Any]] = {}
 
         # 模式 1: function Name(...)
         pattern1 = re.compile(r"function\s+(\w+)\s*\(([^)]*)\)")
@@ -172,7 +171,7 @@ class LuaParser:
 
         return content[start_pos:pos]
 
-    def _extract_calls(self, content: str) -> List[str]:
+    def _extract_calls(self, content: str) -> list[str]:
         """提取函数调用"""
         calls = []
         pattern = re.compile(r"(\w+)\s*\(")
@@ -182,7 +181,7 @@ class LuaParser:
                 calls.append(call_name)
         return list(set(calls))
 
-    def _extract_modifications(self, content: str) -> List[str]:
+    def _extract_modifications(self, content: str) -> list[str]:
         """提取修改操作"""
         modifies = []
 
@@ -199,21 +198,31 @@ class LuaParser:
 
         return list(set(modifies))
 
-    def _extract_reads(self, content: str) -> List[str]:
+    def _extract_reads(self, content: str) -> list[str]:
         """提取读取操作"""
         reads = []
 
         # 检查全局变量读取
         for match in re.finditer(r"[^\w.](\w+)(?:\s*\[.*?\])?\s*[^=]", content):
             var_name = match.group(1)
-            if var_name not in ["if", "for", "while", "return", "local", "function", "end", "then", "do"]:
+            if var_name not in [
+                "if",
+                "for",
+                "while",
+                "return",
+                "local",
+                "function",
+                "end",
+                "then",
+                "do",
+            ]:
                 reads.append(var_name)
 
         return list(set(reads))
 
-    def _extract_globals(self, content: str) -> Dict[str, Any]:
+    def _extract_globals(self, content: str) -> dict[str, Any]:
         """提取全局配置变量"""
-        globals_vars: Dict[str, Any] = {}
+        globals_vars: dict[str, Any] = {}
 
         # 模式: VAR_NAME = value
         for match in re.finditer(r"^(\w+)\s*=\s*(.+)$", content, re.MULTILINE):
@@ -252,8 +261,9 @@ class LuaParser:
             return False
 
         # 字符串
-        if (value_str.startswith('"') and value_str.endswith('"')) or \
-           (value_str.startswith("'") and value_str.endswith("'")):
+        if (value_str.startswith('"') and value_str.endswith('"')) or (
+            value_str.startswith("'") and value_str.endswith("'")
+        ):
             return value_str[1:-1]
 
         # 表（简化处理）
@@ -262,7 +272,7 @@ class LuaParser:
 
         return value_str
 
-    def _add_file_node(self, rel_path: str, nodes: List[ContentNode], graph: ContentGraph) -> None:
+    def _add_file_node(self, rel_path: str, nodes: list[ContentNode], graph: ContentGraph) -> None:
         """添加文件节点"""
         file_node_id = f"file:{rel_path}"
         if not any(n.id == file_node_id for n in graph.nodes):
@@ -275,11 +285,13 @@ class LuaParser:
             graph.add_node(file_node)
 
             for node in nodes:
-                graph.add_edge(ContentEdge(
-                    source=file_node_id,
-                    target=node.id,
-                    type=EdgeType.CONTAINS,
-                ))
+                graph.add_edge(
+                    ContentEdge(
+                        source=file_node_id,
+                        target=node.id,
+                        type=EdgeType.CONTAINS,
+                    )
+                )
 
     def _generate_node_id(self, file_path: str, name: str) -> str:
         """生成节点 ID"""

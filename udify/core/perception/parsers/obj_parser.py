@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from udify.models.content_graph import ContentEdge, ContentGraph, ContentNode, EdgeType, NodeType
 
@@ -42,7 +42,7 @@ class OBJParser:
             "scene": NodeType.LEVEL,
         }
 
-    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> List[ContentNode]:
+    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> list[ContentNode]:
         """解析 OBJ 文件并添加到图谱"""
         content = file_path.read_text(encoding="utf-8")
         nodes = []
@@ -75,10 +75,10 @@ class OBJParser:
 
         return nodes
 
-    def _parse_objects(self, content: str) -> Dict[str, List[str]]:
+    def _parse_objects(self, content: str) -> dict[str, list[str]]:
         """解析 OBJ 文件中的对象定义"""
-        objects: Dict[str, List[str]] = {}
-        current_object: Optional[str] = None
+        objects: dict[str, list[str]] = {}
+        current_object: str | None = None
 
         for line in content.splitlines():
             stripped = line.strip()
@@ -88,7 +88,9 @@ class OBJParser:
                 continue
 
             # 对象开始标记（多种可能格式）
-            obj_match = re.match(r"^(?:Object|Define|Entry|@)\s+([\w_\-]+)", stripped, re.IGNORECASE)
+            obj_match = re.match(
+                r"^(?:Object|Define|Entry|@)\s+([\w_\-]+)", stripped, re.IGNORECASE
+            )
             if obj_match:
                 current_object = obj_match.group(1)
                 objects[current_object] = []
@@ -101,9 +103,11 @@ class OBJParser:
                 continue
 
             # PascalCase/CamelCase 名称作为对象标记（首字母大写，不含 =，不是缩进行）
-            if (not line.startswith(" ") and not line.startswith("\t")) and \
-               "=" not in stripped and \
-               re.match(r"^[A-Z][a-zA-Z0-9_]*$", stripped):
+            if (
+                (not line.startswith(" ") and not line.startswith("\t"))
+                and "=" not in stripped
+                and re.match(r"^[A-Z][a-zA-Z0-9_]*$", stripped)
+            ):
                 current_object = stripped
                 objects[current_object] = []
                 continue
@@ -113,7 +117,7 @@ class OBJParser:
 
         return objects
 
-    def _infer_node_type(self, obj_data: List[str]) -> NodeType:
+    def _infer_node_type(self, obj_data: list[str]) -> NodeType:
         """根据对象数据推断节点类型"""
         content = "\n".join(obj_data).lower()
 
@@ -133,7 +137,7 @@ class OBJParser:
 
         return NodeType.RESOURCE
 
-    def _extract_properties(self, obj_data: List[str]) -> Dict[str, Any]:
+    def _extract_properties(self, obj_data: list[str]) -> dict[str, Any]:
         """提取对象属性"""
         properties = {}
 
@@ -149,7 +153,9 @@ class OBJParser:
 
         return properties
 
-    def _extract_relationships(self, node: ContentNode, obj_data: List[str], graph: ContentGraph) -> None:
+    def _extract_relationships(
+        self, node: ContentNode, obj_data: list[str], graph: ContentGraph
+    ) -> None:
         """提取对象间关系"""
         content = "\n".join(obj_data).lower()
 
@@ -172,11 +178,13 @@ class OBJParser:
                         break
 
                 if target_id:
-                    graph.add_edge(ContentEdge(
-                        source=node.id,
-                        target=target_id,
-                        type=edge_type,
-                    ))
+                    graph.add_edge(
+                        ContentEdge(
+                            source=node.id,
+                            target=target_id,
+                            type=edge_type,
+                        )
+                    )
 
     def _generate_node_id(self, file_path: str, obj_name: str) -> str:
         """生成节点 ID"""
@@ -184,7 +192,7 @@ class OBJParser:
         safe_name = re.sub(r"[^a-zA-Z0-9_\-]", "_", obj_name)
         return f"{safe_file}_{safe_name}"
 
-    def _add_file_node(self, rel_path: str, nodes: List[ContentNode], graph: ContentGraph) -> None:
+    def _add_file_node(self, rel_path: str, nodes: list[ContentNode], graph: ContentGraph) -> None:
         """添加文件节点并建立包含关系"""
         file_node_id = f"file:{rel_path}"
         if not any(n.id == file_node_id for n in graph.nodes):
@@ -197,11 +205,13 @@ class OBJParser:
             graph.add_node(file_node)
 
             for node in nodes:
-                graph.add_edge(ContentEdge(
-                    source=file_node_id,
-                    target=node.id,
-                    type=EdgeType.CONTAINS,
-                ))
+                graph.add_edge(
+                    ContentEdge(
+                        source=file_node_id,
+                        target=node.id,
+                        type=EdgeType.CONTAINS,
+                    )
+                )
 
     def _convert_value(self, value: str) -> Any:
         """转换属性值类型"""
@@ -240,8 +250,9 @@ class OBJParser:
             return converted
 
         # 去掉引号的字符串
-        if (value.startswith('"') and value.endswith('"')) or \
-           (value.startswith("'") and value.endswith("'")):
+        if (value.startswith('"') and value.endswith('"')) or (
+            value.startswith("'") and value.endswith("'")
+        ):
             return value[1:-1]
 
         return value

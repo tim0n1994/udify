@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from udify.models.content_graph import ContentGraph, ContentNode, NodeType
 
@@ -28,7 +28,7 @@ class INIParser:
     """
 
     def __init__(self) -> None:
-        self._type_hints: Dict[str, type] = {
+        self._type_hints: dict[str, type] = {
             "MaxLife": int,
             "MaxMana": int,
             "Strength": int,
@@ -46,7 +46,7 @@ class INIParser:
             "DropRate": float,
         }
 
-    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> List[ContentNode]:
+    def parse(self, file_path: Path, rel_path: str, graph: ContentGraph) -> list[ContentNode]:
         """
         解析 INI 文件并添加到图谱
 
@@ -92,17 +92,20 @@ class INIParser:
                 graph.add_node(file_node)
 
             from udify.models.content_graph import ContentEdge, EdgeType
-            graph.add_edge(ContentEdge(
-                source=file_node_id,
-                target=node_id,
-                type=EdgeType.CONTAINS,
-            ))
+
+            graph.add_edge(
+                ContentEdge(
+                    source=file_node_id,
+                    target=node_id,
+                    type=EdgeType.CONTAINS,
+                )
+            )
 
         return nodes
 
-    def _parse_sections(self, content: str) -> Dict[str, Dict[str, str]]:
+    def _parse_sections(self, content: str) -> dict[str, dict[str, str]]:
         """解析 INI 内容为 Section 字典"""
-        sections: Dict[str, Dict[str, str]] = {}
+        sections: dict[str, dict[str, str]] = {}
         current_section = None
 
         for line in content.splitlines():
@@ -131,7 +134,7 @@ class INIParser:
         self,
         file_path: str,
         section_name: str,
-        properties: Dict[str, str],
+        properties: dict[str, str],
     ) -> NodeType:
         """根据上下文推断节点类型"""
         path_lower = file_path.lower()
@@ -179,7 +182,7 @@ class INIParser:
         safe_section = re.sub(r"[^a-zA-Z0-9_\-]", "_", section_name)
         return f"{safe_file}_{safe_section}"
 
-    def _convert_types(self, properties: Dict[str, str]) -> Dict[str, Any]:
+    def _convert_types(self, properties: dict[str, str]) -> dict[str, Any]:
         """转换属性值为适当类型"""
         result = {}
         for key, value in properties.items():
@@ -238,7 +241,7 @@ class INIParser:
             # 检查是否进入目标 Section
             if stripped.startswith("[") and stripped.endswith("]"):
                 section = stripped[1:-1].strip()
-                in_target_section = (section == section_name)
+                in_target_section = section == section_name
                 continue
 
             # 在目标 Section 中查找键
@@ -246,7 +249,7 @@ class INIParser:
                 current_key = line.split("=", 1)[0].strip()
                 if current_key == key:
                     # 保持缩进
-                    indent = line[:len(line) - len(line.lstrip())]
+                    indent = line[: len(line) - len(line.lstrip())]
                     lines[i] = f"{indent}{key}={new_value}"
                     modified = True
                     break
