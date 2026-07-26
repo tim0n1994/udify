@@ -9,18 +9,25 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from udify.models.content_graph import ContentGraph, ContentNode, ContentEdge, MediaType, NodeType, EdgeType
-from udify.models.cdl_patch import CDLPatch, PatchOperation, OpType
 from udify.core.session.session_manager import ModSession, SessionManager, SessionStatus
+from udify.models.cdl_patch import CDLPatch
+from udify.models.content_graph import (
+    ContentEdge,
+    ContentGraph,
+    ContentNode,
+    EdgeType,
+    MediaType,
+    NodeType,
+)
 
 
 class GraphSerializer:
     """图谱序列化器"""
 
     @staticmethod
-    def to_dict(graph: ContentGraph) -> Dict[str, Any]:
+    def to_dict(graph: ContentGraph) -> dict[str, Any]:
         """序列化为字典"""
         return {
             "version": "1.0",
@@ -61,7 +68,7 @@ class GraphSerializer:
         }
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> ContentGraph:
+    def from_dict(data: dict[str, Any]) -> ContentGraph:
         """从字典反序列化"""
         graph = ContentGraph(
             media_type=MediaType(data.get("media_type", "unknown")),
@@ -98,7 +105,7 @@ class SessionSerializer:
     """会话序列化器"""
 
     @staticmethod
-    def to_dict(session: ModSession) -> Dict[str, Any]:
+    def to_dict(session: ModSession) -> dict[str, Any]:
         """序列化会话"""
         return {
             "version": "1.0",
@@ -126,7 +133,7 @@ class SessionSerializer:
         }
 
     @staticmethod
-    def from_dict(data: Dict[str, Any]) -> ModSession:
+    def from_dict(data: dict[str, Any]) -> ModSession:
         """反序列化会话"""
         session = ModSession(
             session_id=data["session_id"],
@@ -174,7 +181,7 @@ class StatePersistence:
         path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
         return path
 
-    def load_session(self, session_id: str) -> Optional[ModSession]:
+    def load_session(self, session_id: str) -> ModSession | None:
         """加载会话"""
         path = self.sessions_dir / f"{session_id}.json"
         if not path.exists():
@@ -183,7 +190,7 @@ class StatePersistence:
         data = json.loads(path.read_text(encoding="utf-8"))
         return SessionSerializer.from_dict(data)
 
-    def list_sessions(self) -> List[str]:
+    def list_sessions(self) -> list[str]:
         """列出所有保存的会话 ID"""
         return [p.stem for p in self.sessions_dir.glob("*.json")]
 
@@ -202,7 +209,7 @@ class StatePersistence:
         path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
         return path
 
-    def load_graph(self, name: str) -> Optional[ContentGraph]:
+    def load_graph(self, name: str) -> ContentGraph | None:
         """加载图谱"""
         path = self.graphs_dir / f"{name}.json"
         if not path.exists():
@@ -211,7 +218,7 @@ class StatePersistence:
         data = json.loads(path.read_text(encoding="utf-8"))
         return GraphSerializer.from_dict(data)
 
-    def list_graphs(self) -> List[str]:
+    def list_graphs(self) -> list[str]:
         """列出所有保存的图谱"""
         return [p.stem for p in self.graphs_dir.glob("*.json")]
 

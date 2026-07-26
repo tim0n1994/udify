@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class MCTSConfig:
     """MCTS 配置"""
+
     num_iterations: int = 100
     exploration_constant: float = 1.414
     max_depth: int = 10
@@ -26,6 +27,7 @@ class MCTSConfig:
 @dataclass
 class CostConfig:
     """成本配置"""
+
     budget_per_session: float = 0.5  # 美元
     llm_timeout_seconds: float = 30.0
     planning_timeout_seconds: float = 10.0
@@ -37,6 +39,7 @@ class CostConfig:
 @dataclass
 class CacheConfig:
     """缓存配置"""
+
     l1_max_size: int = 1000
     l2_directory: str = ".udify/cache"
     l2_max_size_bytes: int = int(1e9)
@@ -49,8 +52,9 @@ class CacheConfig:
 @dataclass
 class SecurityConfig:
     """安全配置"""
+
     max_input_length: int = 1000
-    forbidden_keywords: List[str] = field(default_factory=list)
+    forbidden_keywords: list[str] = field(default_factory=list)
     sandbox_memory_limit: str = "512m"
     sandbox_cpu_limit: float = 1.0
     sandbox_timeout_seconds: int = 10
@@ -60,16 +64,29 @@ class SecurityConfig:
 @dataclass
 class GameModConfig:
     """游戏魔改特化配置"""
+
     max_mod_operations: int = 50
     max_numeric_scale: float = 10.0
     min_numeric_scale: float = 0.1
     preservative_bias: float = 0.7
     enable_preview_mode: bool = True
     enable_auto_rollback: bool = True
-    supported_formats: List[str] = field(default_factory=lambda: [
-        ".ini", ".obj", ".txt", ".npc", ".lua",
-        ".asf", ".msf", ".mpc", ".map", ".mmf", ".shd", ".xnb",
-    ])
+    supported_formats: list[str] = field(
+        default_factory=lambda: [
+            ".ini",
+            ".obj",
+            ".txt",
+            ".npc",
+            ".lua",
+            ".asf",
+            ".msf",
+            ".mpc",
+            ".map",
+            ".mmf",
+            ".shd",
+            ".xnb",
+        ]
+    )
 
 
 class ConfigCenter:
@@ -87,7 +104,7 @@ class ConfigCenter:
             forbidden_keywords=["rm -rf", "drop table", "delete from", "format c:"],
         )
         self.game_mod = GameModConfig()
-        self._overrides: Dict[str, Any] = {}
+        self._overrides: dict[str, Any] = {}
 
     def load_from_env(self) -> None:
         """从环境变量加载配置"""
@@ -138,7 +155,7 @@ class ConfigCenter:
 
         return default
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """导出为字典"""
         return {
             "mcts": self.mcts.__dict__,

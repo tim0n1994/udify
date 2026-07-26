@@ -12,21 +12,22 @@ import shutil
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class BackupSnapshot:
     """备份快照"""
+
     snapshot_id: str
     game_root: str
     created_at: datetime
     description: str
     file_count: int
     total_size: int
-    file_hashes: Dict[str, str] = field(default_factory=dict)
+    file_hashes: dict[str, str] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "snapshot_id": self.snapshot_id,
             "game_root": self.game_root,
@@ -53,14 +54,14 @@ class BackupManager:
     def __init__(self, backup_dir: Path = Path(".udify/backups")) -> None:
         self.backup_dir = backup_dir
         self.backup_dir.mkdir(parents=True, exist_ok=True)
-        self._snapshots: List[BackupSnapshot] = []
+        self._snapshots: list[BackupSnapshot] = []
         self._load_index()
 
     def create_snapshot(
         self,
         game_root: Path,
         description: str = "",
-        session_id: Optional[str] = None,
+        session_id: str | None = None,
     ) -> BackupSnapshot:
         """
         创建完整快照备份
@@ -69,7 +70,7 @@ class BackupManager:
         snapshot_dir = self.backup_dir / snapshot_id
         snapshot_dir.mkdir(parents=True, exist_ok=True)
 
-        file_hashes: Dict[str, str] = {}
+        file_hashes: dict[str, str] = {}
         file_count = 0
         total_size = 0
 
@@ -105,7 +106,7 @@ class BackupManager:
 
         return snapshot
 
-    def restore_snapshot(self, snapshot_id: str, game_root: Path) -> Dict[str, Any]:
+    def restore_snapshot(self, snapshot_id: str, game_root: Path) -> dict[str, Any]:
         """
         从快照恢复
 
@@ -142,8 +143,8 @@ class BackupManager:
         self,
         game_root: Path,
         base_snapshot_id: str,
-        session_id: Optional[str] = None,
-    ) -> Optional[BackupSnapshot]:
+        session_id: str | None = None,
+    ) -> BackupSnapshot | None:
         """
         基于基础快照创建差异备份
         """
@@ -155,7 +156,7 @@ class BackupManager:
         delta_dir = self.backup_dir / delta_id
         delta_dir.mkdir(parents=True, exist_ok=True)
 
-        file_hashes: Dict[str, str] = {}
+        file_hashes: dict[str, str] = {}
         file_count = 0
         total_size = 0
 
@@ -193,14 +194,14 @@ class BackupManager:
 
         return snapshot
 
-    def get_snapshot(self, snapshot_id: str) -> Optional[BackupSnapshot]:
+    def get_snapshot(self, snapshot_id: str) -> BackupSnapshot | None:
         """获取快照"""
         for s in self._snapshots:
             if s.snapshot_id == snapshot_id:
                 return s
         return None
 
-    def list_snapshots(self) -> List[Dict[str, Any]]:
+    def list_snapshots(self) -> list[dict[str, Any]]:
         """列出所有快照"""
         return [s.to_dict() for s in self._snapshots]
 
@@ -253,14 +254,16 @@ class BackupManager:
             try:
                 data = json.loads(index_path.read_text(encoding="utf-8"))
                 for item in data:
-                    self._snapshots.append(BackupSnapshot(
-                        snapshot_id=item["snapshot_id"],
-                        game_root=item["game_root"],
-                        created_at=datetime.fromisoformat(item["created_at"]),
-                        description=item.get("description", ""),
-                        file_count=item.get("file_count", 0),
-                        total_size=item.get("total_size", 0),
-                        file_hashes=item.get("file_hashes", {}),
-                    ))
+                    self._snapshots.append(
+                        BackupSnapshot(
+                            snapshot_id=item["snapshot_id"],
+                            game_root=item["game_root"],
+                            created_at=datetime.fromisoformat(item["created_at"]),
+                            description=item.get("description", ""),
+                            file_count=item.get("file_count", 0),
+                            total_size=item.get("total_size", 0),
+                            file_hashes=item.get("file_hashes", {}),
+                        )
+                    )
             except Exception:
                 pass

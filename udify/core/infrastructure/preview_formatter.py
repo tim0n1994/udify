@@ -6,7 +6,7 @@ Udify Preview Formatter
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 
 class PreviewFormatter:
@@ -23,19 +23,20 @@ class PreviewFormatter:
     def __init__(self, fmt: str = "terminal") -> None:
         self.fmt = fmt
 
-    def format_diffs(self, diffs: List[Dict[str, Any]]) -> str:
+    def format_diffs(self, diffs: list[dict[str, Any]]) -> str:
         """格式化 diff 列表"""
         if self.fmt == "markdown":
             return self._format_markdown(diffs)
         elif self.fmt == "json":
             import json
+
             return json.dumps(diffs, indent=2, ensure_ascii=False)
         elif self.fmt == "terminal":
             return self._format_terminal(diffs)
         else:
             return self._format_text(diffs)
 
-    def _format_markdown(self, diffs: List[Dict[str, Any]]) -> str:
+    def _format_markdown(self, diffs: list[dict[str, Any]]) -> str:
         """Markdown 格式"""
         lines = ["# Mod 预览", ""]
 
@@ -69,7 +70,7 @@ class PreviewFormatter:
 
         return "\n".join(lines)
 
-    def _format_terminal(self, diffs: List[Dict[str, Any]]) -> str:
+    def _format_terminal(self, diffs: list[dict[str, Any]]) -> str:
         """带颜色的终端格式"""
         lines = []
 
@@ -77,7 +78,7 @@ class PreviewFormatter:
         GREEN = chr(27) + "[92m"
         RED = chr(27) + "[91m"
         YELLOW = chr(27) + "[93m"
-        CYAN = chr(27) + "[96m"
+        chr(27) + "[96m"
         RESET = chr(27) + "[0m"
         BOLD = chr(27) + "[1m"
 
@@ -127,7 +128,7 @@ class PreviewFormatter:
 
         return "\n".join(lines)
 
-    def _format_text(self, diffs: List[Dict[str, Any]]) -> str:
+    def _format_text(self, diffs: list[dict[str, Any]]) -> str:
         """纯文本格式"""
         lines = ["=== Mod 预览 ===", ""]
 
@@ -157,7 +158,7 @@ class PreviewFormatter:
 
         return "\n".join(lines)
 
-    def format_summary(self, stats: Dict[str, Any]) -> str:
+    def format_summary(self, stats: dict[str, Any]) -> str:
         """格式化统计摘要"""
         if self.fmt == "terminal":
             BOLD = chr(27) + "[1m"

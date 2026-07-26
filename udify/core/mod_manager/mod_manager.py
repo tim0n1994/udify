@@ -6,16 +6,15 @@ Udify Mod Manager - Multi-Mod Manager
 
 from __future__ import annotations
 
-from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional, Set
-from uuid import UUID, uuid4
+from typing import Any
 
 
 class ModStatus(Enum):
     """Mod 状态"""
+
     DRAFT = auto()
     INSTALLED = auto()
     ACTIVE = auto()
@@ -27,14 +26,15 @@ class ModStatus(Enum):
 @dataclass
 class ModConflict:
     """Mod 冲突"""
+
     conflict_type: str  # file_collision, semantic_conflict, dependency_missing
     mod_a: str
     mod_b: str
     description: str
-    file_path: Optional[str] = None
+    file_path: str | None = None
     severity: str = "error"  # warning, error, critical
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "conflict_type": self.conflict_type,
             "mod_a": self.mod_a,
@@ -48,6 +48,7 @@ class ModConflict:
 @dataclass
 class InstalledMod:
     """已安装的 Mod"""
+
     mod_id: str
     name: str
     version: str
@@ -55,12 +56,12 @@ class InstalledMod:
     status: ModStatus = ModStatus.INSTALLED
     install_order: int = 0
     install_time: datetime = field(default_factory=lambda: datetime.now().replace(tzinfo=None))
-    files: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
-    conflicts: List[ModConflict] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    files: list[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
+    conflicts: list[ModConflict] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "mod_id": self.mod_id,
             "name": self.name,
@@ -78,12 +79,13 @@ class InstalledMod:
 @dataclass
 class ModStack:
     """Mod 堆栈"""
-    mods: List[InstalledMod]
-    load_order: List[str]
-    conflicts: List[ModConflict]
+
+    mods: list[InstalledMod]
+    load_order: list[str]
+    conflicts: list[ModConflict]
     is_valid: bool = True
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "mods": [m.to_dict() for m in self.mods],
             "load_order": self.load_order,
@@ -95,21 +97,23 @@ class ModStack:
 @dataclass
 class InstallResult:
     """安装结果"""
+
     success: bool
     mod_id: str
-    conflicts: List[ModConflict]
-    errors: List[str]
-    installed_files: List[str]
+    conflicts: list[ModConflict]
+    errors: list[str]
+    installed_files: list[str]
 
 
 @dataclass
 class UninstallResult:
     """卸载结果"""
+
     success: bool
     mod_id: str
-    removed_files: List[str]
-    reverted_files: List[str]
-    errors: List[str]
+    removed_files: list[str]
+    reverted_files: list[str]
+    errors: list[str]
 
 
 class ConflictResolver:
@@ -122,7 +126,7 @@ class ConflictResolver:
     - 自动冲突解决（基于优先级）
     """
 
-    def resolve(self, conflicts: List[ModConflict]) -> "ConflictResolution":
+    def resolve(self, conflicts: list[ModConflict]) -> ConflictResolution:
         """解决冲突"""
         resolved = []
         unresolved = []
@@ -153,8 +157,9 @@ class ConflictResolver:
 @dataclass
 class ConflictResolution:
     """冲突解决结果"""
-    resolved: List[ModConflict]
-    unresolved: List[ModConflict]
+
+    resolved: list[ModConflict]
+    unresolved: list[ModConflict]
     success: bool
 
 
@@ -171,8 +176,8 @@ class MultiModManager:
 
     def __init__(self, game_root: str) -> None:
         self.game_root = game_root
-        self._installed: Dict[str, InstalledMod] = {}
-        self._load_order: List[str] = []
+        self._installed: dict[str, InstalledMod] = {}
+        self._load_order: list[str] = []
         self._conflict_resolver = ConflictResolver()
         self._backup_dir = ".udify/backups"
 
@@ -182,8 +187,8 @@ class MultiModManager:
         name: str,
         version: str,
         author: str,
-        files: List[str],
-        dependencies: Optional[List[str]] = None,
+        files: list[str],
+        dependencies: list[str] | None = None,
     ) -> InstallResult:
         """安装 Mod"""
         dependencies = dependencies or []
@@ -207,14 +212,16 @@ class MultiModManager:
             file_conflicts = set(files) & set(existing_mod.files)
             if file_conflicts:
                 for f in file_conflicts:
-                    conflicts.append(ModConflict(
-                        conflict_type="file_collision",
-                        mod_a=mod_id,
-                        mod_b=existing_id,
-                        description=f"文件冲突: {f}",
-                        file_path=f,
-                        severity="error",
-                    ))
+                    conflicts.append(
+                        ModConflict(
+                            conflict_type="file_collision",
+                            mod_a=mod_id,
+                            mod_b=existing_id,
+                            description=f"文件冲突: {f}",
+                            file_path=f,
+                            severity="error",
+                        )
+                    )
 
         # 3. 尝试解决冲突
         if conflicts:
@@ -310,7 +317,7 @@ class MultiModManager:
         self._installed[mod_id].status = ModStatus.DISABLED
         return True
 
-    async def create_mod_stack(self, mod_ids: Optional[List[str]] = None) -> ModStack:
+    async def create_mod_stack(self, mod_ids: list[str] | None = None) -> ModStack:
         """创建 Mod 堆栈"""
         if mod_ids is None:
             mod_ids = self._load_order
@@ -336,11 +343,11 @@ class MultiModManager:
             is_valid=is_valid,
         )
 
-    def _topological_sort(self, mod_ids: List[str]) -> List[str]:
+    def _topological_sort(self, mod_ids: list[str]) -> list[str]:
         """拓扑排序"""
         # 构建依赖图
         graph = {mid: set() for mid in mod_ids}
-        in_degree = {mid: 0 for mid in mod_ids}
+        in_degree = dict.fromkeys(mod_ids, 0)
 
         for mid in mod_ids:
             if mid in self._installed:
@@ -369,24 +376,25 @@ class MultiModManager:
 
         return result
 
-    def get_installed_mods(self) -> List[InstalledMod]:
+    def get_installed_mods(self) -> list[InstalledMod]:
         """获取所有已安装的 Mod"""
         return list(self._installed.values())
 
-    def get_active_mods(self) -> List[InstalledMod]:
+    def get_active_mods(self) -> list[InstalledMod]:
         """获取活跃的 Mod"""
         return [
-            m for m in self._installed.values()
+            m
+            for m in self._installed.values()
             if m.status in [ModStatus.INSTALLED, ModStatus.ACTIVE]
         ]
 
-    def get_mod_conflicts(self, mod_id: str) -> List[ModConflict]:
+    def get_mod_conflicts(self, mod_id: str) -> list[ModConflict]:
         """获取 Mod 的冲突"""
         if mod_id not in self._installed:
             return []
         return self._installed[mod_id].conflicts
 
-    def check_compatibility(self, mod_a: str, mod_b: str) -> List[ModConflict]:
+    def check_compatibility(self, mod_a: str, mod_b: str) -> list[ModConflict]:
         """检查两个 Mod 的兼容性"""
         conflicts = []
 
@@ -399,26 +407,26 @@ class MultiModManager:
         # 文件冲突
         file_conflicts = set(a.files) & set(b.files)
         for f in file_conflicts:
-            conflicts.append(ModConflict(
-                conflict_type="file_collision",
-                mod_a=mod_a,
-                mod_b=mod_b,
-                description=f"文件冲突: {f}",
-                file_path=f,
-            ))
+            conflicts.append(
+                ModConflict(
+                    conflict_type="file_collision",
+                    mod_a=mod_a,
+                    mod_b=mod_b,
+                    description=f"文件冲突: {f}",
+                    file_path=f,
+                )
+            )
 
         return conflicts
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         status_counts = {}
         for mod in self._installed.values():
             name = mod.status.name
             status_counts[name] = status_counts.get(name, 0) + 1
 
-        total_conflicts = sum(
-            len(m.conflicts) for m in self._installed.values()
-        )
+        total_conflicts = sum(len(m.conflicts) for m in self._installed.values())
 
         return {
             "total_mods": len(self._installed),

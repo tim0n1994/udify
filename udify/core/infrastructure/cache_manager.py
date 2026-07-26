@@ -7,23 +7,22 @@ Udify Infrastructure - Cache Manager
 from __future__ import annotations
 
 import json
-import os
 import pickle
 from collections import OrderedDict
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, Generic, Optional, TypeVar
+from typing import Any, TypeVar
 
 from udify.core.infrastructure.config_center import config
-
 
 T = TypeVar("T")
 
 
 @dataclass
-class CacheEntry(Generic[T]):
+class CacheEntry[T]:
     """缓存条目"""
+
     key: str
     value: T
     created_at: datetime
@@ -35,14 +34,14 @@ class CacheEntry(Generic[T]):
         return elapsed > self.ttl_seconds
 
 
-class LRUCache(Generic[T]):
+class LRUCache[T]:
     """L1: 内存 LRU 缓存"""
 
     def __init__(self, maxsize: int = 1000):
         self._cache: OrderedDict[str, CacheEntry[T]] = OrderedDict()
         self._maxsize = maxsize
 
-    def get(self, key: str) -> Optional[T]:
+    def get(self, key: str) -> T | None:
         if key not in self._cache:
             return None
 
@@ -93,11 +92,11 @@ class DiskCache:
         self._dir.mkdir(parents=True, exist_ok=True)
         self._max_size = max_size_bytes
         self._meta_file = self._dir / "cache_meta.json"
-        self._meta: Dict[str, Dict[str, Any]] = self._load_meta()
+        self._meta: dict[str, dict[str, Any]] = self._load_meta()
 
-    def _load_meta(self) -> Dict[str, Any]:
+    def _load_meta(self) -> dict[str, Any]:
         if self._meta_file.exists():
-            with open(self._meta_file, "r") as f:
+            with open(self._meta_file) as f:
                 return json.load(f)
         return {}
 
@@ -110,7 +109,7 @@ class DiskCache:
         safe_key = hash(key) % 1000000
         return self._dir / f"cache_{safe_key}.pickle"
 
-    async def get(self, key: str) -> Optional[Any]:
+    async def get(self, key: str) -> Any | None:
         if key not in self._meta:
             return None
 
@@ -203,7 +202,7 @@ class CacheManager:
             max_size_bytes=config.cache.l2_max_size_bytes,
         )
 
-    async def get(self, key: str) -> Optional[Any]:
+    async def get(self, key: str) -> Any | None:
         """三级缓存读取"""
         # L1
         value = self.l1.get(key)
@@ -218,7 +217,7 @@ class CacheManager:
 
         return None
 
-    async def set(self, key: str, value: Any, ttl_seconds: Optional[int] = None) -> None:
+    async def set(self, key: str, value: Any, ttl_seconds: int | None = None) -> None:
         """三级缓存写入"""
         if ttl_seconds is None:
             ttl_seconds = config.cache.l2_ttl_seconds
@@ -234,7 +233,7 @@ class CacheManager:
     async def invalidate_pattern(self, pattern: str) -> int:
         """按模式失效缓存"""
         count = 0
-        for key in self.l1.keys():
+        for key in self.l1:
             if pattern in key:
                 self.l1.delete(key)
                 count += 1

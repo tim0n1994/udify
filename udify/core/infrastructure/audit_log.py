@@ -8,25 +8,26 @@ from __future__ import annotations
 
 import hashlib
 import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class AuditEntry:
     """审计记录"""
+
     timestamp: str
     user_id: str
     session_id: str
     action: str
-    details: Dict[str, Any]
+    details: dict[str, Any]
     previous_hash: str
     entry_hash: str
-    ip_address: Optional[str] = None
-    user_agent: Optional[str] = None
+    ip_address: str | None = None
+    user_agent: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "timestamp": self.timestamp,
             "user_id": self.user_id,
@@ -52,18 +53,18 @@ class AuditLog:
     """
 
     def __init__(self) -> None:
-        self._entries: List[AuditEntry] = []
+        self._entries: list[AuditEntry] = []
         self._chain_hash: str = "0" * 64
-        self._session_index: Dict[str, List[int]] = {}
+        self._session_index: dict[str, list[int]] = {}
 
     def append(
         self,
         user_id: str,
         session_id: str,
         action: str,
-        details: Dict[str, Any],
-        ip_address: Optional[str] = None,
-        user_agent: Optional[str] = None,
+        details: dict[str, Any],
+        ip_address: str | None = None,
+        user_agent: str | None = None,
     ) -> AuditEntry:
         """追加审计记录"""
         timestamp = datetime.now().replace(tzinfo=None).isoformat()
@@ -102,7 +103,7 @@ class AuditLog:
 
         return entry
 
-    def _hash_data(self, data: Dict[str, Any]) -> str:
+    def _hash_data(self, data: dict[str, Any]) -> str:
         """计算数据哈希"""
         canonical = json.dumps(data, sort_keys=True, default=str)
         return hashlib.sha256(canonical.encode()).hexdigest()
@@ -134,23 +135,23 @@ class AuditLog:
 
         return True
 
-    def get_session_logs(self, session_id: str) -> List[AuditEntry]:
+    def get_session_logs(self, session_id: str) -> list[AuditEntry]:
         """获取会话的审计日志"""
         indices = self._session_index.get(session_id, [])
         return [self._entries[i] for i in indices]
 
-    def get_user_logs(self, user_id: str, limit: int = 100) -> List[AuditEntry]:
+    def get_user_logs(self, user_id: str, limit: int = 100) -> list[AuditEntry]:
         """获取用户的审计日志"""
         results = [e for e in self._entries if e.user_id == user_id]
         return results[-limit:]
 
-    def get_all_logs(self, limit: int = 1000) -> List[AuditEntry]:
+    def get_all_logs(self, limit: int = 1000) -> list[AuditEntry]:
         """获取所有日志"""
         return self._entries[-limit:]
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
-        action_counts: Dict[str, int] = {}
+        action_counts: dict[str, int] = {}
         for entry in self._entries:
             action_counts[entry.action] = action_counts.get(entry.action, 0) + 1
 

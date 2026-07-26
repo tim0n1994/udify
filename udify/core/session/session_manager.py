@@ -10,15 +10,16 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional
-from uuid import UUID, uuid4
+from typing import Any
+from uuid import uuid4
 
-from udify.models.content_graph import ContentGraph
 from udify.models.cdl_patch import CDLPatch, PatchOperation
+from udify.models.content_graph import ContentGraph
 
 
 class SessionStatus(Enum):
     """会话状态"""
+
     CREATED = auto()
     PERCEIVING = auto()
     PLANNING = auto()
@@ -32,9 +33,10 @@ class SessionStatus(Enum):
 @dataclass
 class SessionCheckpoint:
     """会话检查点"""
+
     name: str
     graph_snapshot: ContentGraph
-    operations_applied: List[PatchOperation]
+    operations_applied: list[PatchOperation]
     timestamp: datetime = field(default_factory=lambda: datetime.now().replace(tzinfo=None))
 
 
@@ -50,6 +52,7 @@ class ModSession:
     - 用户反馈
     - 检查点
     """
+
     session_id: str = field(default_factory=lambda: str(uuid4()))
     user_id: str = "anonymous"
     game_id: str = ""
@@ -58,29 +61,29 @@ class ModSession:
     updated_at: datetime = field(default_factory=lambda: datetime.now().replace(tzinfo=None))
 
     # 意图
-    intents: List[str] = field(default_factory=list)
+    intents: list[str] = field(default_factory=list)
     current_intent: str = ""
 
     # 图谱
-    original_graph: Optional[ContentGraph] = None
-    current_graph: Optional[ContentGraph] = None
+    original_graph: ContentGraph | None = None
+    current_graph: ContentGraph | None = None
 
     # Patch 历史
-    patches: List[CDLPatch] = field(default_factory=list)
-    applied_operations: List[PatchOperation] = field(default_factory=list)
+    patches: list[CDLPatch] = field(default_factory=list)
+    applied_operations: list[PatchOperation] = field(default_factory=list)
 
     # 检查点
-    checkpoints: List[SessionCheckpoint] = field(default_factory=list)
+    checkpoints: list[SessionCheckpoint] = field(default_factory=list)
 
     # 用户反馈
-    feedback_history: List[Dict[str, Any]] = field(default_factory=list)
+    feedback_history: list[dict[str, Any]] = field(default_factory=list)
 
     # 成本追踪
     cost_spent: float = 0.0
     llm_calls: int = 0
 
     # 元数据
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_intent(self, intent: str) -> None:
         """添加意图"""
@@ -131,14 +134,16 @@ class ModSession:
             return False
         return self.rollback_to_checkpoint(self.checkpoints[-1].name)
 
-    def add_feedback(self, feedback: str, rating: Optional[int] = None) -> None:
+    def add_feedback(self, feedback: str, rating: int | None = None) -> None:
         """添加用户反馈"""
-        self.feedback_history.append({
-            "feedback": feedback,
-            "rating": rating,
-            "timestamp": datetime.now().replace(tzinfo=None).isoformat(),
-            "intent": self.current_intent,
-        })
+        self.feedback_history.append(
+            {
+                "feedback": feedback,
+                "rating": rating,
+                "timestamp": datetime.now().replace(tzinfo=None).isoformat(),
+                "intent": self.current_intent,
+            }
+        )
         self._touch()
 
     def record_cost(self, cost: float, llm_call: bool = False) -> None:
@@ -170,7 +175,7 @@ class ModSession:
         ]
         return "\n".join(lines)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """序列化为字典"""
         return {
             "session_id": self.session_id,
@@ -198,8 +203,8 @@ class SessionManager:
     """
 
     def __init__(self, max_sessions: int = 100) -> None:
-        self._sessions: Dict[str, ModSession] = {}
-        self._user_sessions: Dict[str, List[str]] = {}
+        self._sessions: dict[str, ModSession] = {}
+        self._user_sessions: dict[str, list[str]] = {}
         self._max_sessions = max_sessions
 
     def create_session(self, user_id: str, game_id: str) -> ModSession:
@@ -213,7 +218,7 @@ class SessionManager:
 
         return session
 
-    def get_session(self, session_id: str) -> Optional[ModSession]:
+    def get_session(self, session_id: str) -> ModSession | None:
         """获取会话"""
         return self._sessions.get(session_id)
 
@@ -242,15 +247,16 @@ class SessionManager:
 
         return True
 
-    def get_user_sessions(self, user_id: str) -> List[ModSession]:
+    def get_user_sessions(self, user_id: str) -> list[ModSession]:
         """获取用户的所有会话"""
         session_ids = self._user_sessions.get(user_id, [])
         return [self._sessions[sid] for sid in session_ids if sid in self._sessions]
 
-    def get_active_sessions(self) -> List[ModSession]:
+    def get_active_sessions(self) -> list[ModSession]:
         """获取活跃会话"""
         return [
-            s for s in self._sessions.values()
+            s
+            for s in self._sessions.values()
             if s.status not in [SessionStatus.COMPLETED, SessionStatus.FAILED]
         ]
 
@@ -259,7 +265,8 @@ class SessionManager:
         while len(self._sessions) >= self._max_sessions:
             # 找到最旧的已完成会话
             old_sessions = [
-                (sid, s) for sid, s in self._sessions.items()
+                (sid, s)
+                for sid, s in self._sessions.items()
                 if s.status in [SessionStatus.COMPLETED, SessionStatus.FAILED]
             ]
 
@@ -276,9 +283,9 @@ class SessionManager:
             else:
                 break
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
-        statuses: Dict[str, int] = {}
+        statuses: dict[str, int] = {}
         for s in self._sessions.values():
             name = s.status.name
             statuses[name] = statuses.get(name, 0) + 1

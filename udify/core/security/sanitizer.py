@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 from udify.core.infrastructure.config_center import config
 
@@ -16,10 +16,11 @@ from udify.core.infrastructure.config_center import config
 @dataclass
 class SanitizationResult:
     """消毒结果"""
+
     is_valid: bool
     sanitized_input: str
     original_input: str
-    violations: List[str]
+    violations: list[str]
     risk_level: str = "low"  # low, medium, high, critical
 
 
@@ -46,19 +47,69 @@ class InputSanitizer:
         r"<\|im_start\|>",
         r"<\|im_end\|>",
         r"\{\{.*\}\}",  # Jinja2 模板注入
-        r"\[%.*%\]",      # 模板注入
+        r"\[%.*%\]",  # 模板注入
     ]
 
     # 允许的意图关键词（游戏魔改相关）
     ALLOWED_INTENT_KEYWORDS = [
-        "游戏", "game", "mod", "魔改", "修改", "change", "增加", "add",
-        "删除", "delete", "移除", "remove", "调整", "adjust", "平衡",
-        "balance", "难度", "difficulty", "血量", "hp", "生命", "life",
-        "经验", "exp", "掉落", "drop", "loot", "技能", "skill", "魔法",
-        "magic", "npc", "角色", "character", "物品", "item", "武器",
-        "weapon", "护甲", "armor", "任务", "quest", "剧情", "story",
-        "对话", "dialog", "地图", "map", "场景", "scene", "商店",
-        "shop", "价格", "price", "金币", "gold", "属性", "stat",
+        "游戏",
+        "game",
+        "mod",
+        "魔改",
+        "修改",
+        "change",
+        "增加",
+        "add",
+        "删除",
+        "delete",
+        "移除",
+        "remove",
+        "调整",
+        "adjust",
+        "平衡",
+        "balance",
+        "难度",
+        "difficulty",
+        "血量",
+        "hp",
+        "生命",
+        "life",
+        "经验",
+        "exp",
+        "掉落",
+        "drop",
+        "loot",
+        "技能",
+        "skill",
+        "魔法",
+        "magic",
+        "npc",
+        "角色",
+        "character",
+        "物品",
+        "item",
+        "武器",
+        "weapon",
+        "护甲",
+        "armor",
+        "任务",
+        "quest",
+        "剧情",
+        "story",
+        "对话",
+        "dialog",
+        "地图",
+        "map",
+        "场景",
+        "scene",
+        "商店",
+        "shop",
+        "价格",
+        "price",
+        "金币",
+        "gold",
+        "属性",
+        "stat",
     ]
 
     def __init__(self) -> None:
@@ -81,7 +132,7 @@ class InputSanitizer:
         # 1. 长度检查
         if len(user_input) > self.max_length:
             violations.append(f"输入过长 ({len(user_input)} > {self.max_length})")
-            sanitized = user_input[:self.max_length]
+            sanitized = user_input[: self.max_length]
             risk_level = "medium"
 
         # 2. 禁止关键词检查
@@ -134,8 +185,7 @@ class InputSanitizer:
 
         # 检查是否包含至少一个允许的关键词
         has_game_keyword = any(
-            keyword.lower() in input_lower
-            for keyword in self.ALLOWED_INTENT_KEYWORDS
+            keyword.lower() in input_lower for keyword in self.ALLOWED_INTENT_KEYWORDS
         )
 
         if has_game_keyword:
@@ -156,18 +206,21 @@ class InputSanitizer:
     def _normalize_unicode(self, text: str) -> str:
         """Unicode 规范化"""
         import unicodedata
+
         return unicodedata.normalize("NFKC", text)
 
-    def _detect_control_chars(self, text: str) -> List[str]:
+    def _detect_control_chars(self, text: str) -> list[str]:
         """检测控制字符"""
         control_chars = []
         for i, char in enumerate(text):
             code = ord(char)
-            if code < 32 and code not in [9, 10, 13]:  # 排除 tab, newline, carriage return
-                control_chars.append(f"U+{code:04X}@{i}")
-            elif code == 0x200E or code == 0x200F:  # LRM, RLM
-                control_chars.append(f"U+{code:04X}@{i}")
-            elif 0x202A <= code <= 0x202E:  # BiDi 控制字符
+            if (
+                code < 32
+                and code not in [9, 10, 13]
+                or code == 0x200E
+                or code == 0x200F
+                or 0x202A <= code <= 0x202E
+            ):  # 排除 tab, newline, carriage return
                 control_chars.append(f"U+{code:04X}@{i}")
         return control_chars
 
@@ -195,7 +248,7 @@ class OutputValidator:
         self.max_script_length = 10000
         self.max_operations = config.game_mod.max_mod_operations
 
-    def validate_patch(self, patch_dict: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    def validate_patch(self, patch_dict: dict[str, Any]) -> tuple[bool, list[str]]:
         """验证 Patch 字典的合法性"""
         errors = []
 
@@ -229,7 +282,7 @@ class OutputValidator:
 
         return len(errors) == 0, errors
 
-    def _validate_operation(self, op: Dict[str, Any], index: int) -> List[str]:
+    def _validate_operation(self, op: dict[str, Any], index: int) -> list[str]:
         """验证单个操作"""
         errors = []
 
@@ -238,7 +291,20 @@ class OutputValidator:
             return errors
 
         op_type = op["op_type"]
-        valid_types = ["MODIFY_INI", "INSERT_SCRIPT", "REPLACE_ASSET", "EDIT_MAP", "ADD_RECORD", "MODIFY_PROPERTY", "ADD_NODE", "REMOVE_NODE", "ADD_EDGE", "REMOVE_EDGE", "ADD_ASSET", "REMOVE_ASSET"]
+        valid_types = [
+            "MODIFY_INI",
+            "INSERT_SCRIPT",
+            "REPLACE_ASSET",
+            "EDIT_MAP",
+            "ADD_RECORD",
+            "MODIFY_PROPERTY",
+            "ADD_NODE",
+            "REMOVE_NODE",
+            "ADD_EDGE",
+            "REMOVE_EDGE",
+            "ADD_ASSET",
+            "REMOVE_ASSET",
+        ]
 
         if op_type not in valid_types:
             errors.append(f"操作 {index}: 未知操作类型 {op_type}")
@@ -248,7 +314,7 @@ class OutputValidator:
 
         return errors
 
-    def _validate_script(self, code: str) -> List[str]:
+    def _validate_script(self, code: str) -> list[str]:
         """验证脚本代码"""
         errors = []
 
@@ -275,7 +341,7 @@ class OutputValidator:
 
         return errors
 
-    def validate_asset_path(self, path: str) -> Tuple[bool, str]:
+    def validate_asset_path(self, path: str) -> tuple[bool, str]:
         """验证资源路径是否安全"""
         # 防止路径遍历
         normalized = path.replace("\\", "/")

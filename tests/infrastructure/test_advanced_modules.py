@@ -4,16 +4,14 @@ Tests for Knowledge Graph, VFS, Sandbox, Feedback, Mod Manager, Enhanced Validat
 
 import pytest
 
-from udify.core.knowledge import GameKnowledgeGraph, KnowledgeWarning
-from udify.core.execution import VirtualFileSystem, SandboxExecutor
-from udify.core.feedback import FeedbackLoop, ModPattern
+from udify.core.execution import SandboxExecutor, VirtualFileSystem
+from udify.core.feedback import FeedbackLoop
+from udify.core.knowledge import GameKnowledgeGraph
 from udify.core.mod_manager import (
-    MultiModManager,
     ModStatus,
-    ModConflict,
-    InstallResult,
+    MultiModManager,
 )
-from udify.core.validation import EnhancedValidator, ValidationReport
+from udify.core.validation import EnhancedValidator
 
 
 class TestGameKnowledgeGraph:
@@ -33,7 +31,11 @@ class TestGameKnowledgeGraph:
     def test_validate_safe_operations(self, kg):
         """测试安全操作"""
         operations = [
-            {"op_type": "MODIFY_INI", "target_id": "boss1", "payload": {"key": "MaxLife", "new_value": 500}},
+            {
+                "op_type": "MODIFY_INI",
+                "target_id": "boss1",
+                "payload": {"key": "MaxLife", "new_value": 500},
+            },
         ]
         warnings = kg.validate_mod_against_knowledge(operations)
         # 500 在合理范围内
@@ -42,7 +44,11 @@ class TestGameKnowledgeGraph:
     def test_validate_dangerous_operations(self, kg):
         """测试危险操作"""
         operations = [
-            {"op_type": "MODIFY_INI", "target_id": "boss1", "payload": {"key": "MaxLife", "value": 999999999}},
+            {
+                "op_type": "MODIFY_INI",
+                "target_id": "boss1",
+                "payload": {"key": "MaxLife", "value": 999999999},
+            },
         ]
         warnings = kg.validate_mod_against_knowledge(operations)
         assert any(w.level == "error" for w in warnings)
@@ -414,7 +420,9 @@ class TestEnhancedValidator:
 
         report = await validator.validate(patch)
         assert not report.is_valid
-        assert any("1-999999" in w.message or "范围" in w.message for w in report.knowledge_warnings)
+        assert any(
+            "1-999999" in w.message or "范围" in w.message for w in report.knowledge_warnings
+        )
 
     @pytest.mark.asyncio
     async def test_knowledge_warning(self, validator):
@@ -430,17 +438,21 @@ class TestEnhancedValidator:
     @pytest.mark.asyncio
     async def test_safety_validation(self, validator):
         """测试安全验证"""
-        from udify.models.cdl_patch import CDLPatch, PatchOperation, OpType
+        from udify.models.cdl_patch import CDLPatch, OpType, PatchOperation
 
         patch = CDLPatch()
-        patch.add_operation(PatchOperation(
-            op_type=OpType.MODIFY_PROPERTY,
-            target_id="script1",
-            payload={"code": "os.execute('bad')", "language": "lua"},
-        ))
+        patch.add_operation(
+            PatchOperation(
+                op_type=OpType.MODIFY_PROPERTY,
+                target_id="script1",
+                payload={"code": "os.execute('bad')", "language": "lua"},
+            )
+        )
 
         report = await validator.validate(patch)
-        assert not report.is_valid or (report.safety_report is not None and not report.safety_report.is_safe)
+        assert not report.is_valid or (
+            report.safety_report is not None and not report.safety_report.is_safe
+        )
 
     def test_knowledge_summary(self, validator):
         """测试知识摘要"""

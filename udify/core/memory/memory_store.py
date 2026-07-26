@@ -12,19 +12,18 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-import numpy as np
+from typing import Any
 
 
 @dataclass
 class IntentTemplate:
     """意图模板"""
+
     template_id: str
     pattern: str  # 正则或关键词模式
     description: str
-    target_types: List[str]  # 影响的节点类型
-    typical_actions: List[str]  # 典型操作序列
+    target_types: list[str]  # 影响的节点类型
+    typical_actions: list[str]  # 典型操作序列
     success_rate: float = 0.0
     usage_count: int = 0
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -33,25 +32,27 @@ class IntentTemplate:
 @dataclass
 class UserPreference:
     """用户偏好"""
+
     user_id: str
     preservative_bias: float = 0.7  # 保守倾向
     difficulty_preference: str = "normal"  # easy, normal, hard
-    favorite_mod_types: List[str] = field(default_factory=list)
-    disliked_patterns: List[str] = field(default_factory=list)
+    favorite_mod_types: list[str] = field(default_factory=list)
+    disliked_patterns: list[str] = field(default_factory=list)
     preferred_budget: float = 0.5
-    last_session_id: Optional[str] = None
+    last_session_id: str | None = None
 
 
 @dataclass
 class ExecutionRecord:
     """执行记录"""
+
     record_id: str
     session_id: str
     intent: str
     patch_id: str
     operations_count: int
     success: bool
-    user_rating: Optional[int] = None
+    user_rating: int | None = None
     execution_time: float = 0.0
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
@@ -72,10 +73,10 @@ class MemoryStore:
 
         self.base_dir.mkdir(parents=True, exist_ok=True)
 
-        self._templates: Dict[str, IntentTemplate] = {}
-        self._preferences: Dict[str, UserPreference] = {}
-        self._history: List[ExecutionRecord] = []
-        self._knowledge: Dict[str, Any] = {}
+        self._templates: dict[str, IntentTemplate] = {}
+        self._preferences: dict[str, UserPreference] = {}
+        self._history: list[ExecutionRecord] = []
+        self._knowledge: dict[str, Any] = {}
 
         self._load_all()
 
@@ -101,11 +102,17 @@ class MemoryStore:
     def _save_all(self) -> None:
         """保存所有数据"""
         self.templates_file.write_text(
-            json.dumps([t.__dict__ for t in self._templates.values()], indent=2, ensure_ascii=False),
+            json.dumps(
+                [t.__dict__ for t in self._templates.values()], indent=2, ensure_ascii=False
+            ),
             encoding="utf-8",
         )
         self.preferences_file.write_text(
-            json.dumps({uid: p.__dict__ for uid, p in self._preferences.items()}, indent=2, ensure_ascii=False),
+            json.dumps(
+                {uid: p.__dict__ for uid, p in self._preferences.items()},
+                indent=2,
+                ensure_ascii=False,
+            ),
             encoding="utf-8",
         )
         self.history_file.write_text(
@@ -122,7 +129,7 @@ class MemoryStore:
         self._templates[template.template_id] = template
         self._save_all()
 
-    def find_matching_templates(self, intent: str, top_k: int = 3) -> List[IntentTemplate]:
+    def find_matching_templates(self, intent: str, top_k: int = 3) -> list[IntentTemplate]:
         """查找匹配的意图模板（简化版：关键词匹配）"""
         intent_lower = intent.lower()
         scores = []
@@ -170,12 +177,12 @@ class MemoryStore:
             self._history = self._history[-10000:]
         self._save_all()
 
-    def get_user_history(self, user_id: str, limit: int = 50) -> List[ExecutionRecord]:
+    def get_user_history(self, user_id: str, limit: int = 50) -> list[ExecutionRecord]:
         """获取用户执行历史"""
         records = [r for r in self._history if r.session_id.startswith(user_id)]
         return records[-limit:]
 
-    def get_similar_executions(self, intent: str, limit: int = 5) -> List[ExecutionRecord]:
+    def get_similar_executions(self, intent: str, limit: int = 5) -> list[ExecutionRecord]:
         """获取相似意图的执行记录"""
         intent_lower = intent.lower()
         intent_words = set(intent_lower.split())
@@ -195,7 +202,7 @@ class MemoryStore:
         scored.sort(key=lambda x: x[1], reverse=True)
         return [r[0] for r in scored[:limit]]
 
-    def get_successful_patterns(self, min_rating: int = 4, limit: int = 20) -> List[Dict[str, Any]]:
+    def get_successful_patterns(self, min_rating: int = 4, limit: int = 20) -> list[dict[str, Any]]:
         """获取成功的模式"""
         successful = [
             {
@@ -217,7 +224,7 @@ class MemoryStore:
         """获取知识"""
         return self._knowledge.get(key, default)
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计"""
         return {
             "templates": len(self._templates),
@@ -238,7 +245,9 @@ class MemoryEnricher:
     def __init__(self, store: MemoryStore) -> None:
         self.store = store
 
-    def enrich_from_patch(self, intent: str, patch: Any, success: bool, rating: Optional[int] = None) -> None:
+    def enrich_from_patch(
+        self, intent: str, patch: Any, success: bool, rating: int | None = None
+    ) -> None:
         """从 Patch 中提取模板"""
         # 生成模板 ID
         template_id = hashlib.sha256(intent.encode()).hexdigest()[:16]
@@ -246,16 +255,20 @@ class MemoryEnricher:
         # 提取操作类型
         action_types = []
         if hasattr(patch, "operations"):
-            action_types = list(set(op.op_type.name for op in patch.operations))
+            action_types = list({op.op_type.name for op in patch.operations})
 
         # 更新或创建模板
         existing = self.store._templates.get(template_id)
         if existing:
             existing.usage_count += 1
             if success:
-                existing.success_rate = (existing.success_rate * (existing.usage_count - 1) + 1.0) / existing.usage_count
+                existing.success_rate = (
+                    existing.success_rate * (existing.usage_count - 1) + 1.0
+                ) / existing.usage_count
             else:
-                existing.success_rate = (existing.success_rate * (existing.usage_count - 1)) / existing.usage_count
+                existing.success_rate = (
+                    existing.success_rate * (existing.usage_count - 1)
+                ) / existing.usage_count
         else:
             template = IntentTemplate(
                 template_id=template_id,

@@ -1,5 +1,12 @@
 """Udify Memory - Memory modules"""
-from udify.core.memory.memory_store import MemoryStore, MemoryEnricher, IntentTemplate, UserPreference, ExecutionRecord
+
+from udify.core.memory.memory_store import (
+    ExecutionRecord,
+    IntentTemplate,
+    MemoryEnricher,
+    MemoryStore,
+    UserPreference,
+)
 
 __all__ = [
     "MemoryStore",

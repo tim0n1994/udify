@@ -3,14 +3,18 @@ Tests for miu2d Parsers, PatchExecutor, and Pipeline
 """
 
 import pytest
-from pathlib import Path
 
-from udify.core.perception.parsers import INIParser, LuaParser, NPCScriptParser, OBJParser
-from udify.core.execution.patch_executor import PatchExecutor, PatchExecutionError
+from udify.core.execution.patch_executor import PatchExecutor
 from udify.core.execution.vfs import VirtualFileSystem
+from udify.core.perception.parsers import INIParser, LuaParser, NPCScriptParser, OBJParser
 from udify.core.pipeline import UdifyPipeline
-from udify.models.cdl_patch import CDLPatch, create_modify_property_op, create_add_node_op, create_remove_node_op
-from udify.models.content_graph import ContentGraph, ContentNode, NodeType
+from udify.models.cdl_patch import (
+    CDLPatch,
+    create_add_node_op,
+    create_modify_property_op,
+    create_remove_node_op,
+)
+from udify.models.content_graph import ContentGraph, NodeType
 
 
 class TestINIParser:
@@ -221,7 +225,7 @@ class TestLuaParser:
 
     @pytest.fixture
     def sample_lua(self, tmp_path):
-        content = '''
+        content = """
 MAX_PLAYERS = 4
 GAME_VERSION = "1.0.5"
 ENABLE_CHEATS = false
@@ -240,7 +244,7 @@ function SpawnBoss(bossType)
         PlaySound("dragon_roar.ogg")
     end
 end
-'''
+"""
         path = tmp_path / "game_logic.lua"
         path.write_text(content, encoding="utf-8")
         return path
@@ -291,9 +295,13 @@ class TestPatchExecutor:
     def test_modify_property_ini(self, executor, sample_ini_file):
         """测试修改 INI 属性"""
         patch = CDLPatch()
-        patch.add_operation(create_modify_property_op(
-            "test_ini_Hero", "MaxLife", 200,
-        ))
+        patch.add_operation(
+            create_modify_property_op(
+                "test_ini_Hero",
+                "MaxLife",
+                200,
+            )
+        )
 
         result = executor.execute(patch)
         assert result["success"]
@@ -305,13 +313,15 @@ class TestPatchExecutor:
     def test_add_node_ini(self, executor, sample_ini_file):
         """测试添加新节点（INI Section）"""
         patch = CDLPatch()
-        patch.add_operation(create_add_node_op(
-            node_id="test_ini_NewChar",
-            node_type=NodeType.CHARACTER,
-            name="NewChar",
-            properties={"MaxLife": 150, "Strength": 20},
-            source_path="test.ini",
-        ))
+        patch.add_operation(
+            create_add_node_op(
+                node_id="test_ini_NewChar",
+                node_type=NodeType.CHARACTER,
+                name="NewChar",
+                properties={"MaxLife": 150, "Strength": 20},
+                source_path="test.ini",
+            )
+        )
 
         result = executor.execute(patch)
         assert result["success"]
@@ -333,14 +343,16 @@ class TestPatchExecutor:
 
     def test_unsupported_operation(self, executor):
         """测试不支持的操作"""
-        from udify.models.cdl_patch import PatchOperation, OpType
+        from udify.models.cdl_patch import OpType, PatchOperation
 
         patch = CDLPatch()
-        patch.add_operation(PatchOperation(
-            op_type=OpType.ADD_EDGE,
-            target_id="a",
-            payload={},
-        ))
+        patch.add_operation(
+            PatchOperation(
+                op_type=OpType.ADD_EDGE,
+                target_id="a",
+                payload={},
+            )
+        )
 
         result = executor.execute(patch)
         assert not result["success"]
@@ -376,7 +388,7 @@ class TestUdifyPipeline:
     @pytest.mark.asyncio
     async def test_preview_mode(self, pipeline):
         """测试预览模式"""
-        result = await pipeline.process_intent("user1", "让BOSS血量翻倍", preview_only=True)
+        await pipeline.process_intent("user1", "让BOSS血量翻倍", preview_only=True)
 
         # 预览模式不应该修改实际文件
         hero_content = (pipeline.game_root / "characters.ini").read_text()
@@ -386,10 +398,11 @@ class TestUdifyPipeline:
         """测试回滚"""
         # 先执行一个操作
         import asyncio
+
         result = asyncio.run(pipeline.process_intent("user1", "让BOSS血量翻倍", preview_only=True))
 
-        success = pipeline.rollback_session(result.session_id)
-        assert success or not success  # 取决于是否有检查点
+        pipeline.rollback_session(result.session_id)
+        assert True  # 取决于是否有检查点
 
     def test_stats(self, pipeline):
         """测试统计"""

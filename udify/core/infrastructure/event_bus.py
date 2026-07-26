@@ -8,14 +8,16 @@ Udify Infrastructure - Event Bus
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Any, Callable, Coroutine, Dict, List, Optional
+from typing import Any
 
 
 class EventType(Enum):
     """核心事件类型"""
+
     # 意图层事件
     INTENT_RECEIVED = auto()
     INTENT_PARSED = auto()
@@ -62,13 +64,14 @@ class EventType(Enum):
 @dataclass
 class Event:
     """事件对象"""
-    event_type: EventType
-    payload: Dict[str, Any] = field(default_factory=dict)
-    timestamp: datetime = field(default_factory=lambda: datetime.now().replace(tzinfo=None))
-    task_id: Optional[str] = None
-    session_id: Optional[str] = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    event_type: EventType
+    payload: dict[str, Any] = field(default_factory=dict)
+    timestamp: datetime = field(default_factory=lambda: datetime.now().replace(tzinfo=None))
+    task_id: str | None = None
+    session_id: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "event_type": self.event_type.name,
             "payload": self.payload,
@@ -93,8 +96,8 @@ class EventBus:
     """
 
     def __init__(self, max_history: int = 10000) -> None:
-        self._subscribers: Dict[EventType, List[EventHandler]] = {}
-        self._history: List[Event] = []
+        self._subscribers: dict[EventType, list[EventHandler]] = {}
+        self._history: list[Event] = []
         self._max_history = max_history
         self._event_count = 0
 
@@ -118,7 +121,7 @@ class EventBus:
 
         # 限制历史大小
         if len(self._history) > self._max_history:
-            self._history = self._history[-self._max_history:]
+            self._history = self._history[-self._max_history :]
 
         handlers = self._subscribers.get(event.event_type, [])
 
@@ -140,10 +143,10 @@ class EventBus:
 
     def get_history(
         self,
-        event_type: Optional[EventType] = None,
-        session_id: Optional[str] = None,
+        event_type: EventType | None = None,
+        session_id: str | None = None,
         limit: int = 100,
-    ) -> List[Event]:
+    ) -> list[Event]:
         """查询事件历史"""
         results = self._history
 
@@ -155,7 +158,7 @@ class EventBus:
 
         return results[-limit:]
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取事件统计"""
         stats = {et.name: 0 for et in EventType}
         for event in self._history:
@@ -172,9 +175,9 @@ class EventBus:
 async def emit_event(
     bus: EventBus,
     event_type: EventType,
-    payload: Dict[str, Any],
-    task_id: Optional[str] = None,
-    session_id: Optional[str] = None,
+    payload: dict[str, Any],
+    task_id: str | None = None,
+    session_id: str | None = None,
 ) -> None:
     """便捷发射事件"""
     event = Event(

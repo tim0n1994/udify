@@ -6,13 +6,11 @@ Udify Execution - Sandboxed Execution
 
 from __future__ import annotations
 
-import hashlib
-import json
 import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from udify.core.infrastructure.config_center import config
 
@@ -20,12 +18,13 @@ from udify.core.infrastructure.config_center import config
 @dataclass
 class ExecutionResult:
     """执行结果"""
+
     success: bool
     stdout: str = ""
     stderr: str = ""
     returncode: int = 0
     execution_time: float = 0.0
-    side_effects: List[str] = None
+    side_effects: list[str] = None
 
     def __post_init__(self):
         if self.side_effects is None:
@@ -35,18 +34,19 @@ class ExecutionResult:
 @dataclass
 class SandboxConfig:
     """沙箱配置"""
+
     # 资源限制
     memory_limit_mb: int = 512
     cpu_limit_percent: int = 50
     timeout_seconds: int = 30
-    
+
     # 网络隔离
     network_disabled: bool = True
-    
+
     # 文件系统隔离
     readonly_root: bool = True
-    allowed_paths: List[str] = None
-    
+    allowed_paths: list[str] = None
+
     def __post_init__(self):
         if self.allowed_paths is None:
             self.allowed_paths = []
@@ -55,11 +55,12 @@ class SandboxConfig:
 @dataclass
 class SafetyReport:
     """安全报告"""
+
     is_safe: bool
-    vulnerabilities: List[Dict[str, Any]]
+    vulnerabilities: list[dict[str, Any]]
     scan_time: float = 0.0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "is_safe": self.is_safe,
             "vulnerability_count": len(self.vulnerabilities),
@@ -71,27 +72,27 @@ class SafetyReport:
 class SandboxManager:
     """
     沙箱管理器
-    
+
     管理多个沙箱实例，提供统一的执行接口。
     """
-    
-    def __init__(self, config: Optional[SandboxConfig] = None):
+
+    def __init__(self, config: SandboxConfig | None = None):
         self.config = config or SandboxConfig()
         self.sandboxes = {}
         self.executor = SandboxExecutor()
-    
-    def execute_lua(self, code: str, context: Optional[Dict[str, Any]] = None) -> ExecutionResult:
+
+    def execute_lua(self, code: str, context: dict[str, Any] | None = None) -> ExecutionResult:
         """执行 Lua 代码"""
         return self.executor.execute_lua(code, context)
-    
+
     def validate_script_safety(self, code: str, language: str = "lua") -> SafetyReport:
         """验证脚本安全性"""
         return self.executor.validate_script_safety(code, language)
-    
-    def list_sandboxes(self) -> List[str]:
+
+    def list_sandboxes(self) -> list[str]:
         """列出所有沙箱"""
         return list(self.sandboxes.keys())
-    
+
     def cleanup(self) -> None:
         """清理所有沙箱"""
         self.sandboxes.clear()
@@ -111,7 +112,7 @@ class SandboxExecutor:
         self.timeout = config.security.sandbox_timeout_seconds
         self.network_disabled = config.security.enable_network_isolation
 
-    def execute_lua(self, code: str, context: Optional[Dict[str, Any]] = None) -> ExecutionResult:
+    def execute_lua(self, code: str, context: dict[str, Any] | None = None) -> ExecutionResult:
         """
         在沙箱中执行 Lua 代码
 
@@ -206,11 +207,13 @@ class SandboxExecutor:
         # 1. 语法检查
         syntax_valid, syntax_error = self._check_syntax(code, language)
         if not syntax_valid:
-            vulnerabilities.append({
-                "level": "error",
-                "type": "syntax_error",
-                "message": syntax_error,
-            })
+            vulnerabilities.append(
+                {
+                    "level": "error",
+                    "type": "syntax_error",
+                    "message": syntax_error,
+                }
+            )
 
         # 2. 危险模式检测
         dangerous_patterns = {
@@ -234,13 +237,16 @@ class SandboxExecutor:
         patterns = dangerous_patterns.get(language, [])
         for pattern, message in patterns:
             import re
+
             if re.search(pattern, code, re.IGNORECASE):
-                vulnerabilities.append({
-                    "level": "critical",
-                    "type": "dangerous_pattern",
-                    "message": message,
-                    "pattern": pattern,
-                })
+                vulnerabilities.append(
+                    {
+                        "level": "critical",
+                        "type": "dangerous_pattern",
+                        "message": message,
+                        "pattern": pattern,
+                    }
+                )
 
         # 3. 网络操作检测
         network_patterns = [
@@ -254,12 +260,15 @@ class SandboxExecutor:
         ]
         for pattern in network_patterns:
             import re
+
             if re.search(pattern, code, re.IGNORECASE):
-                vulnerabilities.append({
-                    "level": "high",
-                    "type": "network_operation",
-                    "message": f"检测到可能的网络操作: {pattern}",
-                })
+                vulnerabilities.append(
+                    {
+                        "level": "high",
+                        "type": "network_operation",
+                        "message": f"检测到可能的网络操作: {pattern}",
+                    }
+                )
 
         # 4. 文件操作检测（超出游戏目录）
         file_patterns = [
@@ -273,12 +282,15 @@ class SandboxExecutor:
         ]
         for pattern in file_patterns:
             import re
+
             if re.search(pattern, code):
-                vulnerabilities.append({
-                    "level": "critical",
-                    "type": "path_traversal",
-                    "message": f"检测到路径遍历: {pattern}",
-                })
+                vulnerabilities.append(
+                    {
+                        "level": "critical",
+                        "type": "path_traversal",
+                        "message": f"检测到路径遍历: {pattern}",
+                    }
+                )
 
         scan_time = time.time() - start_time
         is_safe = not any(v["level"] == "critical" for v in vulnerabilities)

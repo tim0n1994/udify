@@ -20,14 +20,13 @@ from udify.core.infrastructure import (
     ConfigCenter,
     EventBus,
     EventType,
-    emit_event,
 )
 from udify.core.infrastructure.event_bus import Event
-from udify.core.security import InputSanitizer, OutputValidator
-from udify.core.session import ModSession, SessionManager, SessionStatus
 from udify.core.planning.cost_controller import CostController, LocalModelPlanner
-from udify.models.content_graph import ContentGraph, ContentNode, MediaType, NodeType
 from udify.core.planning.state import Intent, PlanContext, PlanState
+from udify.core.security import InputSanitizer, OutputValidator
+from udify.core.session import SessionManager, SessionStatus
+from udify.models.content_graph import ContentGraph, MediaType, NodeType
 
 
 class TestEventBus:
@@ -276,7 +275,11 @@ class TestOutputValidator:
         """测试有效 Patch"""
         patch = {
             "operations": [
-                {"op_type": "MODIFY_INI", "target_id": "boss1", "payload": {"key": "hp", "new_value": 200}},
+                {
+                    "op_type": "MODIFY_INI",
+                    "target_id": "boss1",
+                    "payload": {"key": "hp", "new_value": 200},
+                },
             ]
         }
         valid, errors = validator.validate_patch(patch)
@@ -286,7 +289,9 @@ class TestOutputValidator:
     def test_too_many_operations(self, validator):
         """测试过多操作"""
         patch = {
-            "operations": [{"op_type": "MODIFY_INI", "target_id": f"n{i}", "payload": {}} for i in range(100)]
+            "operations": [
+                {"op_type": "MODIFY_INI", "target_id": f"n{i}", "payload": {}} for i in range(100)
+            ]
         }
         valid, errors = validator.validate_patch(patch)
         assert not valid
@@ -344,7 +349,6 @@ class TestSessionManager:
 
     def test_checkpoint(self, manager):
         """测试检查点"""
-        from udify.models.content_graph import ContentGraph, MediaType
 
         session = manager.create_session("user1", "game1")
         graph = ContentGraph(media_type=MediaType.GAME)
@@ -356,7 +360,6 @@ class TestSessionManager:
 
     def test_rollback(self, manager):
         """测试回滚"""
-        from udify.models.content_graph import ContentGraph, MediaType
 
         session = manager.create_session("user1", "game1")
         graph = ContentGraph(media_type=MediaType.GAME)
@@ -365,7 +368,8 @@ class TestSessionManager:
 
         # 修改图谱
         from udify.models.cdl_patch import create_add_node_op
-        op = create_add_node_op("n1", NodeType.CHARACTER, "Hero")
+
+        create_add_node_op("n1", NodeType.CHARACTER, "Hero")
 
         success = session.rollback_to_checkpoint("before_mod")
         assert success
@@ -399,7 +403,6 @@ class TestCostController:
     @pytest.mark.asyncio
     async def test_within_budget(self, controller):
         """测试预算内"""
-        from udify.models.content_graph import ContentGraph, MediaType
 
         state = PlanState(
             graph=ContentGraph(media_type=MediaType.GAME),
@@ -409,6 +412,7 @@ class TestCostController:
 
         async def mock_plan(state):
             from udify.core.planning.planner import PlanResult
+
             return PlanResult(actions=[], estimated_value=0.5)
 
         result = await controller.plan_with_budget(state, mock_plan)
@@ -432,7 +436,6 @@ class TestCostController:
         """测试本地模型降级"""
         planner = LocalModelPlanner()
 
-        from udify.models.content_graph import ContentGraph, MediaType
         state = PlanState(
             graph=ContentGraph(media_type=MediaType.GAME),
             intent=Intent(description="increase difficulty"),
@@ -440,5 +443,6 @@ class TestCostController:
         )
 
         import asyncio
+
         result = asyncio.run(planner.plan(state))
         assert result is not None

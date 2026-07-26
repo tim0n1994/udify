@@ -7,29 +7,31 @@ Udify Knowledge - Game Knowledge Graph
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class KnowledgeRule:
     """知识规则"""
+
     rule_id: str
     category: str
     description: str
     severity: str = "warning"  # info, warning, error, critical
-    condition: Optional[str] = None
-    recommended_range: Optional[tuple] = None
+    condition: str | None = None
+    recommended_range: tuple | None = None
 
 
 @dataclass
 class KnowledgeWarning:
     """知识警告"""
+
     level: str
     message: str
-    rule_id: Optional[str] = None
-    operation_type: Optional[str] = None
-    target_id: Optional[str] = None
+    rule_id: str | None = None
+    operation_type: str | None = None
+    target_id: str | None = None
 
 
 class GameKnowledgeGraph:
@@ -45,11 +47,11 @@ class GameKnowledgeGraph:
     """
 
     def __init__(self) -> None:
-        self._rules: Dict[str, KnowledgeRule] = {}
-        self._mechanic_relationships: List[Dict[str, Any]] = []
-        self._common_patterns: Dict[str, Dict[str, Any]] = {}
-        self._dangerous_patterns: List[Dict[str, Any]] = []
-        self._miu2d_knowledge: Dict[str, Any] = {}
+        self._rules: dict[str, KnowledgeRule] = {}
+        self._mechanic_relationships: list[dict[str, Any]] = []
+        self._common_patterns: dict[str, dict[str, Any]] = {}
+        self._dangerous_patterns: list[dict[str, Any]] = []
+        self._miu2d_knowledge: dict[str, Any] = {}
 
         self._init_rpg_knowledge()
         self._init_miu2d_knowledge()
@@ -82,7 +84,11 @@ class GameKnowledgeGraph:
         self._mechanic_relationships = [
             {"cause": "increase_boss_hp", "effect": "increase_exp_reward", "strength": 0.8},
             {"cause": "increase_drop_rate", "effect": "decrease_item_value", "strength": 0.6},
-            {"cause": "increase_player_speed", "effect": "decrease_game_difficulty", "strength": 0.7},
+            {
+                "cause": "increase_player_speed",
+                "effect": "decrease_game_difficulty",
+                "strength": 0.7,
+            },
             {"cause": "increase_enemy_count", "effect": "increase_exp_per_hour", "strength": 0.9},
             {"cause": "decrease_cooldown", "effect": "increase_dps", "strength": 0.8},
         ]
@@ -122,8 +128,16 @@ class GameKnowledgeGraph:
 
         # 危险模式
         self._dangerous_patterns = [
-            {"pattern": "set_hp_to_999999", "risk": "破坏游戏平衡，导致无敌", "severity": "critical"},
-            {"pattern": "delete_all_enemies", "risk": "删除所有敌人导致无法通关", "severity": "critical"},
+            {
+                "pattern": "set_hp_to_999999",
+                "risk": "破坏游戏平衡，导致无敌",
+                "severity": "critical",
+            },
+            {
+                "pattern": "delete_all_enemies",
+                "risk": "删除所有敌人导致无法通关",
+                "severity": "critical",
+            },
             {"pattern": "set_exp_to_zero", "risk": "无法升级导致游戏卡住", "severity": "critical"},
             {"pattern": "set_all_stats_to_max", "risk": "破坏成长曲线", "severity": "high"},
             {"pattern": "remove_all_obstacles", "risk": "地图可 walkthrough", "severity": "high"},
@@ -139,30 +153,68 @@ class GameKnowledgeGraph:
                 {"combo": "fire + wind", "result": "firestorm", "power": 1.8},
             ],
             "npc_archetypes": [
-                {"archetype": "tutorial_mentor", "typical_stats": {"hp": 100, "friendly": True, "level": 1}},
+                {
+                    "archetype": "tutorial_mentor",
+                    "typical_stats": {"hp": 100, "friendly": True, "level": 1},
+                },
                 {"archetype": "first_boss", "typical_stats": {"hp": 500, "level": 5, "attack": 30}},
                 {"archetype": "mid_boss", "typical_stats": {"hp": 2000, "level": 20, "attack": 80}},
-                {"archetype": "final_boss", "typical_stats": {"hp": 10000, "level": 50, "attack": 200}},
+                {
+                    "archetype": "final_boss",
+                    "typical_stats": {"hp": 10000, "level": 50, "attack": 200},
+                },
                 {"archetype": "merchant", "typical_stats": {"hp": 50, "friendly": True}},
             ],
             "map_regions": [
-                {"region": "starter_village", "level_range": (1, 5), "enemy_types": ["slime", "wolf", "rabbit"]},
-                {"region": "dark_forest", "level_range": (10, 20), "enemy_types": ["skeleton", "ghost", "spider"]},
-                {"region": "volcano", "level_range": (25, 35), "enemy_types": ["fire_elemental", "demon"]},
-                {"region": "ice_castle", "level_range": (40, 50), "enemy_types": ["ice_golem", "frost_dragon"]},
+                {
+                    "region": "starter_village",
+                    "level_range": (1, 5),
+                    "enemy_types": ["slime", "wolf", "rabbit"],
+                },
+                {
+                    "region": "dark_forest",
+                    "level_range": (10, 20),
+                    "enemy_types": ["skeleton", "ghost", "spider"],
+                },
+                {
+                    "region": "volcano",
+                    "level_range": (25, 35),
+                    "enemy_types": ["fire_elemental", "demon"],
+                },
+                {
+                    "region": "ice_castle",
+                    "level_range": (40, 50),
+                    "enemy_types": ["ice_golem", "frost_dragon"],
+                },
             ],
             "move_kinds": [
-                "LineMove", "CircleMove", "SpiralMove", "SectorMove",
-                "HeartMove", "FollowEnemy", "Throw", "Transport",
-                "Summon", "TimeStop", "VMove",
+                "LineMove",
+                "CircleMove",
+                "SpiralMove",
+                "SectorMove",
+                "HeartMove",
+                "FollowEnemy",
+                "Throw",
+                "Transport",
+                "Summon",
+                "TimeStop",
+                "VMove",
             ],
             "special_kinds": [
-                "freeze", "poison", "petrify", "invisibility",
-                "heal", "buff", "transform", "remove_debuff",
+                "freeze",
+                "poison",
+                "petrify",
+                "invisibility",
+                "heal",
+                "buff",
+                "transform",
+                "remove_debuff",
             ],
         }
 
-    def validate_mod_against_knowledge(self, operations: List[Dict[str, Any]]) -> List[KnowledgeWarning]:
+    def validate_mod_against_knowledge(
+        self, operations: list[dict[str, Any]]
+    ) -> list[KnowledgeWarning]:
         """根据知识图谱验证修改的合理性"""
         warnings = []
 
@@ -170,12 +222,14 @@ class GameKnowledgeGraph:
             # 检查危险模式
             for dangerous in self._dangerous_patterns:
                 if dangerous["pattern"] in str(op):
-                    warnings.append(KnowledgeWarning(
-                        level="critical",
-                        message=f"检测到危险模式: {dangerous['risk']}",
-                        rule_id="dangerous_pattern",
-                        operation_type=op.get("op_type"),
-                    ))
+                    warnings.append(
+                        KnowledgeWarning(
+                            level="critical",
+                            message=f"检测到危险模式: {dangerous['risk']}",
+                            rule_id="dangerous_pattern",
+                            operation_type=op.get("op_type"),
+                        )
+                    )
 
             # 检查数值规则
             if op.get("op_type") in ["MODIFY_INI", "MODIFY_PROPERTY"]:
@@ -184,8 +238,16 @@ class GameKnowledgeGraph:
 
                 # 检查特定规则
                 rule_checks = [
-                    ("MaxLife", "hp_reasonable", lambda v: isinstance(v, (int, float)) and (v < 1 or v > 999999)),
-                    ("MaxMana", "mp_reasonable", lambda v: isinstance(v, (int, float)) and (v < 0 or v > 999999)),
+                    (
+                        "MaxLife",
+                        "hp_reasonable",
+                        lambda v: isinstance(v, (int, float)) and (v < 1 or v > 999999),
+                    ),
+                    (
+                        "MaxMana",
+                        "mp_reasonable",
+                        lambda v: isinstance(v, (int, float)) and (v < 0 or v > 999999),
+                    ),
                     ("Strength", "stat_positive", lambda v: isinstance(v, (int, float)) and v < 0),
                     ("Dexterity", "stat_positive", lambda v: isinstance(v, (int, float)) and v < 0),
                     ("price", "price_positive", lambda v: isinstance(v, (int, float)) and v < 0),
@@ -195,17 +257,19 @@ class GameKnowledgeGraph:
                     if check_key.lower() in key.lower() and check_func(new_value):
                         rule = self._rules.get(rule_id)
                         if rule:
-                            warnings.append(KnowledgeWarning(
-                                level=rule.severity,
-                                message=f"{rule.description}: {key} = {new_value}",
-                                rule_id=rule_id,
-                                operation_type="MODIFY_INI",
-                                target_id=op.get("target_id"),
-                            ))
+                            warnings.append(
+                                KnowledgeWarning(
+                                    level=rule.severity,
+                                    message=f"{rule.description}: {key} = {new_value}",
+                                    rule_id=rule_id,
+                                    operation_type="MODIFY_INI",
+                                    target_id=op.get("target_id"),
+                                )
+                            )
 
         return warnings
 
-    def get_recommended_pattern(self, intent: str) -> Optional[Dict[str, Any]]:
+    def get_recommended_pattern(self, intent: str) -> dict[str, Any] | None:
         """根据意图推荐成功模式"""
         intent_lower = intent.lower()
 
@@ -223,7 +287,7 @@ class GameKnowledgeGraph:
 
         return None
 
-    def get_related_mechanics(self, action: str) -> List[Dict[str, Any]]:
+    def get_related_mechanics(self, action: str) -> list[dict[str, Any]]:
         """获取与某个机制相关的其他机制"""
         results = []
         for rel in self._mechanic_relationships:
@@ -231,7 +295,7 @@ class GameKnowledgeGraph:
                 results.append(rel)
         return results
 
-    def get_npc_archetype(self, name: str) -> Optional[Dict[str, Any]]:
+    def get_npc_archetype(self, name: str) -> dict[str, Any] | None:
         """获取 NPC 原型"""
         name_lower = name.lower()
         for archetype in self._miu2d_knowledge.get("npc_archetypes", []):
@@ -239,7 +303,7 @@ class GameKnowledgeGraph:
                 return archetype
         return None
 
-    def get_map_region(self, map_name: str) -> Optional[Dict[str, Any]]:
+    def get_map_region(self, map_name: str) -> dict[str, Any] | None:
         """获取地图区域信息"""
         name_lower = map_name.lower()
         for region in self._miu2d_knowledge.get("map_regions", []):
@@ -253,7 +317,7 @@ class GameKnowledgeGraph:
         valid_specials = self._miu2d_knowledge.get("special_kinds", [])
         return move_kind in valid_moves and special_kind in valid_specials
 
-    def get_knowledge_summary(self) -> Dict[str, Any]:
+    def get_knowledge_summary(self) -> dict[str, Any]:
         """获取知识摘要"""
         return {
             "rule_count": len(self._rules),

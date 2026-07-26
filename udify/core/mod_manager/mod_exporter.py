@@ -12,7 +12,7 @@ import zipfile
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from udify.models.cdl_patch import CDLPatch
 
@@ -20,6 +20,7 @@ from udify.models.cdl_patch import CDLPatch
 @dataclass
 class ModManifest:
     """Mod 清单"""
+
     mod_id: str
     name: str
     version: str
@@ -27,14 +28,14 @@ class ModManifest:
     description: str = ""
     game_id: str = ""
     game_version: str = ""
-    dependencies: List[str] = field(default_factory=list)
-    conflicts: List[str] = field(default_factory=list)
-    tags: List[str] = field(default_factory=list)
+    dependencies: list[str] = field(default_factory=list)
+    conflicts: list[str] = field(default_factory=list)
+    tags: list[str] = field(default_factory=list)
     created_at: str = field(default_factory=lambda: datetime.now().isoformat())
     operations_count: int = 0
-    files_modified: List[str] = field(default_factory=list)
+    files_modified: list[str] = field(default_factory=list)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "manifest_version": "1.0",
             "mod_id": self.mod_id,
@@ -53,7 +54,7 @@ class ModManifest:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ModManifest":
+    def from_dict(cls, data: dict[str, Any]) -> ModManifest:
         return cls(
             mod_id=data["mod_id"],
             name=data["name"],
@@ -90,7 +91,7 @@ class ModExporter:
         self,
         patch: CDLPatch,
         manifest: ModManifest,
-        mod_files: Optional[Dict[str, str]] = None,
+        mod_files: dict[str, str] | None = None,
     ) -> Path:
         """
         导出为 ZIP 格式
@@ -103,7 +104,9 @@ class ModExporter:
 
         with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
             # 写入清单
-            zf.writestr("manifest.json", json.dumps(manifest.to_dict(), indent=2, ensure_ascii=False))
+            zf.writestr(
+                "manifest.json", json.dumps(manifest.to_dict(), indent=2, ensure_ascii=False)
+            )
 
             # 写入补丁
             zf.writestr("patch.json", json.dumps(patch.to_dict(), indent=2, default=str))
@@ -123,7 +126,7 @@ class ModExporter:
         self,
         patch: CDLPatch,
         manifest: ModManifest,
-        mod_files: Optional[Dict[str, str]] = None,
+        mod_files: dict[str, str] | None = None,
     ) -> Path:
         """
         导出为目录结构
@@ -203,7 +206,7 @@ class ModExporter:
 
         return "\n".join(lines)
 
-    def list_exported_mods(self) -> List[Dict[str, Any]]:
+    def list_exported_mods(self) -> list[dict[str, Any]]:
         """列出所有已导出的 Mod"""
         mods = []
         for path in self.output_dir.iterdir():
@@ -211,19 +214,23 @@ class ModExporter:
                 try:
                     with zipfile.ZipFile(path, "r") as zf:
                         manifest = json.loads(zf.read("manifest.json"))
-                        mods.append({
-                            "path": str(path),
-                            **manifest,
-                        })
+                        mods.append(
+                            {
+                                "path": str(path),
+                                **manifest,
+                            }
+                        )
                 except Exception:
                     continue
             elif path.is_dir() and (path / "manifest.json").exists():
                 try:
                     manifest = json.loads((path / "manifest.json").read_text())
-                    mods.append({
-                        "path": str(path),
-                        **manifest,
-                    })
+                    mods.append(
+                        {
+                            "path": str(path),
+                            **manifest,
+                        }
+                    )
                 except Exception:
                     continue
         return mods

@@ -6,29 +6,30 @@ Udify Execution - Virtual File System (VFS)
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class VFSNode:
     """VFS 节点"""
+
     path: str
-    content: Optional[str] = None
-    binary_content: Optional[bytes] = None
+    content: str | None = None
+    binary_content: bytes | None = None
     is_modified: bool = False
     is_deleted: bool = False
     is_new: bool = False
 
-    def get_content(self) -> Optional[str]:
+    def get_content(self) -> str | None:
         return self.content
 
     def set_content(self, content: str) -> None:
         self.content = content
         self.is_modified = True
 
-    def get_binary(self) -> Optional[bytes]:
+    def get_binary(self) -> bytes | None:
         return self.binary_content
 
     def set_binary(self, content: bytes) -> None:
@@ -50,10 +51,10 @@ class VirtualFileSystem:
 
     def __init__(self, base_path: Path) -> None:
         self.base_path = base_path
-        self._files: Dict[str, VFSNode] = {}
-        self._originals: Dict[str, str] = {}  # 原始内容备份
+        self._files: dict[str, VFSNode] = {}
+        self._originals: dict[str, str] = {}  # 原始内容备份
 
-    def read_file(self, path: str) -> Optional[str]:
+    def read_file(self, path: str) -> str | None:
         """读取文件（优先从 VFS，否则从实际文件系统）"""
         # 1. 检查 VFS
         if path in self._files:
@@ -106,7 +107,7 @@ class VirtualFileSystem:
 
         return False
 
-    def get_diff(self, path: str) -> Optional[Dict[str, Any]]:
+    def get_diff(self, path: str) -> dict[str, Any] | None:
         """获取文件的 diff"""
         if path not in self._files:
             return None
@@ -142,7 +143,7 @@ class VirtualFileSystem:
 
         return None
 
-    def get_all_diffs(self) -> List[Dict[str, Any]]:
+    def get_all_diffs(self) -> list[dict[str, Any]]:
         """获取所有修改的 diff"""
         diffs = []
         for path in self._files:
@@ -151,20 +152,22 @@ class VirtualFileSystem:
                 diffs.append(diff)
         return diffs
 
-    def _compute_diff(self, original: str, current: str) -> List[Dict[str, Any]]:
+    def _compute_diff(self, original: str, current: str) -> list[dict[str, Any]]:
         """计算文本差异"""
         import difflib
 
         original_lines = original.splitlines(keepends=True)
         current_lines = current.splitlines(keepends=True)
 
-        diff = list(difflib.unified_diff(
-            original_lines,
-            current_lines,
-            fromfile="original",
-            tofile="modified",
-            lineterm="",
-        ))
+        diff = list(
+            difflib.unified_diff(
+                original_lines,
+                current_lines,
+                fromfile="original",
+                tofile="modified",
+                lineterm="",
+            )
+        )
 
         # 解析统一差异格式
         changes = []
@@ -176,7 +179,7 @@ class VirtualFileSystem:
 
         return changes
 
-    def apply_to_filesystem(self) -> Dict[str, Any]:
+    def apply_to_filesystem(self) -> dict[str, Any]:
         """将 VFS 中的修改应用到实际文件系统"""
         results = {
             "applied": [],
@@ -216,14 +219,15 @@ class VirtualFileSystem:
         self._files.clear()
         self._originals.clear()
 
-    def get_modified_files(self) -> List[str]:
+    def get_modified_files(self) -> list[str]:
         """获取所有被修改的文件路径"""
         return [
-            path for path, node in self._files.items()
+            path
+            for path, node in self._files.items()
             if node.is_modified or node.is_deleted or node.is_new
         ]
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """获取统计信息"""
         modified = sum(1 for n in self._files.values() if n.is_modified)
         deleted = sum(1 for n in self._files.values() if n.is_deleted)
