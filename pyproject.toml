@@ -35,6 +35,8 @@ dev = [
     "hypothesis>=6.0",
     "mypy>=1.8",
     "ruff>=0.2",
+    "tree-sitter>=0.21",
+    "tree-sitter-lua>=0.1",
 ]
 graph = [
     "neo4j>=5.0",
@@ -86,6 +88,8 @@ show_error_codes = true
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+
+[tool.ruff.lint]
 select = [
     "E",  # pycodestyle errors
     "F",  # Pyflakes
@@ -97,7 +101,13 @@ select = [
     "C4", # flake8-comprehensions
     "SIM",# flake8-simplify
 ]
-ignore = ["E501"]
+ignore = ["E501", "SIM102"]  # nested-if is often clearer than `and`; merge is not always safe
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# ANSI color constants are uppercase by convention.
+"udify/core/infrastructure/preview_formatter.py" = ["N806"]
+# MCP protocol field is mixedCase by spec.
+"udify/core/execution/mcp_server.py" = ["N815"]
