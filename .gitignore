@@ -57,6 +57,14 @@ logs/
 *.mod_backup/
 .udify/
 
+# Personal agent config (machine-specific symlinks/settings)
+.agents/
+.claude/
+
+# Tool caches
+.hypothesis/
+.ruff_cache/
+
 # Database
 *.db
 *.sqlite
