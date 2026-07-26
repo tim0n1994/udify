@@ -12,15 +12,16 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
 class LLMResponse:
     """LLM 响应"""
+
     content: str
     model: str
-    usage: Dict[str, int]
+    usage: dict[str, int]
     finish_reason: str = "stop"
 
 
@@ -34,7 +35,7 @@ class LLMClient:
     def __init__(self, provider: str = "openai", model: str = "gpt-4o-mini") -> None:
         self.provider = provider
         self.model = model
-        self._client: Optional[Any] = None
+        self._client: Any | None = None
 
     def _get_client(self) -> Any:
         """获取或创建底层客户端"""
@@ -44,29 +45,33 @@ class LLMClient:
         if self.provider == "openai":
             try:
                 import openai
+
                 api_key = os.getenv("OPENAI_API_KEY")
                 if not api_key:
                     raise RuntimeError("OPENAI_API_KEY not set")
                 self._client = openai.OpenAI(api_key=api_key)
             except ImportError:
-                raise ImportError("openai package not installed")
+                raise ImportError("openai package not installed") from None
 
         elif self.provider == "anthropic":
             try:
                 import anthropic
+
                 api_key = os.getenv("ANTHROPIC_API_KEY")
                 if not api_key:
                     raise RuntimeError("ANTHROPIC_API_KEY not set")
                 self._client = anthropic.Anthropic(api_key=api_key)
             except ImportError:
-                raise ImportError("anthropic package not installed")
+                raise ImportError("anthropic package not installed") from None
 
         else:
             raise ValueError(f"Unknown provider: {self.provider}")
 
         return self._client
 
-    def complete(self, prompt: str, temperature: float = 0.7, max_tokens: int = 1000) -> LLMResponse:
+    def complete(
+        self, prompt: str, temperature: float = 0.7, max_tokens: int = 1000
+    ) -> LLMResponse:
         """
         单次补全调用
         """
@@ -109,7 +114,9 @@ class LLMClient:
 
         raise RuntimeError("Unknown provider")
 
-    def chat(self, messages: List[Dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000) -> LLMResponse:
+    def chat(
+        self, messages: list[dict[str, str]], temperature: float = 0.7, max_tokens: int = 1000
+    ) -> LLMResponse:
         """
         多轮对话
         """

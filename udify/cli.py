@@ -73,7 +73,7 @@ def create_parser() -> argparse.ArgumentParser:
     )
 
     # preview 命令
-    preview_parser = subparsers.add_parser("preview", help="预览当前修改")
+    subparsers.add_parser("preview", help="预览当前修改")
 
     # apply 命令
     apply_parser = subparsers.add_parser("apply", help="应用待确认的 Mod")
@@ -84,27 +84,93 @@ def create_parser() -> argparse.ArgumentParser:
     rollback_parser.add_argument("session_id", help="会话 ID")
 
     # stats 命令
-    stats_parser = subparsers.add_parser("stats", help="查看统计")
+    subparsers.add_parser("stats", help="查看统计")
 
     # validate 命令
-    validate_parser = subparsers.add_parser("validate", help="验证游戏目录")
+    subparsers.add_parser("validate", help="验证游戏目录")
 
     return parser
 
 
 async def cmd_mod(args: argparse.Namespace) -> int:
-    """mod 命令"""
-    pipeline = UdifyPipeline(game_root=args.game_root)
+    """mod 命令——走单一编排入口。
+
+    miu2d 游戏走 ``Miu2dClosedLoop``（批次 2 的黄金闭环：语义图→file_patch→VFS
+    预览）；其它引擎回退到 ``UdifyPipeline``。
+    """
+    from udify.core.adapters.miu2d import Miu2dAdapter
 
     print(f"🎮 分析游戏目录: {args.game_root}")
     print(f"💭 意图: {args.intent}")
-    print()
 
+    # 检测是否为 miu2d → 走新编排入口
+    adapter = Miu2dAdapter()
+    detection = adapter.detect(args.game_root)
+    use_miu2d_loop = detection.confidence.score > 0
+
+    if use_miu2d_loop:
+        from udify.core.miu2d_pipeline import Miu2dClosedLoop
+
+        print(f"🛰️  引擎: miu2d (置信度 {detection.confidence.score:.2f}) → 黄金闭环")
+        print()
+        loop = Miu2dClosedLoop(args.game_root)
+        loop_result = loop.run(args.intent)
+
+        if not loop_result.success:
+            print("❌ 失败!")
+            for error in loop_result.errors:
+                print(f"  - {error}")
+            return 1
+
+        # 认知层产物
+        if loop_result.graph:
+            tagged = [n for n in loop_result.graph.nodes if n.semantic_tags]
+            print(f"🧠 语义图: {len(loop_result.graph.nodes)} 节点, {len(tagged)} 带标签")
+        if loop_result.patch:
+            modes = {op.execution_mode.value for op in loop_result.patch.operations}
+            print(f"📦 计划: {len(loop_result.patch.operations)} 操作, 模式={modes}")
+        print()
+
+        formatter = PreviewFormatter(fmt="terminal")
+        if loop_result.vfs_diffs:
+            print(formatter.format_diffs(loop_result.vfs_diffs))
+        else:
+            print("⚠️  没有文件被修改（VFS 预览）")
+
+        # 导出
+        if args.export and loop_result.patch:
+            exporter = ModExporter(args.output)
+            manifest = ModManifest(
+                mod_id="mod_miu2d",
+                name=args.name or args.intent[:30],
+                version="1.0.0",
+                author=args.author,
+                description=args.intent,
+                modified_files=[d["path"] for d in loop_result.vfs_diffs],
+            )
+            output_path = exporter.export(loop_result.patch, manifest, format=args.export)
+            print(f"\n📦 已导出: {output_path}")
+
+        print("\n✅ VFS 预览完成（原文件未修改）")
+        return 0
+
+    # 非 miu2d：回退到 UdifyPipeline
+    pipeline = UdifyPipeline(game_root=args.game_root)
+    print()
     result = await pipeline.process_intent(
         user_id=args.user_id,
         intent=args.intent,
         preview_only=not args.apply,
     )
+
+    # 认知层产物（让意图分类/参考/冲突第一次在 CLI 可见）
+    if result.structured_intent:
+        goal = result.structured_intent.primary_goal
+        print(f"🧠 意图分类: {goal.get('type', 'unknown')} → {goal.get('target', '')}")
+    if result.warnings:
+        for w in result.warnings[:5]:
+            print(f"  ⚠️  {w}")
+    print()
 
     if not result.success:
         print("❌ 失败!")
@@ -113,7 +179,7 @@ async def cmd_mod(args: argparse.Namespace) -> int:
         return 1
 
     # 显示预览
-    formatter = PreviewFormatter(format="terminal")
+    formatter = PreviewFormatter(fmt="terminal")
 
     if result.vfs_diffs:
         print(formatter.format_diffs(result.vfs_diffs))
@@ -152,7 +218,7 @@ async def cmd_preview(args: argparse.Namespace) -> int:
         print("没有待预览的修改")
         return 0
 
-    formatter = PreviewFormatter(format="terminal")
+    formatter = PreviewFormatter(fmt="terminal")
     print(formatter.format_diffs(diffs))
     return 0
 
@@ -205,7 +271,7 @@ async def cmd_validate(args: argparse.Namespace) -> int:
     perception = IncrementalPerception(args.game_root)
     graph = await perception.perceive()
 
-    print(f"✅ 游戏目录验证通过")
+    print("✅ 游戏目录验证通过")
     print(f"  节点数: {len(graph.nodes)}")
     print(f"  边数: {len(graph.edges)}")
     print(f"  资源数: {len(graph.assets)}")
@@ -220,6 +286,7 @@ async def main() -> int:
 
     if args.config:
         from udify.core.infrastructure.config_loader import ConfigFileLoader
+
         loader = ConfigFileLoader(config)
         loader.load(args.config)
 
