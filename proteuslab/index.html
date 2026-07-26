@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<!--
+  Proteus Lab — Renaissance Background Setup
+  
+  1. Place 6 Renaissance portrait images in:  website/images/
+     kepler.jpg          — Johannes Kepler portrait
+     descartes.jpg        — René Descartes portrait
+     machiavelli.jpg      — Niccolò Machiavelli portrait
+     thomas_more.jpg      — Sir Thomas More portrait
+     renaissan
+     three_philosophers.jpg — Giorgione "Three Philosophers"
+  
+  2. Or run the download script:
+     cd /Users/chillbit/Proj/udify/website && bash download_images.sh
+  
+  3. If images are missing, the site gracefully falls back to
+     CSS-only Renaissance textures (SVG noise + multi-layer gradients).
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Proteus Lab — Game research laboratory exploring AI, hardware, and cross-disciplinary frontiers through the Udify intent-driven system. | 普罗透斯实验室——基于Udify意图驱动系统，探索AI、硬件与游戏艺术的交叉前沿。">
+  <title>Proteus Lab — 游戏研究实验室 | udify.games</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%234ecdc4'>~</text></svg>">
+  <meta property="og:title" content="Proteus Lab — 游戏研究实验室">
+  <meta property="og:description" content="万物皆流。我们定义问题，探索意图驱动内容演化的前沿疆域。">
+  <meta property="og:image" content="https://udify.games/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    :root {
+      --void: #050a16;
+      --abyss: #0a1a2e;
+      --deep: #0f1d32;
+      --parchment: #e8dcc4;
+      --parchment-dim: #8a7e6a;
+      --gold: #c9a96e;
+      --gold-bright: #f0d5a3;
+      --teal: #4ecdc4;
+      --teal-dim: #2a7a74;
+      --crimson: #8b2635;
+      --font-display: 'Cinzel', 'Noto Serif SC', serif;
+      --font-body: 'Cormorant Garamond', 'Noto Serif SC', serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--void);
+      color: var(--parchment);
+      line-height: 1.9;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection { background: rgba(78, 205, 196, 0.3); color: var(--teal); }
+
+    /* ── Renaissance Multi-Layer Backdrop ── */
+    /* Layer 1: Animated oil-wash base */
+    #renaissance-bg {
+      position: fixed; top:0; left:0;
+      width:100vw; height:100vh;
+      z-index: 0;
+      overflow: hidden;
+      background-color: var(--void);
+      background-image:
+        /* Renaissance sky/sky tones */
+        radial-gradient(ellipse at 15% 20%, rgba(201,169,110,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 80%, rgba(78,205,196,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(139,38,53,0.03) 0%, transparent 60%);
+    }
+
+    /* Layer 2: Seamless parchment / fresco texture (SVG noise, no ext files) */
+    #renaissance-texture {
+      position: fixed; top:0; left:0;
+      width:100vw; height:100vh; z-index: 1;
+      pointer-events: none;
+      opacity: 0.35;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='linear' slope='0.6' intercept='0.2'/%3E%3CfeFuncG type='linear' slope='0.55' intercept='0.18'/%3E%3CfeFuncB type='linear' slope='0.45' intercept='0.15'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23t)'/%3E%3C/svg%3E");
+      background-size: 400px 400px;
+      mix-blend-mode: multiply;
+    }
+
+    /* Layer 3: Floating Renaissance portraits */
+    #portrait-layer {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 6;
+      pointer-events: none;
+      perspective: 500px;
+    }
+    .portrait-img {
+      position: absolute;
+      pointer-events: none;
+      filter: url(#burn1) sepia(0.5) brightness(0.9) contrast(0.85) saturate(0.6);
+      box-shadow: inset 0 0 80px rgba(0,0,0,0.8);
+      transition: opacity 2.5s ease, filter 2.5s ease;
+      transform-origin: center center;
+    }
+    .portrait-img.bright {
+      filter: url(#burn1) sepia(0.3) brightness(1.15) contrast(1.0) saturate(0.8);
+      opacity: 0.7 !important;
+    }
+
+    /* Layer 4: Film grain overlay */
+    #film-grain {
+      position: fixed; top:0; left:0;
+      width:100vw; height:100vh; z-index: 3;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='1.5'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+/* Deep Space Canvas */
+ #starfield-canvas {
+ position: fixed; top:0; left:0;
+ width:100vw; height:100vh;
+ z-index: 4; pointer-events: none;
+ }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed; top:0; left:0; width:100%; z-index:100;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(5,8,16,0.95) 0%, transparent 100%);
+      transition: all 0.5s ease;
+    }
+    nav.scrolled { background: rgba(5,8,16,0.92); }
+    .nav-logo {
+      font-family: var(--font-display); font-size: 1rem; font-weight: 600;
+      letter-spacing: 0.3em; color: var(--teal); text-decoration: none;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .nav-logo .glyph { font-size: 1.3rem; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--parchment-dim); text-decoration: none;
+      transition: color 0.3s ease; position: relative; padding: 0.25rem 0;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -2px; left: 50%;
+      width:0; height:1px; background: var(--teal);
+      transition: width 0.4s ease; transform: translateX(-50%);
+    }
+    .nav-links a:hover { color: var(--teal); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ── Main & Sections ── */
+    main { position: relative; z-index: 10; }
+    section {
+      position: relative; width:100%; min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      padding: 8rem 2rem;
+    }
+    .section-border {
+      position: absolute; top:0; left:50%; transform: translateX(-50%);
+      width:1px; height: 4rem;
+      background: linear-gradient(to bottom, transparent, var(--teal-dim), transparent);
+      opacity: 0.3;
+    }
+
+    /* ── Hero ── */
+    #hero { min-height: 100vh; text-align: center; padding: 0 2rem; }
+    .hero-glyph {
+      font-size: 3.5rem; color: var(--teal);
+      opacity: 0.4; margin-bottom: 2rem;
+      animation: breathe 6s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity:0.3; transform: scale(1); }
+      50% { opacity:0.6; transform: scale(1.06); }
+    }
+    .hero-label {
+      font-family: var(--font-mono); font-size: 0.7rem;
+      letter-spacing: 0.5em; color: var(--teal-dim);
+      text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero-title {
+      font-family: var(--font-display); font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 800; letter-spacing: 0.12em; color: var(--gold-bright);
+      line-height: 1.1; text-shadow: 0 0 60px rgba(201,169,110,0.1);
+      margin-bottom: 0.5rem;
+    }
+    .hero-title-cn {
+      font-family: var(--font-display); font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 400; letter-spacing: 0.6em; color: var(--parchment-dim);
+      margin-bottom: 2.5rem;
+    }
+    .hero-tagline {
+      font-family: var(--font-body); font-size: clamp(1rem, 2vw, 1.3rem);
+      font-style: italic; color: var(--parchment);
+      max-width: 600px; margin: 0 auto 1.5rem; line-height: 1.9;
+    }
+    .hero-tagline-en {
+      font-family: var(--font-body); font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+      font-style: italic; color: var(--parchment-dim);
+      max-width: 600px; margin: 0 auto 3rem; line-height: 1.8;
+      opacity: 0.7;
+    }
+    .hero-desc-cn {
+      max-width: 680px; margin: 0 auto 3rem;
+      color: var(--parchment); line-height: 1.9;
+    }
+    .hero-desc-en {
+      max-width: 680px; margin: 0 auto 3rem;
+      color: var(--parchment-dim); line-height: 1.8;
+      font-style: italic; opacity: 0.6;
+    }
+    strong { color: var(--gold-bright); font-weight: 600; }
+
+    .scroll-hint {
+      position: absolute; bottom: 3rem; left:50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: var(--teal-dim); font-family: var(--font-mono);
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+      animation: floatDown 3s ease-in-out infinite;
+    }
+    @keyframes floatDown {
+      0%,100% { transform: translateX(-50%) translateY(0); opacity:0.4; }
+      50% { transform: translateX(-50%) translateY(8px); opacity:0.8; }
+    }
+    .scroll-line { width:1px; height:2.5rem; background: linear-gradient(to bottom, var(--teal-dim), transparent); }
+
+    /* ── Section Typography ── */
+    .section-number {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.3em; color: var(--teal-dim);
+      margin-bottom: 1.5rem; text-transform: uppercase;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 400; letter-spacing: 0.15em; color: var(--gold);
+      text-align: center; margin-bottom: 0.5rem; line-height: 1.3;
+    }
+    .section-subtitle {
+      font-family: var(--font-body); font-size: 1.05rem;
+      font-style: italic; color: var(--parchment-dim);
+      text-align: center; margin-bottom: 3.5rem;
+    }
+    .ornament {
+      display: flex; align-items: center; gap: 1rem; margin: 2rem 0;
+      color: var(--gold-dim); font-size: 0.8rem;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; width: 4rem; height:1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+    }
+
+    /* ── Content Wrappers ── */
+    .content-wrapper, .content-wrapper-wide {
+      width: 100%; margin: 0 auto;
+      padding: 3rem;
+      background: radial-gradient(ellipse at center, rgba(15,25,45,0.6) 0%, rgba(5,8,16,0.3) 100%);
+    }
+    .content-wrapper { max-width: 900px; }
+    .content-wrapper-wide { max-width: 1100px; }
+
+    .prose { font-size: 1.15rem; line-height: 1.9; color: var(--parchment); }
+    .prose p { margin-bottom: 1.5rem; }
+    .prose strong { color: var(--gold-bright); font-weight: 600; }
+    .prose em { color: var(--teal); font-style: italic; }
+
+    /* ── Bilingual ── */
+    .bilingual { margin-bottom: 1.5rem; }
+    .bilingual .cn {
+      font-family: var(--font-body); font-size: 1.15rem;
+      line-height: 1.8; color: var(--parchment);
+    }
+    .bilingual .cn {
+      font-family: var(--font-body); font-size: 1.15rem;
+      line-height: 1.8; color: var(--parchment);
+    }
+    .bilingual .en {
+      font-family: var(--font-mono); font-size: 0.85rem;
+      line-height: 1.6; color: var(--teal-dim);
+      font-style: normal; opacity: 0.8; margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Question Cards ── */
+    .questions-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    .question-card {
+      padding: 2rem 2.5rem;
+      background: radial-gradient(ellipse at 30% 0%, rgba(78,205,196,0.03) 0%, rgba(15,25,45,0.7) 100%);
+      position: relative; overflow: hidden;
+      transition: all 0.5s ease;
+    }
+    .question-card::before {
+      content: ''; position: absolute; top:0; left:0;
+      width: 2px; height: 100%;
+      background: linear-gradient(to bottom, var(--teal-dim), transparent 80%);
+      opacity: 0.4; transition: opacity 0.4s ease, height 0.4s ease;
+    }
+    .question-card:hover::before { opacity: 0.8; height: 100%; }
+    .question-card:hover {
+      background: radial-gradient(ellipse at 30% 0%, rgba(78,205,196,0.06) 0%, rgba(15,25,45,0.85) 100%);
+    }
+    .question-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--teal-dim); margin-bottom: 0.75rem;
+    }
+    .question-title-cn {
+      font-family: var(--font-display); font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.08em; color: var(--parchment);
+      margin-bottom: 0.4rem; line-height: 1.5;
+    }
+    .question-title-en {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      color: var(--teal-dim); letter-spacing: 0.05em;
+      margin-bottom: 0.75rem; opacity: 0.7;
+    }
+    .question-text-cn {
+      font-size: 0.95rem; color: var(--parchment);
+      line-height: 1.8; margin-bottom: 0.5rem;
+    }
+    .question-text-en {
+      font-size: 0.9rem; color: var(--parchment-dim);
+      line-height: 1.7; font-style: italic; opacity: 0.65;
+    }
+    .question-text-cn strong, .question-text-en strong { color: var(--gold); }
+
+    /* ── Domain Tags ── */
+    .domain-tags {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 0.75rem; margin-top: 2rem;
+    }
+    .domain-tag {
+      font-family: var(--font-mono); font-size: 0.75rem;
+      padding: 0.35rem 0.9rem; letter-spacing: 0.05em;
+      color: var(--teal-dim); background: rgba(78,205,196,0.03);
+      transition: all 0.3s ease;
+    }
+    .domain-tag:hover { color: var(--teal); background: rgba(78,205,196,0.08); }
+
+    /* ── Role Cards ── */
+    .roles-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    .role-card {
+      text-align: center; padding: 2.5rem 2rem;
+      background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.03) 0%, rgba(15,25,45,0.6) 100%);
+      transition: all 0.4s ease;
+    }
+    .role-card:hover {
+      background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.06) 0%, rgba(15,25,45,0.75) 100%);
+      transform: translateY(-3px);
+    }
+    .role-icon { font-size: 1.8rem; margin-bottom: 1rem; color: var(--gold-dim); }
+    .role-title {
+      font-family: var(--font-display); font-size: 0.85rem;
+      letter-spacing: 0.15em; color: var(--gold);
+      margin-bottom: 0.75rem; text-transform: uppercase;
+    }
+    .role-desc-cn {
+      font-size: 0.95rem; color: var(--parchment-dim);
+      line-height: 1.7; margin-bottom: 0.5rem;
+    }
+    .role-desc-en {
+      font-size: 0.85rem; color: var(--parchment-dim);
+      line-height: 1.6; font-style: italic; opacity: 0.6;
+    }
+
+    /* ── Manifesto ── */
+    .manifesto {
+      margin-top: 4rem; padding: 3rem;
+      background: radial-gradient(ellipse at center, rgba(139,38,53,0.04) 0%, rgba(15,25,45,0.5) 100%);
+      text-align: center;
+    }
+    .manifesto-text-cn {
+      font-family: var(--font-body); font-size: 1.25rem;
+      font-style: italic; color: var(--parchment);
+      line-height: 2; max-width: 700px; margin: 0 auto 1rem;
+    }
+    .manifesto-text-en {
+      font-family: var(--font-body); font-size: 1.05rem;
+      font-style: italic; color: var(--parchment-dim);
+      line-height: 1.8; max-width: 700px; margin: 0 auto;
+      opacity: 0.6;
+    }
+
+    /* ── Contact ── */
+    #contact { min-height: auto; padding: 6rem 2rem 4rem; }
+    .contact-email {
+      font-family: var(--font-mono); font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--teal); letter-spacing: 0.1em; text-decoration: none;
+      display: inline-block; padding: 1rem 2rem;
+      background: rgba(78,205,196,0.03);
+      position: relative; overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .contact-email::before {
+      content: ''; position: absolute; top:0; left:-100%; width:100%; height:100%;
+      background: linear-gradient(90deg, transparent, rgba(78,205,196,0.06), transparent);
+      transition: left 0.6s ease;
+    }
+    .contact-email:hover::before { left:100%; }
+    .contact-email:hover {
+      color: var(--gold-bright); background: rgba(78,205,196,0.06);
+    }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 10;
+      padding: 3rem 2rem; text-align: center;
+      background: radial-gradient(ellipse at top, rgba(78,205,196,0.02) 0%, transparent 70%);
+    }
+    .footer-domain {
+      font-family: var(--font-display); font-size: 0.85rem;
+      letter-spacing: 0.3em; color: var(--teal-dim); margin-bottom: 1rem;
+    }
+    .footer-credit {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      color: var(--parchment-dim); opacity: 0.4; letter-spacing: 0.1em;
+      line-height: 1.6;
+    }
+
+    /* ── Scroll Reveal ── */
+    .reveal { opacity:0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .reveal.visible { opacity:1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      .questions-grid { grid-template-columns: 1fr; }
+      .roles-grid { grid-template-columns: 1fr; gap:1.5rem; }
+      .content-wrapper, .content-wrapper-wide { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Filter: burned-edge vintage portrait -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden;" aria-hidden="true">
+    <defs>
+      <filter id="burn1">
+        <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="5" seed="1" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="dilated"/>
+        <feFlood flood-color="#0f0600" flood-opacity="0.85" result="burn"/>
+        <feComposite in="burn" in2="dilated" operator="in" result="burn-edge"/>
+        <feMerge>
+          <feMergeNode in="displaced"/>
+          <feMergeNode in="burn-edge"/>
+        </feMerge>
+        <feColorMatrix type="matrix"
+          values="0.7 0.1 0.05 0 0.04
+                  0.08 0.6 0.1  0 0.03
+                  0.02 0.08 0.4 0 0.02
+                  0    0    0    0.5 0"/>
+        <feGaussianBlur stdDeviation="0.8"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Renaissance Background Layers -->
+  <div id="renaissance-bg"></div>
+  <div id="renaissance-texture"></div>
+  <div id="portrait-layer">
+    <!-- 15 Renaissance Portraits — Real photographed portraits, vintage tone, soft-light blend -->
+    <img class="portrait-img" src="images/kepler.jpg"    style="position:absolute;width:22%;left:2%;top:5%;opacity:0.5;"  alt="Johannes Kepler">
+    <img class="portrait-img" src="images/newton.jpg"   style="position:absolute;width:21%;left:16%;top:50%;opacity:0.48;" alt="Isaac Newton">
+    <img class="portrait-img" src="images/descartes.jpg" style="position:absolute;width:20%;left:35%;top:4%;opacity:0.46;"  alt="René Descartes">
+    <img class="portrait-img" src="images/machiavelli.jpg" style="position:absolute;width:19%;left:52%;top:6%;opacity:0.44;"  alt="Niccolò Machiavelli">
+    <img class="portrait-img" src="images/spinoza.jpg"   style="position:absolute;width:20%;left:68%;top:12%;opacity:0.42;" alt="Baruch Spinoza">
+    <img class="portrait-img" src="images/leibniz.jpg"  style="position:absolute;width:21%;left:85%;top:8%;opacity:0.45;"  alt="Gottfried Leibniz">
+    <img class="portrait-img" src="images/bentham.jpg"  style="position:absolute;width:18%;left:5%;top:60%;opacity:0.4;"  alt="Jeremy Bentham">
+    <img class="portrait-img" src="images/montesquieu.jpg" style="position:absolute;width:19%;left:22%;top:65%;opacity:0.43;" alt="Charles de Montesquieu">
+    <img class="portrait-img" src="images/voltaire.jpg" style="position:absolute;width:17%;left:40%;top:68%;opacity:0.41;" alt="Voltaire">
+    <img class="portrait-img" src="images/kant.jpg"     style="position:absolute;width:20%;left:55%;top:55%;opacity:0.47;" alt="Immanuel Kant">
+    <img class="portrait-img" src="images/sartre.jpg"   style="position:absolute;width:18%;left:75%;top:60%;opacity:0.39;" alt="Jean-Paul Sartre">
+    <img class="portrait-img" src="images/greek_philosophers.jpg" style="position:absolute;width:25%;left:88%;top:30%;opacity:0.42;" alt="Greek Philosophers">
+    <img class="portrait-img" src="images/newton_rs.jpg" style="position:absolute;width:16%;left:38%;top:35%;opacity:0.38;" alt="Newton Royal Society">
+  </div>
+  <div id="film-grain"></div>
+
+<!-- Deep Space Canvas -->
+ <canvas id="starfield-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <a href="#hero" class="nav-logo">
+      <span class="glyph">~</span>
+      <span>PROTEUS LAB</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problems">Problems</a></li>
+      <li><a href="#domains">Domains</a></li>
+      <li><a href="#join">Join</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero">
+      <div class="hero-glyph">~</div>
+      <div class="hero-label">udify.games / research laboratory</div>
+      <h1 class="hero-title">PROTEUS LAB</h1>
+      <div class="hero-title-cn">普罗透斯实验室</div>
+      <p class="hero-tagline">"万物皆流，无物常驻。在深邃的信息海洋中，定义下一个问题。"</p>
+      <p class="hero-tagline-en">"All things flow, nothing stays. In the deep ocean of information, define the next question."</p>
+      <div class="hero-desc-cn" style="text-align:center;">
+        我们基于 <strong>Udify</strong> 意图驱动内容演化系统，在游戏、AI、硬件与艺术的交叉疆域中，提出最前沿的问题。问题即方向，定义问题即引领变革。
+      </div>
+      <div class="hero-desc-en" style="text-align:center;">
+        Built on the <strong>Udify</strong> intent-driven content evolution system, we raise the frontier questions at the intersection of games, AI, hardware, and art. Questions are directions — defining the question leads the change.
+      </div>
+      <div class="scroll-hint">
+        <span>Explore</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- PROBLEMS -->
+    <section id="problems">
+      <div class="section-border"></div>
+      <div class="content-wrapper-wide">
+        <div class="section-number reveal">I. Problems / 前沿问题</div>
+        <h2 class="section-title reveal">前沿问题</h2>
+        <p class="section-subtitle reveal">我们定义的、等待被解决的问题 / Questions we define, waiting to be solved</p>
+
+        <div class="prose reveal" style="margin-bottom:1rem; text-align:center;">
+          <p>
+            Udify 的核心洞见是：<strong>创作是变换，不是生成</strong>；<strong>意图比技术更重要</strong>。<br>
+            <span style="color:var(--parchment-dim); font-size:0.95rem; font-style:italic;">The core insight of Udify: <strong>Creation is transformation, not generation</strong>; <strong>Intent matters more than technology</strong>.</span>
+          </p>
+        </div>
+
+        <div class="questions-grid">
+          <div class="question-card reveal reveal-delay-1">
+            <div class="question-tag">Hardware × AI / 硬件 × AI</div>
+            <div class="question-title-cn">神经形态芯片能加速 MCTS 搜索中的价值评估吗？</div>
+            <div class="question-title-en">Can neuromorphic chips accelerate value evaluation in MCTS search?</div>
+            <div class="question-text-cn">当前 MCTS 规划中 LLM 价值函数延迟高达数百毫秒。能否利用 <strong>脉冲神经网络（SNN）在 neuromorphic 芯片</strong>（如 Intel Loihi）上实现超低延迟的价值评估？这是否能将规划延迟压缩到游戏实时帧率以内？</div>
+            <div class="question-text-en">Current LLM value functions in MCTS planning incur hundreds of milliseconds of latency. Can <strong>Spiking Neural Networks (SNN) on neuromorphic chips</strong> like Intel Loihi achieve ultra-low-latency value evaluation? Could this compress planning latency within real-time game framerates?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-2">
+            <div class="question-tag">Game Host × Edge / 游戏主机 × 边缘</div>
+            <div class="question-title-cn">如何在游戏主机上运行轻量级内容感知模型？</div>
+            <div class="question-title-en">How to run lightweight content perception models on game consoles?</div>
+            <div class="question-text-cn">PS5 / Xbox Series 的定制 APU 拥有被忽视的 AI 加速能力。能否将 <strong>感知引擎压缩为 &lt;50MB 的量化模型</strong>，直接在游戏主机上实时提取内容图谱，而不依赖云端往返？</div>
+            <div class="question-text-en">PS5/Xbox Series custom APUs have overlooked AI acceleration capabilities. Can the <strong>perception engine be compressed into a &lt;50MB quantized model</strong>, running directly on game consoles to extract content graphs in real-time, eliminating cloud round-trips?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-3">
+            <div class="question-tag">AI × Algorithms / AI × 算法</div>
+            <div class="question-title-cn">LLM 能否产生可验证的因果变换链？</div>
+            <div class="question-title-en">Can LLMs produce verifiable causal transformation chains?</div>
+            <div class="question-text-cn">Udify 的 CDL Patch 需要可验证性。如何让 LLM 在生成变换计划时，<strong>同时输出形式化的因果推理链</strong>，使得每个 Patch 操作都可以被 SMT 求解器自动验证一致性？</div>
+            <div class="question-text-en">Udify's CDL Patch requires verifiability. Can we make LLMs <strong>output formal causal reasoning chains</strong> alongside transformation plans, enabling each Patch operation to be automatically verified for consistency by SMT solvers?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-1">
+            <div class="question-tag">RL × Personality / 强化学习 × 个性</div>
+            <div class="question-title-cn">强化学习如何从用户反馈中演化出个性化审美模型？</div>
+            <div class="question-title-en">How can RL evolve personalized aesthetic models from user feedback?</div>
+            <div class="question-text-cn">当前审美模型是静态的。能否用 <strong>在线强化学习 + 贝叶斯偏好学习</strong>，让系统从每个用户的隐式反馈（停留时长、重试率、分叉行为）中实时演化出个性化审美函数？</div>
+            <div class="question-text-en">Current aesthetic models are static. Can we use <strong>online RL + Bayesian preference learning</strong> to let the system evolve personalized aesthetic functions in real-time from each user's implicit feedback (dwell time, retry rate, fork behavior)?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-2">
+            <div class="question-tag">Math × Content / 数学 × 内容</div>
+            <div class="question-title-cn">如何用范畴论形式化验证跨媒介变换的一致性？</div>
+            <div class="question-title-en">How to formalize and verify cross-media transformation consistency using category theory?</div>
+            <div class="question-text-cn">游戏→小说→视频的跨媒介变换缺乏形式化保证。能否用 <strong>范畴论语义</strong> 定义变换函子的保结构性质，从而在变换前自动验证目标媒介的可达性？</div>
+            <div class="question-text-en">Cross-media transformations (game→novel→video) lack formal guarantees. Can we use <strong>categorical semantics</strong> to define structure-preserving properties of transformation functors, automatically verifying target medium reachability before transformation?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-3">
+            <div class="question-tag">Physics × Systems / 物理 × 系统</div>
+            <div class="question-title-cn">内容适应度景观中的相变点如何被算法自动识别？</div>
+            <div class="question-title-en">How can phase transition points in content fitness landscapes be algorithmically detected?</div>
+            <div class="question-text-cn">类比统计物理中的相变检测。能否用 <strong>信息几何 + 拓扑数据分析</strong>，在内容的高维特征空间中自动定位"临界参数"，在相变点附近进行最经济但最有冲击力的变换？</div>
+            <div class="question-text-en">Analogous to phase transition detection in statistical physics. Can we use <strong>information geometry + topological data analysis</strong> to automatically locate "critical parameters" in high-dimensional content feature space, executing the most economical yet impactful transformations near phase transition points?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-1">
+            <div class="question-tag">Game Art × AI / 游戏艺术 × AI</div>
+            <div class="question-title-cn">如何从游戏引擎二进制中自动重建可编辑的内容图谱？</div>
+            <div class="question-title-en">How to automatically reconstruct editable content graphs from game engine binaries?</div>
+            <div class="question-text-cn">Unity / Unreal 的运行时资产是黑盒。能否结合 <strong>逆向工程 + 程序分析 + 神经网络反编译</strong>，从打包的游戏中自动提取出带语义标注的内容图谱（Content Graph）？</div>
+            <div class="question-text-en">Unity/Unreal runtime assets are black boxes. Can we combine <strong>reverse engineering + program analysis + neural decompilation</strong> to automatically extract semantically annotated Content Graphs from packaged games?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-2">
+            <div class="question-tag">Rendering × Intent / 渲染 × 意图</div>
+            <div class="question-title-cn">如何在实时渲染管线中嵌入"意图驱动"的实时魔改？</div>
+            <div class="question-title-en">How to embed "intent-driven" real-time modding into rendering pipelines?</div>
+            <div class="question-text-cn">当前魔改是离线的。能否在 <strong>Vulkan/Metal 着色器中嵌入意图解析器</strong>，让玩家在游戏过程中实时说出"更暗黑一点"，渲染管线即时调整光照、后处理和材质参数？</div>
+            <div class="question-text-en">Current modding is offline. Can we <strong>embed intent parsers into Vulkan/Metal shaders</strong>, allowing players to say "make it darker" mid-gameplay, with the rendering pipeline instantly adjusting lighting, post-processing, and material parameters?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-3">
+            <div class="question-tag">Cloud × Security / 云 × 安全</div>
+            <div class="question-title-cn">如何在沙箱中实现零信任的内容变换验证？</div>
+            <div class="question-title-en">How to achieve zero-trust content transformation verification in sandboxes?</div>
+            <div class="question-text-cn">gVisor 等沙箱仍有逃逸风险。能否结合 <strong>形式化验证 + eBPF 沙箱 + 可信执行环境（TEE）</strong>，构建一个可以运行不可信用户上传变换脚本的零信任执行环境？</div>
+            <div class="question-text-en">Sandboxes like gVisor still carry escape risks. Can we combine <strong>formal verification + eBPF sandboxes + TEE (Trusted Execution Environments)</strong> to build a zero-trust execution environment for untrusted user-uploaded transformation scripts?</div>
+          </div>
+
+          <div class="question-card reveal reveal-delay-1">
+            <div class="question-tag">Distributed × Content / 分布式 × 内容</div>
+            <div class="question-title-cn">如何用 DHT 构建去中心化的内容图谱存储？</div>
+            <div class="question-title-en">How to build decentralized content graph storage using DHT?</div>
+            <div class="question-text-cn">当前内容图谱集中在 Neo4j。能否用 <strong>分布式哈希表（如 IPFS + CRDT）</strong> 构建一个去中心化的内容图谱网络，让每个 Mod 创作者都成为图谱的一个节点，实现真正的 P2P 内容演化？</div>
+            <div class="question-text-en">Current content graphs are centralized in Neo4j. Can we use <strong>Distributed Hash Tables (e.g., IPFS + CRDTs)</strong> to build a decentralized content graph network, where every Mod creator becomes a node in the graph, enabling true P2P content evolution?</div>
+          </div>
+        </div>
+
+        <div class="ornament reveal">◆</div>
+        <div class="prose reveal" style="text-align:center;">
+          <p style="font-style:italic; color:var(--parchment-dim);">
+            这些问题没有标准答案。我们寻找那些被问题本身点燃的人。<br>
+            <strong>提出更好的问题，比给出平庸的答案更重要。</strong><br><br>
+            <span style="font-size:0.9rem; opacity:0.6;">These questions have no standard answers. We seek those ignited by the questions themselves.<br><strong>Raising better questions matters more than giving mediocre answers.</strong></span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOMAINS -->
+    <section id="domains">
+      <div class="section-border"></div>
+      <div class="content-wrapper">
+        <div class="section-number reveal">II. Domains / 研究疆域</div>
+        <h2 class="section-title reveal">研究疆域</h2>
+        <p class="section-subtitle reveal">Udify 思想体系下的交叉学科方向 / Cross-disciplinary directions under the Udify paradigm</p>
+        <div class="prose reveal" style="text-align:center;">
+          <p>
+            <strong>Proteus Lab</strong> 不局限于单一技术栈。我们从 <strong>游戏 Mod 自动化</strong> 切入——最硬核、最可验证的领域——但目光始终投向更远的疆域。<br>
+            <span style="color:var(--parchment-dim); font-size:0.95rem; font-style:italic;">We are not limited to a single tech stack. We enter through <strong>game mod automation</strong> — the hardest, most verifiable domain — but our gaze always reaches farther.</span>
+          </p>
+        </div>
+        <div class="domain-tags reveal">
+          <span class="domain-tag">意图识别 / Intent</span>
+          <span class="domain-tag">MCTS 规划 / MCTS Planning</span>
+          <span class="domain-tag">内容图谱 / Content Graph</span>
+          <span class="domain-tag">游戏逆向 / Game RE</span>
+          <span class="domain-tag">LLM 编排 / LLM Orchestration</span>
+          <span class="domain-tag">Diff/Patch</span>
+          <span class="domain-tag">审美模型 / Aesthetic Models</span>
+          <span class="domain-tag">适应度景观 / Fitness Landscape</span>
+          <span class="domain-tag">多智能体 / Multi-Agent</span>
+          <span class="domain-tag">实时演化 / Real-Time Evolution</span>
+          <span class="domain-tag">跨媒介转换 / Cross-Media</span>
+          <span class="domain-tag">沙箱安全 / Sandbox Security</span>
+          <span class="domain-tag">神经形态 / Neuromorphic</span>
+          <span class="domain-tag">形式化验证 / Formal Verification</span>
+          <span class="domain-tag">信息几何 / Information Geometry</span>
+          <span class="domain-tag">分布式系统 / Distributed Systems</span>
+          <span class="domain-tag">实时渲染 / Real-Time Rendering</span>
+          <span class="domain-tag">创作者经济 / Creator Economy</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOIN -->
+    <section id="join">
+      <div class="section-border"></div>
+      <div class="content-wrapper">
+        <div class="section-number reveal">III. Join / 加入我们</div>
+        <h2 class="section-title reveal">加入我们</h2>
+        <p class="section-subtitle reveal">寻找被问题点燃的人 / Seeking those ignited by questions</p>
+        <div class="prose reveal" style="text-align:center;">
+          <p>
+            我们不招聘"职位"，我们寻找"解题者"。如果你对以上任何一个问题有执念，我们渴望与你对话。<br>
+            <span style="color:var(--parchment-dim); font-size:0.95rem; font-style:italic;">We don't hire "positions"; we seek "problem solvers." If you're obsessed with any of these questions, we want to talk to you.</span>
+          </p>
+        </div>
+        <div class="roles-grid">
+          <div class="role-card reveal reveal-delay-1">
+            <div class="role-icon">◈</div>
+            <div class="role-title">架构炼金术士</div>
+            <div class="role-desc-cn">你理解复杂系统的涌现性质，能将跨学科洞见转化为软件架构。你相信代码可以像有机体一样演化。</div>
+            <div class="role-desc-en">You understand emergent properties of complex systems, translating cross-disciplinary insights into software architecture. You believe code can evolve like organisms.</div>
+          </div>
+          <div class="role-card reveal reveal-delay-2">
+            <div class="role-icon">◉</div>
+            <div class="role-title">AI 认知架构师</div>
+            <div class="role-desc-cn">你痴迷于让机器"理解"内容的结构与意义。LLM 编排、RAG、多模态融合——无论你的武器是什么，你在寻找可验证的 AI 推理。</div>
+            <div class="role-desc-en">You're obsessed with making machines "understand" content structure and meaning. LLM orchestration, RAG, multimodal fusion — whatever your weapon, you seek verifiable AI reasoning.</div>
+          </div>
+          <div class="role-card reveal reveal-delay-3">
+            <div class="role-icon">◆</div>
+            <div class="role-title">游戏系统逆向师</div>
+            <div class="role-desc-cn">你能读懂二进制的语言，拆解过 Unity / Unreal / Godot 的资源格式，对文件格式、内存布局、渲染管线有直觉般的理解。</div>
+            <div class="role-desc-en">You read the language of binaries, have dissected Unity/Unreal/Godot resource formats, with intuitive understanding of file formats, memory layouts, and rendering pipelines.</div>
+          </div>
+          <div class="role-card reveal reveal-delay-1">
+            <div class="role-icon">◎</div>
+            <div class="role-title">审美形式化者</div>
+            <div class="role-desc-cn">你在寻找量化"美"的方法。信息论、拓扑、范畴论或认知科学——无论你的武器是什么，你相信审美可以被计算，但永远不会被穷尽。</div>
+            <div class="role-desc-en">You seek methods to quantify "beauty." Information theory, topology, category theory, or cognitive science — whatever your weapon, you believe aesthetics can be computed but never exhausted.</div>
+          </div>
+          <div class="role-card reveal reveal-delay-2">
+            <div class="role-icon">◇</div>
+            <div class="role-title">系统铸造师</div>
+            <div class="role-desc-cn">你关心如何让系统在生产环境中可靠运行。分布式系统、安全沙箱、形式化验证、性能优化——你是让理论落地的重力。</div>
+            <div class="role-desc-en">You care about making systems run reliably in production. Distributed systems, secure sandboxes, formal verification, performance optimization — you are the gravity that grounds theory into reality.</div>
+          </div>
+          <div class="role-card reveal reveal-delay-3">
+            <div class="role-icon">◐</div>
+            <div class="role-title">跨媒介译者</div>
+            <div class="role-desc-cn">你看见游戏与音乐、小说与视频之间的隐秘通道。你相信任何内容都可以被翻译为任何其他内容，关键是找到正确的中间表示。</div>
+            <div class="role-desc-en">You see the hidden passages between games and music, novels and videos. You believe any content can be translated into any other — the key is finding the right intermediate representation.</div>
+          </div>
+        </div>
+        <div class="manifesto reveal">
+          <div class="manifesto-text-cn">"我们不追问 LLM 是否真正理解，而追问：基于它的表示生成的改造计划，在实践中是否有效？"</div>
+          <div class="manifesto-text-en">"We don't ask whether LLMs truly understand; we ask: Are the transformation plans generated from their representations effective in practice?"</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-border"></div>
+      <div class="content-wrapper" style="text-align:center;">
+        <div class="section-number reveal">IV. Signal / 建立连接</div>
+        <h2 class="section-title reveal">建立连接</h2>
+        <p class="section-subtitle reveal">如果你听到了问题的召唤 / If you hear the call of the question</p>
+        <div class="prose reveal">
+          <p>
+            无论你是研究者、工程师、艺术家还是哲学家，<br>
+            如果你相信 <strong>意图应当直接转化为形态</strong>，<br>
+            如果你渴望在交叉学科的锋刃上行走——<br><br>
+            <span style="color:var(--parchment-dim); font-size:0.95rem; font-style:italic;">
+              Whether you are a researcher, engineer, artist, or philosopher,<br>
+              if you believe <strong>intent should directly transform into form</strong>,<br>
+              if you thirst to walk the razor's edge of cross-disciplinary frontiers—
+            </span>
+          </p>
+          <p style="font-size:1.3rem; color:var(--gold); margin-top:2rem;">
+            发送信号。我们等待着与你共振。<br>
+            <span style="font-size:1rem; opacity:0.6;">Send the signal. We await resonance with you.</span>
+          </p>
+        </div>
+        <a href="mailto:iamin@udify.games" class="contact-email reveal">iamin@udify.games</a>
+        <div class="ornament reveal">◆</div>
+        <div style="margin-top:2rem;">
+          <p style="font-family:var(--font-mono); font-size:0.7rem; color:var(--parchment-dim); letter-spacing:0.2em; opacity:0.4;">udify.games</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-domain">UDIFY.GAMES</div>
+    <div class="footer-credit">
+      Proteus Lab — Intent-Driven Content Evolution Research / 普罗透斯实验室 — 意图驱动内容演化研究<br>
+      "Evolution needs no designer. Only variation and selection." / "演化不需要设计师。只需要变异与选择。"
+    </div>
+  </footer>
+
+<script>
+/* ================================================================
+ DEEP COSMOS — Deep Space Starfield Particle Effect
+              深邃星空粒子特效
+ ================================================================ */
+(function() {
+ // Canvas & Renderer / 画布与渲染器
+ var c = document.getElementById('starfield-canvas');
+ if (!c || !window.THREE) return;
+
+ var rr = new THREE.WebGLRenderer({canvas: c, antialias: true, alpha: true});
+ rr.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+ rr.setSize(window.innerWidth, window.innerHeight);
+
+ // Scene & Camera / 场景与相机
+ var ss = new THREE.Scene();
+ var cam = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+ cam.position.z = 80;
+
+ // Mouse tracking (parallax) / 鼠标追踪（视差）
+ var mx = 0, my = 0, tmx = 0, tmy = 0;
+ document.addEventListener('mousemove', function(e) {
+ tmx = (e.clientX / window.innerWidth) * 2 - 1;
+ tmy = -(e.clientY / window.innerHeight) * 2 + 1;
+ });
+ window.addEventListener('resize', function() {
+ cam.aspect = window.innerWidth / window.innerHeight;
+ cam.updateProjectionMatrix();
+ rr.setSize(window.innerWidth, window.innerHeight);
+ });
+
+ // Deep space background / 深空背景
+ var bgCanvas = document.createElement('canvas');
+ bgCanvas.width = 4; bgCanvas.height = 512;
+ var bCtx = bgCanvas.getContext('2d');
+ var bGrad = bCtx.createLinearGradient(0, 0, 0, 512);
+ bGrad.addColorStop(0, '#000005');
+ bGrad.addColorStop(0.3, '#020510');
+ bGrad.addColorStop(0.7, '#030818');
+ bGrad.addColorStop(1, '#0a1228');
+ bCtx.fillStyle = bGrad;
+ bCtx.fillRect(0, 0, 4, 512);
+ var bgMesh = new THREE.Mesh(
+ new THREE.PlaneGeometry(2000, 2000),
+ new THREE.MeshBasicMaterial({map: new THREE.CanvasTexture(bgCanvas)})
+ );
+ bgMesh.position.z = -500;
+ ss.add(bgMesh);
+
+ // Shared shader material factory / 通用shader材质工厂
+ function mkMat(vs, fs, ext) {
+ var u = {time: {value: 0}, px: {value: Math.min(window.devicePixelRatio, 2)}};
+ var opts = {
+ uniforms: u,
+ vertexShader: vs,
+ fragmentShader: fs,
+ transparent: true,
+ blending: THREE.AdditiveBlending,
+ depthWrite: false
+ };
+ if (ext) { for (var k in ext) opts[k] = ext[k]; }
+ return new THREE.ShaderMaterial(opts);
+ }
+
+ // ---- Layer 1: Far-field diffuse star sea (globular cluster, chaotic distribution)
+ //    层1: 远景弥散星海（球状星团，混沌分布）
+ var g1 = new THREE.BufferGeometry();
+ var p1 = new Float32Array(6500 * 3), s1 = new Float32Array(6500);
+ for (var i = 0; i < 6500; i++) {
+ var R = 200 + Math.random() * 500;
+ var th = Math.random() * Math.PI * 2;
+ var ph = Math.acos(2 * Math.random() - 1);
+ var chaos = (Math.random() - 0.5) * R * 0.4;
+ p1[i*3] = R * Math.sin(ph) * Math.cos(th) + chaos;
+ p1[i*3+1] = R * Math.sin(ph) * Math.sin(th) + chaos;
+ p1[i*3+2] = R * Math.cos(ph) + (Math.random() - 0.5) * 200;
+ s1[i] = Math.random() * 1.2 + 0.3;
+ }
+ g1.setAttribute('position', new THREE.BufferAttribute(p1, 3));
+ g1.setAttribute('sz', new THREE.BufferAttribute(s1, 1));
+ var stars1 = new THREE.Points(g1, mkMat(
+ 'attribute float sz; uniform float time; uniform float px; varying float vA;'+
+ 'void main(){vA=sz;'+
+ 'vec3 p=position;p.x+=sin(time*.096+p.y*.018)*4.8;p.y+=cos(time*.072+p.x*.018)*3.6;'+
+ 'vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=abs(sz)*px*(180./-mv.z);gl_Position=projectionMatrix*mv;}',
+ 'varying float vA;'+
+ 'void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;'+
+ 'float a=pow(1.0-d*2.0,2.0)*0.4*vA;gl_FragColor=vec4(1.0,0.95,0.98,a);}'
+ ));
+ ss.add(stars1);
+
+ // ---- Layer 2: Nebula clouds (varying density and size)
+ //    层2: 星云团（浓淡不一，大小不一）
+ var g2 = new THREE.BufferGeometry();
+ var p2 = new Float32Array(1040 * 3), s2 = new Float32Array(1040), c2 = new Float32Array(1040 * 3);
+ var ncols = [
+ [0.06, 0.02, 0.22], [0.04, 0.08, 0.30], [0.10, 0.04, 0.28], [0.02, 0.12, 0.25], [0.08, 0.06, 0.20]
+ ];
+ for (var i = 0; i < 1040; i++) {
+ p2[i*3] = (Math.random() - 0.5) * 500;
+ p2[i*3+1] = (Math.random() - 0.5) * 350;
+ p2[i*3+2] = (Math.random() - 0.5) * 200 - 50;
+ s2[i] = Math.random() * 100 + 40;
+ var nc = ncols[Math.floor(Math.random() * ncols.length)];
+ c2[i*3] = nc[0]; c2[i*3+1] = nc[1]; c2[i*3+2] = nc[2];
+ }
+ g2.setAttribute('position', new THREE.BufferAttribute(p2, 3));
+ g2.setAttribute('sz', new THREE.BufferAttribute(s2, 1));
+ g2.setAttribute('color', new THREE.BufferAttribute(c2, 3));
+ var nebula = new THREE.Points(g2, mkMat(
+ 'attribute float sz; attribute vec3 color; uniform float time; varying vec3 vC;'+
+ 'void main(){vC=color;vec3 p=position;'+
+ 'p.x+=sin(time*.06+p.y*.012)*9.6;p.y+=cos(time*.048+p.x*.012)*7.2;'+
+ 'vec4 mv=modelViewMatrix*vec4(p,1.);gl_PointSize=sz*(250./-mv.z);gl_Position=projectionMatrix*mv;}',
+ 'varying vec3 vC;'+
+ 'void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;'+
+ 'float a=pow(1.0-d*2.0,0.5)*0.18;gl_FragColor=vec4(vC,a);}',
+ {vertexColors: true}
+ ));
+ ss.add(nebula);
+
+ // ---- Layer 3: Mid-field stars (twinkling + cross flare)
+ //    层3: 中景恒星（带闪烁+十字光芒）
+ var g3 = new THREE.BufferGeometry();
+ var p3 = new Float32Array(3250 * 3), s3 = new Float32Array(3250), ph3 = new Float32Array(3250);
+ for (var i = 0; i < 3250; i++) {
+ var R = 80 + Math.random() * 150;
+ var th = Math.random() * Math.PI * 2;
+ var ph = Math.acos(2 * Math.random() - 1);
+ p3[i*3] = R * Math.sin(ph) * Math.cos(th);
+ p3[i*3+1] = R * Math.sin(ph) * Math.sin(th);
+ p3[i*3+2] = R * Math.cos(ph) - 40;
+ s3[i] = Math.random() * 2.5 + 1;
+ ph3[i] = Math.random() * Math.PI * 2;
+ }
+ g3.setAttribute('position', new THREE.BufferAttribute(p3, 3));
+ g3.setAttribute('sz', new THREE.BufferAttribute(s3, 1));
+ g3.setAttribute('phase', new THREE.BufferAttribute(ph3, 1));
+ var stars3 = new THREE.Points(g3, mkMat(
+ 'attribute float sz; attribute float phase; uniform float time; uniform float px; varying float vT;'+
+ 'void main(){vT=0.5+0.5*sin(time*2.4+phase);'+
+ 'vec4 mv=modelViewMatrix*vec4(position,1.);'+
+ 'gl_PointSize=sz*px*vT*(140./-mv.z);gl_Position=projectionMatrix*mv;}',
+ 'varying float vT;'+
+ 'void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;'+
+ 'float ang=atan(gl_PointCoord.y-0.5,gl_PointCoord.x-0.5);'+
+ 'float cross=abs(sin(ang*2.0))*0.3+0.7;'+
+ 'float a=pow(1.0-d*2.0,1.3)*vT*cross*0.8;'+
+ 'gl_FragColor=vec4(1.0,0.96,0.92,a);}'
+ ));
+ ss.add(stars3);
+
+ // ---- Layer 4: Near-field bright stars (large but few)
+ //    层4: 近景亮星（大而少）
+ var g4 = new THREE.BufferGeometry();
+ var p4 = new Float32Array(520 * 3), s4 = new Float32Array(520), c4 = new Float32Array(520 * 3);
+ var lcols = [[1,1,1],[1,0.95,0.88],[0.9,0.95,1],[1,1,0.95],[0.95,0.9,1]];
+ for (var i = 0; i < 520; i++) {
+ var R = 30 + Math.random() * 60;
+ var th = Math.random() * Math.PI * 2;
+ var ph = Math.acos(2 * Math.random() - 1);
+ p4[i*3] = R * Math.sin(ph) * Math.cos(th);
+ p4[i*3+1] = R * Math.sin(ph) * Math.sin(th);
+ p4[i*3+2] = R * Math.cos(ph) - 20;
+ s4[i] = Math.random() * 5 + 2.5;
+ var lc = lcols[Math.floor(Math.random() * lcols.length)];
+ c4[i*3] = lc[0]; c4[i*3+1] = lc[1]; c4[i*3+2] = lc[2];
+ }
+ g4.setAttribute('position', new THREE.BufferAttribute(p4, 3));
+ g4.setAttribute('sz', new THREE.BufferAttribute(s4, 1));
+ g4.setAttribute('color', new THREE.BufferAttribute(c4, 3));
+ var stars4 = new THREE.Points(g4, mkMat(
+ 'attribute float sz; attribute vec3 color; uniform float px; varying vec3 vC;'+
+ 'void main(){vC=color;vec4 mv=modelViewMatrix*vec4(position,1.);'+
+ 'gl_PointSize=sz*px*(130./-mv.z);gl_Position=projectionMatrix*mv;}',
+ 'varying vec3 vC;'+
+ 'void main(){float d=length(gl_PointCoord-vec2(0.5));if(d>0.5)discard;'+
+ 'float a=pow(1.0-d*2.0,1.2)*0.95;gl_FragColor=vec4(vC,a);}',
+ {vertexColors: true}
+ ));
+ ss.add(stars4);
+
+ // ---- Animation loop / 动画循环 ----
+ var objs = [stars1, nebula, stars3, stars4];
+ var ck = new THREE.Clock();
+ function anim() {
+ requestAnimationFrame(anim);
+ var t = ck.getElapsedTime();
+ mx += (tmx - mx) * 0.02;
+ my += (tmy - my) * 0.02;
+ for (var i = 0; i < objs.length; i++) {
+ var o = objs[i];
+ if (o.material.uniforms) o.material.uniforms.time.value = t;
+ o.rotation.y = t * 0.006 + mx * 0.08;
+ o.rotation.x = my * 0.04;
+ o.rotation.z = t * 0.0024;
+ }
+ cam.position.x = mx * 6;
+ cam.position.y = my * 4;
+ cam.lookAt(0, 0, -30);
+ rr.render(ss, cam);
+ }
+ anim();
+})();
+
+    /* ================================================================
+       RANDOM PORTRAIT HIGHLIGHT — one lights up, others dim
+       ================================================================ */
+    (function() {
+      var imgs = document.querySelectorAll('#portrait-layer .portrait-img');
+      if (imgs.length === 0) return;
+      // Init: all dim
+      for (var i = 0; i < imgs.length; i++) {
+        imgs[i].classList.remove('bright');
+      }
+      function pickOne() {
+        var idx = Math.floor(Math.random() * imgs.length);
+        for (var i = 0; i < imgs.length; i++) {
+          imgs[i].classList.remove('bright');
+        }
+        imgs[idx].classList.add('bright');
+      }
+      pickOne();
+      setInterval(pickOne, 2500 + Math.random() * 2000);
+    })();
+
+    /* ================================================================
+       SCROLL REVEAL
+       ================================================================ */
+    (function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+          if (e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold:0.1 });
+      document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+    })();
+
+    /* ================================================================
+       NAV SCROLL
+       ================================================================ */
+    (function() {
+      var nav = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        nav.classList.toggle('scrolled', window.pageYOffset > 80);
+      });
+    })();
+  </script>
+</body>
+</html>

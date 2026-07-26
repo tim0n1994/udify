@@ -1,0 +1,1485 @@
+<!DOCTYPE HTML>
+
+
+
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+        
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+
+        <!-- Block search indexing controllers with exclude-from-sitemap paramater set to true, using meta tags.  -->
+        <!-- https://support.google.com/webmasters/answer/93710?hl=en -->
+        
+
+        
+
+        <base href="https://pictures.royalsociety.org/">
+
+
+        <link rel="stylesheet" type="text/css" href="static/css/content/reset.css?_m=1688396681">
+
+        <script type="text/javascript" src="static/js/content/util.js?_m=1688396898"></script>
+        <link rel="stylesheet" type="text/css" href="static/css/web_user/user-style.css?_m=1688396682">
+        <link rel="stylesheet" type="text/css" href="static/css/web_dashboard/web_dashboard.css?_m=1688396682">
+        <script type="text/javascript" src="static/js/web_dashboard/dashboard.js?_m=1688397208"></script>
+        <script type="text/javascript" src="static/js/col/jquery/jquery-3.7.1.min.js?_m=1704808284"></script>
+
+        <script type="text/javascript" src="static/js/col/jquery/jquery-ui.min-1.13.2.js?_m=1708607846"></script>
+        <link rel="stylesheet" type="text/css" href="static/css/col/jquery/smoothness/jquery-ui.min-1.13.2.css?_m=1708677835">
+
+        <script type="text/javascript" src="static/js/col/jquery/jquery.bxslider.4.2.15.js?_m=1688396865"></script>
+        <link rel="stylesheet" type="text/css" href="static/css/col/jquery/jquery.bxslider.4.2.15.css?_m=1688396673">
+        <script type="text/javascript" src="static/js/col/openseadragon-2.4.1/openseadragon.js?_m=1688396876"></script>
+        <script type="text/javascript" src="static/js/col/jquery/jquery.bpopup-0.11.0.min.js?_m=1688396865"></script>
+        <script type="text/javascript" src="static/js/col/bpopup.js?_m=1688396860"></script>
+        <link rel="stylesheet" type="text/css" href="static/css/col/bpopup.css?_m=1688396420">
+        <script type="text/javascript" src="static/js/col/menu/jquery.slicknav.min.js?_m=1688396868"></script>
+        <link rel="stylesheet" type="text/css" href="static/css/col/menu/slicknav.min.css?_m=1688396676">
+
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <meta name="Description" content="Portrait of Johannes Kepler, engraved by Jakob van der Heyden.,Portrait of Johannes Kepler, engraved by Jakob van der Heyden." >
+<meta name="Keywords" content="digital (surrogate), manuscript, print" >
+
+        <title>Portrait of Johannes Kepler,Portrait of Johannes Kepler | Royal Society Picture Library</title>
+
+        
+
+        <script type="text/javascript" nonce="ZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTJmN2JjODQ3M2U4ZDI0ZjU2MjAwYjdhN2QyZTkzMzA5MmY3YmM4NDczZThkMjRmNTYyMDBiN2E3ZDJlOTMzMDkyZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTI=">
+            var IXCAF = {};
+            IXCAF.project = {
+                rootID: 'SITE-COL', // At the moment, this could be SITE-MI+ or SITE-COL. Check your database's root node.
+                id: 'col',
+                siteNodeId: 'SITE-COL',
+                assetRefButtons: { showUpload: true, showEdit: true, showClear: true },
+                assetConfig: {
+                    rectype: 'image'
+                },
+                fieldHints: {
+                    cms_con_core_graphic: {
+                        ifolder: 'cms-images',
+                        image_type: 'ContentIndex+ image'
+                    },
+                    dash_mus_obj_images_field_id: {
+                        ifolder: 'dashboard-object-images',
+                        rectype: 'image',
+                        image_type: 'MuseumIndex+ image',
+                        displayRendition: 'web',
+                        direct: 'y'
+                    },
+                    mus_obj_images_field_id: {
+                        ifolder: 'dashboard-object-images',
+                        rectype: 'image',
+                        image_type: 'MuseumIndex+ image',
+                        displayRendition: 'web',
+                        direct: 'y'
+                    },
+
+                    // show all the nodes in parent site tree popup
+                    /*cms_node_parent_calc: {
+                        treePanelConfig: {
+                            allchildren: true
+                        }
+                    }
+                    // show specific nodes in parent site tree popup
+                    cms_node_parent_calc: {
+                        treePanelConfig: {
+                            rectypes: "mus_article,cms_node_child"
+                        }
+                    }
+                    */
+                },
+                dashboardUrl: 'dashboard',
+                editorButtons: {
+                    format: true,
+                    lists: true,
+                    IXLink: true,
+                    IXImage: true,
+                    IXEembed: {
+                        MI_object_is_enable : false,
+                        HTML_snippet_is_enable: true
+                    },
+                    IXFormat: false,
+                    IXHeading: false
+                }
+            };
+        </script>
+
+        
+
+        
+            <script type="text/javascript" src="static/js/organiser/organiser-noext.js?_m=1688397207"></script>
+
+
+        
+
+            
+    
+        <link rel="icon" href="static/img/col_royal_society/favicon.ico">
+    
+    <script type="text/javascript" src="static/js/col_royal_society/col_custom.js?_m=1688396897"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/col_royal_society/style.css">
+
+    <link rel="stylesheet" type="text/css" href="static/css/col_royal_society/col_custom.css?_m=1688396680">
+
+
+    <!--[if IE]>
+        
+        <link rel="stylesheet" type="text/css" href="static/css/col_royal_society/IE-style.css">
+    <![endif]-->
+    <script type="text/javascript" nonce="ZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTJmN2JjODQ3M2U4ZDI0ZjU2MjAwYjdhN2QyZTkzMzA5MmY3YmM4NDczZThkMjRmNTYyMDBiN2E3ZDJlOTMzMDkyZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTI=">
+
+        
+        $(function() {
+            $("#book_tabs_wrap").tabs();
+        });
+        var imgDataJson
+
+    </script>
+
+        <script nonce="ZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTJmN2JjODQ3M2U4ZDI0ZjU2MjAwYjdhN2QyZTkzMzA5MmY3YmM4NDczZThkMjRmNTYyMDBiN2E3ZDJlOTMzMDkyZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTI="></script>
+
+
+        <script type="text/javascript" src="static/js/col/col-v2.js?_m=1688396860"></script>
+
+        <!-- OneTrust Cookies Consent Notice start for pictures.royalsociety.org -->
+<script type="text/javascript" src="https://cdn-ukwest.onetrust.com/consent/ab8feff9-5221-4346-aa24-f355268cfa6a/OtAutoBlock.js" ></script>
+<script src="https://cdn-ukwest.onetrust.com/scripttemplates/otSDKStub.js"  type="text/javascript" charset="UTF-8" data-domain-script="ab8feff9-5221-4346-aa24-f355268cfa6a" ></script>
+<script type="text/javascript">
+function OptanonWrapper() { }
+</script>
+<!-- OneTrust Cookies Consent Notice end for pictures.royalsociety.org -->
+<!-- Google Tag Manager --> 
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+
+})(window,document,'script','dataLayer','GTM-TQPW74W');</script>
+ <!-- End Google Tag Manager -->
+
+
+
+    </head>
+    <body>
+        
+        <div class="container object">
+
+            <header class="header">
+
+
+
+                <div class="inner-header">
+                    <div class="logo_banner">
+                        
+
+
+
+    <div class="logo-wrap">
+        <a class="banner_logo" href="https://royalsociety.org" alt="Royal Society Picture Library">
+            <div class="banner_text">The Royal Society</div>
+        </a>
+    </div>
+
+
+
+
+    <section class="banner">
+        <div class="title">
+            <div id="title-text">Royal Society Picture Library</div>
+        </div>
+    </section>
+
+
+
+
+                    </div>
+                    <div class="user_menu">
+                        <div class="login_bar va">
+    
+            <a href="login"><i class="fa fa-sign-in va"></i><span class="fa_legend va"> Log in</span></a>
+            
+        
+</div>
+
+
+                        <div class="organiser va">
+                        <div class="organiser_bar_inner">
+                            <!-- $Header: /local/cvs_repository/caf/modules/col_core/web_templates/include/organiser_controls.html,v 1.6 2023/02/22 12:05:43 sacha Exp $ -->
+
+
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function () {
+
+    var organiser = new IXCAF.Organiser({
+        url: '/organiser/api',
+        name: 'Organiser-MI',
+        setProfile: 'simple',
+        itemProfile: 'items'
+    });
+
+    var sets_store = organiser.getSetsStore();
+    var item_store = organiser.getItemsStore();
+
+    var logged_in = ('' === 'yes');
+    //###I think this is true by definition because we only include if true
+    var organiser_enabled = ('1' =='1');
+
+    // the management of this cookie should perhaps be in some common col file
+    var current_set_id = '1';
+
+    // once the organiser has been loaded for the first time, set current set
+    sets_store.on('load', function onload() {
+        sets_store.un('load', onload);  // once only
+        if ((!current_set_id && (sets_store.getCount() > 0)) ||
+            (current_set_id && !organiser.setExists(current_set_id))) {
+            // use the first available set
+            current_set_id = sets_store.getAt(0).get('id');
+        }
+
+        organiser.setCurrent(current_set_id);
+    });
+
+    organiser.on('currentchanged', function (orgr, id) {
+        createCookie('currentSet', id);
+    });
+
+    // support multiple sets if the user is logged in
+    if (organiser_enabled && logged_in) {
+        // populate the drop-down whenever the lists of sets changes
+        sets_store.on('load', function () {
+            var html = '';
+            var rec = organiser.getCurrentSetRec();
+            var selid = rec ? rec.get('id') : null;
+            sets_store.each(function (rec) {
+                var id = rec.get('id');
+                html += '<option value="'+escapeHTML(id)+'"';
+                if (id === selid)
+                    html += ' selected="selected"';
+                html += '>' + escapeHTML(rec.get('name')) +
+                        '</option>';
+            });
+            $('#organiser-set-select').html(html);
+        });
+
+        // change the current set when the user selects from the drop-down
+        $('#organiser-set-select').change(
+            function () {
+                var id = $('#organiser-set-select option:selected').val();
+                organiser.setCurrent(id);
+            }
+        );
+
+        // make sure the right combo option is selected
+        organiser.on('currentchanged', function (orgr, id) {
+            createCookie('currentSet', id);
+            $('#organiser-set-select option[value='+id+']').attr('selected', 'selected');
+        });
+    }
+
+    // update the add/remove links to reflect whether the item is in the
+    // current set
+
+    function syncToggle (el) {
+        $(el).removeClass('working');
+        el.style.display = 'block';
+        var id = el.attributes['_objid'].value;
+
+        function toggle (el, id, onoff) {
+            try {
+                var added = false;
+                var removed = false;
+
+                if (onoff === 'on') { // add
+                    added = organiser.addItem(id);
+                } else if (onoff === 'off') { // remove
+                    removed = organiser.removeItem(id);
+                }
+
+                if (added || removed) {
+                    el.onclick = function () { return false; };
+                    el.innerHTML = 'working...';
+                    $(el).addClass('working');
+                    organiser.saveCurrentSet(
+                        function oncomplete (r) {
+                            if (!r.success) {
+                                if (added) {
+                                    item_store.remove(rec);
+                                } else {
+                                    item_store.insert(pos, [ rec ]);
+                                }
+                            }
+                            syncToggle(el);
+                        }
+                    );
+                }
+            } catch (e) {
+                if (console) console.log(e);
+            }
+            return false;
+        }
+
+        if (item_store.findExact('id', id) !== -1) {
+            el.innerHTML = '<i class="fa fa-minus"></i><span class="caption"> remove from ' + 'My images' + '</span>';
+            el.onclick = function immediate () {
+                var cel = el;
+                return function () {
+                    return toggle(cel, id, 'off');
+                }
+            }();
+        } else {
+            el.innerHTML = '<i class="fa fa-plus"></i><span class="caption"> add to ' + 'My images' + '</span>';
+            el.onclick = function immediate () {
+                var cel = el;
+                return function () {
+                    return toggle(cel, id, 'on');
+                }
+            }();
+        }
+    }
+
+    // Update the add/remove links whenever the current set is changed
+    organiser.on('currentchanged', function () {
+        var i;
+        var els = document.getElementsByClassName("organiser-toggle");
+        for (i=0; i < els.length; i++) {
+            var el = els[i];
+            syncToggle(el);
+        }
+    });
+
+    // Now that all the event handlers are in place, load the organiser
+    
+
+    organiser.initData({
+        sets: {"count":1,"items":[{"parent":"","owner":"","orig_owner":"","orig_owner_display":"","groups":[],"name":"My images","description":"","nitems":0,"created":"","id":"1","items":[]}]},
+        currentSet: {"parent":"","owner":"","orig_owner":"","orig_owner_display":"","groups":[],"name":"My images","description":"","nitems":0,"created":"","id":"1","items":[]}
+    });
+});
+</script>
+
+    <div class="organiser_bar va">
+        
+    <span class="organiser_manage">
+            <a href="organiser/manage" id="organiser_manage">My images</a>
+    </span>
+    </div>
+
+
+                            <!-- $Header: /local/cvs_repository/caf/modules/col_core/web_templates/include/basket_controls.html,v 1.5 2023/02/22 14:14:29 sacha Exp $ -->
+
+
+
+<script type="text/javascript">
+
+var Basket = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    var organiser = new IXCAF.Organiser({
+        url: '/organiser/api',
+        setProfile: 'simple',
+        itemProfile: 'items',
+        name: 'EF-Basket'
+    });
+
+    Basket = organiser;
+
+    var sets_store = organiser.getSetsStore();
+    var item_store = organiser.getItemsStore();
+
+    var logged_in = ('' === 'yes');
+
+    // there's only one basket
+    var current_set_id = '1';
+
+
+
+    // Update the display of number of items in basket whenever the basket
+    // changes. Turns out the best way to do this currently is to watch for
+    // the 'clean' event (fires when the js basket organiser object is in
+    // sync with the basket on the server), although this means it briefly
+    // shows zero while the basket organiser is loading. Should probably
+    // review the organiser object's events and add a specific event.
+
+    organiser.on(
+        'clean',
+        function () {
+            var n = item_store.getCount();
+            //$('.basket-nitems').html('('+n+" item"+(n!=1?"s":"")+')');
+            if (n) {
+                //$('.basket-counter').style.display = 'initial';
+                //$('.basket-counter').hidden = 'false';
+                $('.basket-counter').show();
+                $('.basket-counter').html(n);
+            } else {
+                //$('.basket-counter').hidden = 'true';
+                $('.basket-counter').hide();
+            }
+            // could highlight .basket-status somehow too
+        }
+    );
+
+
+    // update the add/remove links to reflect whether the item is in the
+    // current set
+
+    function syncToggle (el) {
+        $(el).removeClass('working');
+        el.style.display = 'block';
+        var id = el.attributes['_objid'].value;
+
+        function toggle (el, id, onoff) {
+            try {
+                var added = false;
+                var removed = false;
+
+                if (onoff === 'on') { // add
+                    added = organiser.addItem(id);
+                } else if (onoff === 'off') { // remove
+                    removed = organiser.removeItem(id);
+                }
+
+                if (added || removed) {
+                    el.onclick = function () { return false; };
+                    el.innerHTML = 'working...';
+                    $(el).addClass('working');
+                    organiser.saveCurrentSet(
+                        function oncomplete (r) {
+                            if (!r.success) {
+                                if (added) {
+                                    item_store.remove(rec);
+                                } else {
+                                    item_store.insert(pos, [ rec ]);
+                                }
+                            }
+                            syncToggle(el);
+                        }
+                    );
+                }
+            } catch (e) {
+                if (console) console.log(e);
+            }
+            return false;
+        }
+
+        if (item_store.findExact('id', id) !== -1) {
+            el.innerHTML = '<i class="fa fa-cart-arrow-down"></i><span class="caption"> remove from ' + 'Basket' + '</span>';
+            el.onclick = function immediate () {
+                var cel = el;
+                return function () {
+                    return toggle(cel, id, 'off');
+                }
+            }();
+        } else {
+            el.innerHTML = '<i class="fa fa-cart-plus"></i><span class="caption"> add to ' + 'Basket' + '</span>';
+            el.onclick = function immediate () {
+                var cel = el;
+                return function () {
+                    return toggle(cel, id, 'on');
+                }
+            }();
+        }
+    }
+
+
+    // Update the add/remove links whenever the current set is changed
+    organiser.on('currentchanged', function () {
+        var i;
+        var els = document.getElementsByClassName("basket-toggle");
+        for (i=0; i < els.length; i++) {
+            var el = els[i];
+            syncToggle(el);
+        }
+    });
+
+
+    // Now that all the event handlers are in place, load the organiser
+    
+
+    organiser.initData({
+        sets: {"count":1,"items":[{"parent":"","owner":"","orig_owner":"","orig_owner_display":"","groups":[],"name":"Basket","description":"","nitems":0,"created":"","id":"1","items":[]}]},
+        currentSet: {"parent":"","owner":"","orig_owner":"","orig_owner_display":"","groups":[],"name":"Basket","description":"","nitems":0,"created":"","id":"1","items":[]}
+    });
+});
+</script>
+
+<div class="user_basket va">
+    <a href="ec/basket" class="basket-status">
+        <i class="fa fa-shopping-cart va"></i>
+        <span class="basket-counter"></span>
+    </a>
+</div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="inner-header">
+                    <nav class="header_primary_menu">
+                    <div class="hamburger-button menu-open"></div>
+                        
+                        
+    
+    
+        <div class="menu_bar">
+            <ul id="navigation-menu-first-level-col-main" class="top-level-menu"><li class="list_item"><a href="" class="">Picture Library</a></li><li class="list_item"><a href="about" class="">About us</a></li><li class="list_item"><a href="terms-and-conditions" class="">Terms and conditions</a></li><li class="list_item"><a href="art23315" class="">Privacy policy</a></li><li class="list_item"><a href="help" class="">Help</a></li><li class="list_item"><a href="contact" class="">Contact us</a></li></ul>
+        </div>
+    
+
+
+                    </nav>
+                </div>
+
+
+            </header>
+
+            
+            
+                <section class="search-form-wrap">
+    <div class="search-form-inner-wrap">
+        <div class="simple-search-wrap">
+            <form id="simple-search" role="search" name="simple_search" method="post" action="https://pictures.royalsociety.org/results" accept-charset="UTF-8">
+    <div class="inner-simple-search-wrap">
+        <input type="hidden" name="session" value="rfMCuElf_Na">
+        <input type="hidden" name="sort" value="1">
+        <input id="simple_search_box" aria-label="Search the collections" type="text" name="simple_search" value="" size="24" placeholder="Search the collections">
+        <input class="simple_search_submit fa-input" type="submit" value="&#xf002;">
+        <input type="hidden" name="mi_adv_search" value="no">
+        <input type="hidden" name="mi_search_type" value="simple">
+    </div>
+</form>
+<div class="adv_search_link">
+    <a href="advanced-search">
+    <i class="fa fa-search-plus va"></i>
+        <span class="fa_legend va"> Advanced search</span>
+    </a>
+</div>
+
+
+
+            <div class="search_image_caption">
+                <a href="image-rs-17582" style="color: #fff; text-decoration: none">William Hamilton's <i>Campi Phlegraei</i> (1776)</a>
+            </div>
+        </div>
+
+
+
+        <div class="adv-search-caption-wrap">
+            <a class="search_link" href="#search_options">Show Advanced Search</a>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="banner-search-form">
+            <div id="search-forms-container">
+    
+        <!-- If search in more than one record type then more tabs -->
+        
+        <ul>
+            <li id="search_tab_all"><a href="https://pictures.royalsociety.org/image-rs-17181#tabs-search-all">Search all collections</a></li>
+            
+                <li id="search_tab_mus_catalogue"><a href="https://pictures.royalsociety.org/image-rs-17181#tabs-search-objects">Search objects</a></li>
+            
+            
+                <li id="search_tab_archive"><a href="https://pictures.royalsociety.org/image-rs-17181#tabs-search-archives">Search archives</a></li>
+            
+            
+                <li id="search_tab_book"><a href="https://pictures.royalsociety.org/image-rs-17181#tabs-search-books">Search books</a></li>
+            
+            
+            
+        </ul>
+        
+        
+    
+
+    
+        
+        <div id="tabs-search-all" class="tab-panel">
+          <form name="advanced_search" id="advanced_search" method="post" action="https://pictures.royalsociety.org/results" accept-charset="UTF-8">
+  <div class="hidden-items">
+    <input type="hidden" name="session" value="rfMCuElf_Na">
+    <input type="hidden" name="mi_search_type" value="adv">
+    <input type="hidden" name="mi_adv_search" value="yes">
+    <input type="hidden" name="adv_rt_all" value="y">
+    <input type="hidden" name="sort" value="">
+  </div>
+
+  <div class="adv-search-item-wrap">
+    <div class="col1">
+            <div id="adv-text-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_text_box">General search</label>
+          </div>                
+          
+        </div>
+        <div class="search-input">
+          <input class="long inline" id="adv_text_box" name="adv_text" type="text" value="">
+        </div>  
+      </div>
+      
+      <div id="adv-date-from-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_from">Earliest year</label>
+          </div>
+          
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_from" name="adv_date_from" value="">
+        </div>
+      </div>
+      
+      <div id="adv-date-to-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_to">Latest year</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_to" name="adv_date_to" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="sort">Sort by</label>
+          </div>    
+          
+        </div>
+        
+        <div class="search-input">
+          <select class="long" id="sort" name="sort"><option value="">No sort</option><option value="1">Alphabetical</option><option value="2">Date</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col2">
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            Restrict search to:
+          </div>
+        </div>
+        <div class="search-input rectypes">
+          
+            
+            <div><input id="adv_rt_mus_catalogue" class="adv-checkbox" type="checkbox" name="adv_rt_mus_catalogue" checked="checked" /><label for="adv_rt_mus_catalogue">Objects</label></div>
+          
+            
+            <div><input id="adv_rt_archive" class="adv-checkbox" type="checkbox" name="adv_rt_archive" checked="checked" /><label for="adv_rt_archive">Archives</label></div>
+          
+            
+            <div><input id="adv_rt_book" class="adv-checkbox" type="checkbox" name="adv_rt_book" checked="checked" /><label for="adv_rt_book">Books</label></div>
+          
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col3">
+
+      <div class="search-item-wrap only-with-wrap" id="only-image-val">
+<fieldset>
+<legend>Include:</legend>
+  <div class="search-text">
+    <div class="search-input">
+      <input class="adv-checkbox" type="checkbox" id="adv_images" name="adv_images">
+    </div>
+    <div class="inline caption">
+      <label for="adv_images">Only items with images</label>
+    </div>
+    
+  </div>
+</fieldset>
+</div>
+
+      
+      <div class="search-form-buttons">
+        <input class="advanced_search_submit" type="button" value="Clear" onclick="clearForm('advanced_search'); checkCheckBox('adv_images');">
+        <input class="advanced_search_submit" type="submit" value="Search">
+      </div>
+
+    </div>
+
+  </div>
+</form>
+
+        </div>
+    
+
+    
+        
+        <div id="tabs-search-objects" class="tab-panel">
+          <form name="adv_objects" id="adv_objects_search" method="post" action="https://pictures.royalsociety.org/results" accept-charset="UTF-8">
+  <div class="hidden-items">
+    <input type="hidden" name="session" value="rfMCuElf_Na">
+    <input type="hidden" name="mi_search_type" value="adv">
+    <input type="hidden" name="mi_adv_search" value="yes">
+    <input type="hidden" name="adv_rt_mus_catalogue" value="y">
+  </div>
+
+  <div class="adv-search-item-wrap">
+    <div class="col1">
+              <div id="adv-text-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_text_box_obj">General search</label>
+          </div>                
+          
+        </div>
+        <div class="search-input">
+          <input class="long inline" id="adv_text_box_obj" name="adv_text" type="text" value="">
+        </div>  
+      </div>
+      
+      <div id="adv-date-from-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_from_obj">Earliest year</label>
+          </div>
+          
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_from_obj" name="adv_date_from" value="">
+        </div>
+      </div>
+      
+      <div id="adv-date-to-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_to_obj">Latest year</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_to_obj" name="adv_date_to" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="sort_obj">Sort by</label>
+          </div>    
+          
+        </div>
+        
+        <div class="search-input">
+          <select class="long" id="sort_obj" name="sort"><option value="">No sort</option><option value="1">Alphabetical</option><option value="2">Date</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col2">
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="collection-caption caption">
+            <label for="obj_adv_dept">Collection</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <select class="long" id="obj_adv_dept" name="adv_dept"><option value="">Any collection</option><option value="=RF.1">&nbsp;&nbsp;&nbsp;Primary</option><option value="=RF.2">&nbsp;&nbsp;&nbsp;Secondary</option><option value="=RF.3">&nbsp;&nbsp;&nbsp;Surrogate</option></select>
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="obj_adv_name">Object name</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <select class="long" id="obj_adv_name" name="adv_name"><option value="">Any object name</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZX2">&nbsp;&nbsp;&nbsp;almanac</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZX5">&nbsp;&nbsp;&nbsp;calendar</option><option value="=PV.01">&nbsp;&nbsp;&nbsp;35mm slide</option><option value="=PV.02">&nbsp;&nbsp;&nbsp;35mm slide (surrogate)</option><option value="=PV.03">&nbsp;&nbsp;&nbsp;album</option><option value="=PV.04">&nbsp;&nbsp;&nbsp;artefact</option><option value="=PV.05">&nbsp;&nbsp;&nbsp;bust</option><option value="=PV.06">&nbsp;&nbsp;&nbsp;cabinet card</option><option value="=PV.07">&nbsp;&nbsp;&nbsp;cameo</option><option value="=PV.08">&nbsp;&nbsp;&nbsp;caricature</option><option value="=PV.09">&nbsp;&nbsp;&nbsp;carte de visite</option><option value="=PV.0:">&nbsp;&nbsp;&nbsp;cartoon</option><option value="=PV.0;">&nbsp;&nbsp;&nbsp;CGI</option><option value="=PV.0<">&nbsp;&nbsp;&nbsp;coin</option><option value="=PV.0=">&nbsp;&nbsp;&nbsp;diagram</option><option value="=PV.0>">&nbsp;&nbsp;&nbsp;digital</option><option value="=PV.0?">&nbsp;&nbsp;&nbsp;digital (surrogate)</option><option value="=PV.0@">&nbsp;&nbsp;&nbsp;drawing</option><option value="=PV.0A">&nbsp;&nbsp;&nbsp;engraving</option><option value="=PV.0B">&nbsp;&nbsp;&nbsp;illustration</option><option value="=PV.0C">&nbsp;&nbsp;&nbsp;inscription</option><option value="=PV.0D">&nbsp;&nbsp;&nbsp;lantern Slide</option><option value="=PV.0E">&nbsp;&nbsp;&nbsp;letter</option><option value="=PV.0F">&nbsp;&nbsp;&nbsp;manuscript</option><option value="=PV.0G">&nbsp;&nbsp;&nbsp;map</option><option value="=PV.0H">&nbsp;&nbsp;&nbsp;mask</option><option value="=PV.0I">&nbsp;&nbsp;&nbsp;medal</option><option value="=PV.0J">&nbsp;&nbsp;&nbsp;micrograph</option><option value="=PV.0K">&nbsp;&nbsp;&nbsp;miniature</option><option value="=PV.0L">&nbsp;&nbsp;&nbsp;negative</option><option value="=PV.0M">&nbsp;&nbsp;&nbsp;negative (surrogate)</option><option value="=PV.0N">&nbsp;&nbsp;&nbsp;painting</option><option value="=PV.0O">&nbsp;&nbsp;&nbsp;paper cut</option><option value="=PV.0P">&nbsp;&nbsp;&nbsp;photograph</option><option value="=PV.0Q">&nbsp;&nbsp;&nbsp;plan</option><option value="=PV.0R">&nbsp;&nbsp;&nbsp;portrait</option><option value="=PV.0S">&nbsp;&nbsp;&nbsp;postcard</option><option value="=PV.0T">&nbsp;&nbsp;&nbsp;print</option><option value="=PV.0U">&nbsp;&nbsp;&nbsp;print (surrogate)</option><option value="=PV.0V">&nbsp;&nbsp;&nbsp;radiograph</option><option value="=PV.0W">&nbsp;&nbsp;&nbsp;scientific instrument</option><option value="=PV.0X">&nbsp;&nbsp;&nbsp;scientific paper</option><option value="=PV.0Y">&nbsp;&nbsp;&nbsp;score (musical)</option><option value="=PV.0Z">&nbsp;&nbsp;&nbsp;sculpture</option><option value="=PV.21">&nbsp;&nbsp;&nbsp;silhouette</option><option value="=PV.22">&nbsp;&nbsp;&nbsp;specimen</option><option value="=PV.23">&nbsp;&nbsp;&nbsp;stereoscopic</option><option value="=PV.24">&nbsp;&nbsp;&nbsp;table</option><option value="=PV.25">&nbsp;&nbsp;&nbsp;transparency (surrogate)</option><option value="=PV.26">&nbsp;&nbsp;&nbsp;X-ray</option></select>
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="obj_adv_place">Place</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <select class="long" id="obj_adv_place" name="adv_place"><option value="">Any place</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU">&nbsp;&nbsp;&nbsp;&lt;The World&gt;</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Africa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Algeria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Algiers</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angola</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luanda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Benin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Botswana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gaborone</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burkina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burundi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.06.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bujumbura</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cameroon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yaounde</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cape Verde</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.08.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Praia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Central African Rep.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N'Djamena</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comoros</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moroni</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brazzaville</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congo (Dem. Rep.)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Democratic Republic of the Kinshasa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Djibouti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Djibouti (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Egypt</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cairo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equatorial Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malabo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eritrea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asmara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ethiopia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addis Ababa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gabon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Libreville</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gambia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Banjul</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ghana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Conakry</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guinea-Bissau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bissau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ivory Coast</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kenya</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nairobi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lesotho</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maseru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Liberia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monrovia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Libya</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tripoli</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madagascar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0M.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antananarivo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malawi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lilongwe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mali</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bamako</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mauritania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nouakchott</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mauritius</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Louis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Morocco</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rabat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mozambique</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0S.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maputo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Namibia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Windhoek</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Niger</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0U.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Niamey</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nigeria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abuja</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0W">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rwanda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0W.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kigali</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sao Tome and Principe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sao Tome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Y">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Senegal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Y.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dakar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Z">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seychelles</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Z.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Victoria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sierra Leone</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Freetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.23">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Somalia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.23.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mogadishu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.25">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;South Africa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.25.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pretoria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.28">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sudan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.28.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Khartoum</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swaziland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mbabane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tanzania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dar es Salaam</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Togo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tunisia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tunis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uganda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kampala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zambia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lusaka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zimbabwe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Harare</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antarctica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arctic</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Afghanistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kabul</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Armenia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yerevan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Azerbaijan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.03.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baku</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bahrain</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manama</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangladesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bhutan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brunei</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Darussalam Bandar Seri Begawan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burma</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cambodia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.09.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phnom Penh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;China</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beijing</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cyprus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nicosia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hong Kong</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;India</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andhra Pradesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangalore</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Batala (Punjab)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chennai (Madras)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Giridih</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.6E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Goa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gwalior</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jodhpur (Rajasthan)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Karnataka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kerala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kolkata (Calcutta)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mumbai (Bombay)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Delhi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pune (Poona)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tamil Nadu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uttar Pradesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indonesia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jakarta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iran</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Teheran</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iraq</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baghdad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Israel</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jerusalem</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Japan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tokyo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jordan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amman</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kazakhstan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Astana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Korea (north)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Korea (south)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuwait</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuwait City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kyrgyzstan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bishkek</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Laos</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vientiane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lebanon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beirut</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malaysia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuala Lumpur</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maldives</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mongolia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ulan Bator</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nepal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0M.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathmandu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oman</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Muscat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pakistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Islamabad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Philippines</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manila</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Qatar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doha</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Russian Federation</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moscow</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St Petersburg</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saudi Arabia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0S.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Riyadh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Singapore</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Singapore (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sri Lanka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0U.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colombo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Syria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Damascus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0W">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Taiwan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0W.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Taipei</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tajikistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dushanbe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Y">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thailand</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Y.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangkok</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turkey</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ankara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turkmenistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ashgabat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United Arab Emirates</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abu Dhabi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uzbekistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tashkent</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vietnam</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hanoi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yemen</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Atlantic Ocean</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Central America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Panama</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4.E.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Panama City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Europe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Albania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tirane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andorra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andorra la Vella</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Austria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.03.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vienna</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belarus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Minsk</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belgium</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.05.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brussels</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bosnia-Herzegovina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bulgaria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sofia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Croatia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.08.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zagreb</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Czech Republic</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.09.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prague</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Denmark</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copenhagen</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estonia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tallinn</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Helsinki</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;France</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paris</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Georgia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tbilisi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Germany</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Berlin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greece</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Athens</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hungary</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budapest</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iceland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reykjavik</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ireland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dublin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0CE">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vatican City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Italy</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sardinia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Latvia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Riga</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Liechtenstein</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vaduz</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lithuania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vilnius</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luxembourg</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luxembourg (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Macedonia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skopje</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Valletta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moldova</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chisinau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monaco</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monaco (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Netherlands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Norway</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oslo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Poland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warsaw</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Portugal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lisbon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madeira</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Romania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bucharest</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Marino</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Marino (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serbia/Montenegro</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slovakia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bratislava</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slovenia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ljubljana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spain</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madrid</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sweden</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stockholm</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Switzerland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bern</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ukraine</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kiev</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United Kingdom</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bristol</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cambridge</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Glasgow</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;London</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manchester</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Northern Ireland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oxford</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scotland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wales</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mediterranean Sea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;North America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antigua and Barbuda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bahamas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nassau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Barbados</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bridgetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belize</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belmopan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Canada</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ontario</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Costa Rica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Jose</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cuba</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Havana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dominica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Roseau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dominican Rep.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El Salvador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Salvador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greenland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grenada</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. George's</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guatemala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guatemala City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Haiti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port-au-Prince</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honduras</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tegucigalpa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jamaica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kingston</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mexico</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.@.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mexico City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nicaragua</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Managua</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Kitts &amp; Nevis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Lucia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Castries</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Vincent &amp; the Grendines</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trinidad &amp; Tobago</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United States</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carolinas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Florida</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Massachusetts</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Berkley</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New York (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Washington D.C.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oceania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Australia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Canberra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fiji</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suva</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kerguelen Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kiribati</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarawa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marshall Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Majuro</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Micronesia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Palikir</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nauru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yaren</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Zealand</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wellington</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Palau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Koror</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Papua New Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.9.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Moresby</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Samoa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solomon Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honiara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tahiti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tonga</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nuku'alofa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuvalu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Funafuti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vanuatu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Vila</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pacific Ocean</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Russia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;South America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Argentina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buenos Aires</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bolivia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sucre</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brazil</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brasilia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chile</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Santiago</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colombia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bogota</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ecuador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quito</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guyana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Georgetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paraguay</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asuncion</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Peru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.9.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lima</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suriname</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paramaribo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uruguay</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Montevideo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Venezuela</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caracas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZX">&nbsp;&nbsp;&nbsp;&lt;unauthorised&gt;</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col3">
+
+      <div class="search-form-buttons">
+        <input class="advanced_search_submit" type="button" value="Clear" onclick="clearForm('adv_objects_search'); checkCheckBox('adv_images');">
+        <input class="advanced_search_submit" type="submit" value="Search">
+      </div>
+
+    </div>
+
+  </div>
+</form>
+
+        </div><!-- #tabs-search-objects -->
+    
+
+    
+        
+        <div id="tabs-search-archives" class="tab-panel">
+          <form name="adv_archive_search" id="adv_archive_search" method="post" action="https://pictures.royalsociety.org/results" accept-charset="UTF-8">
+  <div class="hidden-items">
+    <input type="hidden" name="session" value="rfMCuElf_Na">
+    <input type="hidden" name="mi_search_type" value="adv">
+    <input type="hidden" name="mi_adv_search" value="yes">
+    <input type="hidden" name="adv_rt_archive" value="y">
+  </div>
+
+  <div class="adv-search-item-wrap">
+
+    <div class="col1">
+            <div id="adv-text-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_text_box_arc">General search</label>
+          </div>                
+          
+        </div>
+        <div class="search-input">
+          <input class="long inline" id="adv_text_box_arc" name="adv_text" type="text" value="">
+        </div>  
+      </div>
+      
+      <div id="adv-date-from-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_from_arc">Earliest year</label>
+          </div>
+          
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_from_arc" name="adv_date_from" value="">
+        </div>
+      </div>
+      
+      <div id="adv-date-to-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_to_arc">Latest year</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_to_arc" name="adv_date_to" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="sort_arc">Sort by</label>
+          </div>    
+          
+        </div>
+        
+        <div class="search-input">
+          <select class="long" id="sort_arc" name="sort"><option value="">No sort</option><option value="1">Alphabetical</option><option value="2">Date</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col2">
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="arc_adv_arc_code">Reference Code</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short" id="arc_adv_arc_code" name="adv_arc_code" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="arc_adv_title">Title</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short" id="arc_adv_title" name="adv_title" value="">
+        </div>
+      </div>
+      
+
+        <div class="search-item-wrap">
+          <div class="search-text">
+            <div class="inline caption">
+              <label for="arc_adv_arch_place">Place</label>
+            </div>
+            
+          </div>
+          <div class="search-input">
+            <select class="long" id="arc_adv_arch_place" name="adv_arch_place"><option value="">Any place</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU">&nbsp;&nbsp;&nbsp;&lt;The World&gt;</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Africa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Algeria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Algiers</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Angola</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luanda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Benin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Botswana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gaborone</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burkina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burundi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.06.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bujumbura</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cameroon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yaounde</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cape Verde</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.08.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Praia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Central African Rep.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N'Djamena</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Comoros</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moroni</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brazzaville</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Congo (Dem. Rep.)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Democratic Republic of the Kinshasa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Djibouti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Djibouti (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Egypt</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cairo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Equatorial Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malabo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eritrea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asmara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ethiopia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Addis Ababa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gabon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Libreville</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gambia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Banjul</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ghana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Accra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Conakry</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guinea-Bissau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bissau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ivory Coast</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kenya</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nairobi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lesotho</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maseru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Liberia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monrovia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Libya</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tripoli</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madagascar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0M.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antananarivo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malawi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lilongwe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mali</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bamako</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mauritania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nouakchott</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mauritius</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Louis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Morocco</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rabat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mozambique</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0S.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maputo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Namibia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Windhoek</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Niger</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0U.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Niamey</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nigeria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abuja</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0W">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rwanda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0W.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kigali</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sao Tome and Principe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sao Tome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Y">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Senegal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Y.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dakar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Z">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Seychelles</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.0Z.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Victoria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sierra Leone</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Freetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.23">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Somalia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.23.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mogadishu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.25">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;South Africa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.25.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pretoria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.28">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sudan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.28.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Khartoum</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Swaziland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mbabane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tanzania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.2H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dar es Salaam</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Togo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tunisia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tunis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uganda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kampala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zambia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lusaka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zimbabwe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.1.F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Harare</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antarctica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arctic</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Afghanistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kabul</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Armenia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yerevan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Azerbaijan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.03.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baku</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bahrain</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manama</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangladesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bhutan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brunei</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Darussalam Bandar Seri Begawan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Burma</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cambodia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.09.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Phnom Penh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;China</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beijing</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cyprus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nicosia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0;E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hong Kong</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;India</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andhra Pradesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangalore</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Batala (Punjab)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chennai (Madras)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Giridih</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.6E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Goa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gwalior</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jodhpur (Rajasthan)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Karnataka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kerala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kolkata (Calcutta)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mumbai (Bombay)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Delhi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pune (Poona)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tamil Nadu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0<.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uttar Pradesh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Indonesia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jakarta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0=.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Java</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iran</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Teheran</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iraq</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baghdad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Israel</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jerusalem</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Japan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tokyo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jordan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Amman</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kazakhstan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Astana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Korea (north)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Korea (south)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuwait</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuwait City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kyrgyzstan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bishkek</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Laos</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vientiane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lebanon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Beirut</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malaysia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kuala Lumpur</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maldives</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Male</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mongolia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ulan Bator</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nepal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0M.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kathmandu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oman</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Muscat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pakistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Islamabad</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Philippines</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manila</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Qatar</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Doha</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Russian Federation</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moscow</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0R.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St Petersburg</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saudi Arabia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0S.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Riyadh</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Singapore</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Singapore (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sri Lanka</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0U.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colombo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Syria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Damascus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0W">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Taiwan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0W.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Taipei</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tajikistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dushanbe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Y">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Thailand</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.0Y.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bangkok</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turkey</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ankara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Turkmenistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ashgabat</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United Arab Emirates</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Abu Dhabi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uzbekistan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tashkent</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vietnam</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hanoi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yemen</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3.F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.3E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Atlantic Ocean</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Central America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Panama</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.4.E.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Panama City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Europe</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.01">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Albania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.01.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tirane</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.02">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andorra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.02.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Andorra la Vella</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.03">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Austria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.03.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vienna</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.04">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belarus</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.04.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Minsk</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belgium</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.05.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brussels</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.06">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bosnia-Herzegovina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.07">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bulgaria</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.07.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sofia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.08">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Croatia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.08.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Zagreb</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.09">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Czech Republic</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.09.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prague</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Denmark</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Copenhagen</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Estonia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tallinn</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Finland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Helsinki</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;France</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paris</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Georgia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tbilisi</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Germany</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Berlin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greece</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0@.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Athens</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hungary</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Budapest</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Iceland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reykjavik</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ireland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0C.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dublin</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0CE">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vatican City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Italy</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Rome</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0D.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sardinia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Latvia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Riga</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Liechtenstein</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0F.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vaduz</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lithuania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0G.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vilnius</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luxembourg</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0H.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Luxembourg (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0I">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Macedonia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0I.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Skopje</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Malta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0J.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Valletta</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Moldova</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chisinau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monaco</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Monaco (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Netherlands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Norway</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0N.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oslo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0O">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Poland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0O.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warsaw</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Portugal</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lisbon</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0P.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madeira</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0Q">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Romania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0Q.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bucharest</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0R">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Marino</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0R.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Marino (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0S">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Serbia/Montenegro</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0T">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slovakia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0T.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bratislava</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0V">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Slovenia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0V.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ljubljana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Spain</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.0X.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Madrid</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sweden</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Stockholm</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Switzerland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bern</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ukraine</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kiev</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United Kingdom</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bristol</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cambridge</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Glasgow</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;London</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manchester</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.M">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Northern Ireland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oxford</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.U">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scotland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5.:.X">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wales</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mediterranean Sea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;North America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Antigua and Barbuda</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bahamas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nassau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Barbados</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bridgetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belize</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Belmopan</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Canada</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ontario</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Costa Rica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Jose</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cuba</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Havana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dominica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Roseau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dominican Rep.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;El Salvador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;San Salvador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.:E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greenland</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grenada</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.;.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. George's</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guatemala</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guatemala City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Haiti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.=.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port-au-Prince</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honduras</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.>.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tegucigalpa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Jamaica</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kingston</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.@">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mexico</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.@.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mexico City</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.A">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nicaragua</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.A.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Managua</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Kitts &amp; Nevis</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Lucia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Castries</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.G">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;St. Vincent &amp; the Grendines</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.J">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trinidad &amp; Tobago</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;United States</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.05">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Carolinas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Florida</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Massachusetts</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.0E.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Berkley</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New York (city)</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.8.P.F">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Washington D.C.</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Oceania</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Australia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Canberra</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fiji</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suva</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.2E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kerguelen Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Kiribati</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tarawa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Marshall Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Majuro</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Micronesia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Palikir</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nauru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Yaren</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New Zealand</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Wellington</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Palau</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Koror</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Papua New Guinea</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.9.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Moresby</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Samoa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.<">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Solomon Islands</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.<.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Honiara</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.=">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tahiti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.?">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tonga</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.?.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nuku'alofa</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.D">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tuvalu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.D.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Funafuti</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.L">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vanuatu</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.>.L.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port Vila</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.C">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pacific Ocean</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Russia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;South America</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Argentina</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.1.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Buenos Aires</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bolivia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.2.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sucre</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brazil</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.3.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Brasilia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Chile</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.4.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Santiago</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colombia</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.5.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bogota</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ecuador</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.6.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quito</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Guyana</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.7.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Georgetown</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.8">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paraguay</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.8.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Asuncion</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.9">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Peru</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.9.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lima</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suriname</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.:.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Paramaribo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.B">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Uruguay</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.B.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Montevideo</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.K">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Venezuela</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.H.K.E">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Caracas</option><option value="1.ZZZZZZZZZZZZZZZZZZZZZZZZZX">&nbsp;&nbsp;&nbsp;&lt;unauthorised&gt;</option></select>
+          </div>
+        </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="arc_adv_level">Level</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <select class="long" id="arc_adv_level"  name="adv_level"><option value="">Any level</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col3">
+
+      <div class="search-form-buttons">
+        <input class="advanced_search_submit" type="button" value="Clear" onclick="clearForm('adv_archive_search'); checkCheckBox('adv_images');">
+        <input class="advanced_search_submit" type="submit" value="Search">
+      </div>
+    </div>
+
+  </div>
+</form>
+
+        </div>
+    
+
+    
+        
+        <div id="tabs-search-books" class="tab-panel">
+          <form name="adv_book_search" id="adv_book_search" method="post" action="https://pictures.royalsociety.org/results" accept-charset="UTF-8">
+  <div class="hidden-items">
+    <input type="hidden" name="session" value="rfMCuElf_Na">
+    <input type="hidden" name="mi_search_type" value="adv">
+    <input type="hidden" name="mi_adv_search" value="yes">
+    <input type="hidden" name="adv_rt_book" value="y">
+  </div>
+
+  <div class="adv-search-item-wrap">
+    <div class="col1">
+            <div id="adv-text-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_text_box_book">General search</label>
+          </div>                
+          
+        </div>
+        <div class="search-input">
+          <input class="long inline" id="adv_text_box_book" name="adv_text" type="text" value="">
+        </div>  
+      </div>
+      
+      <div id="adv-date-from-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_from_book">Earliest year</label>
+          </div>
+          
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_from_book" name="adv_date_from" value="">
+        </div>
+      </div>
+      
+      <div id="adv-date-to-wrap" class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="adv_date_to_book">Latest year</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short inline" id="adv_date_to_book" name="adv_date_to" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="sort_book">Sort by</label>
+          </div>    
+          
+        </div>
+        
+        <div class="search-input">
+          <select class="long" id="sort_book" name="sort"><option value="">No sort</option><option value="1">Alphabetical</option><option value="2">Date</option></select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col2">
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="book_adv_book_id">Identifier</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short" id="book_adv_book_id" name="adv_book_id" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="book_adv_title">Title</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short" id="book_adv_title" name="adv_title" value="">
+        </div>
+      </div>
+
+      <div class="search-item-wrap">
+        <div class="search-text">
+          <div class="inline caption">
+            <label for="book_adv_perorg_name">Name</label>
+          </div>
+          
+        </div>
+        <div class="search-input">
+          <input class="short" id="book_adv_perorg_name" name="adv_perorg_name" value="">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col3">
+        <div class="search-item-wrap only-with-wrap" id="only-image-val_book">
+<fieldset>
+<legend>Include:</legend>
+  <div class="search-text">
+    <div class="search-input">
+      <input class="adv-checkbox" type="checkbox" id="adv_images_book" name="adv_images">
+    </div>
+    <div class="inline caption">
+      <label for="adv_images_book">Only items with images</label>
+    </div>
+    
+  </div>
+</fieldset>
+</div>
+
+        <div class="search-form-buttons">
+          <input class="advanced_search_submit" type="button" value="Clear" onclick="clearForm('adv_book_search'); checkCheckBox('adv_images');">
+          <input class="advanced_search_submit" type="submit" value="Search">
+        </div>
+    </div>
+
+  </div>
+</form>
+
+        </div>
+    
+    
+    
+</div><!-- .search-forms-container -->
+
+        </div>
+
+    <div class="save-search wlink">
+
+    </div>
+    </div>
+</section>
+
+            
+
+            <section class="content-wrap">
+                
+
+                
+                    <div class="inner-content-header-wrap">
+
+
+                        
+                            
+
+
+
+
+
+
+
+<div class="header-result-nav-wrap">
+    
+
+</div>
+
+                        
+
+<!-- HERE header_results.html -->
+                        
+<!-- /HERE header_results.html -->
+                        
+                    </div>
+                
+
+                <div class="main content">
+                
+
+
+<div class="item-container object_container">
+    
+
+        <div class="item-col object_right">
+            <div class="full_record_box">
+                
+                    <div id="image_primary" class="primary_image_box">
+
+
+
+
+
+
+
+
+                        
+
+<script type="text/javascript" src="static/js/col_royal_society/image_gallery_onelarge.js?_m=1708958812"></script>
+
+<script>
+    window.ids = ["15921"];
+</script>
+
+<div id="image-counter"></div>
+
+<ul class="bxslider" id="sliderCustom"></ul>
+
+
+
+                    </div>
+                
+
+                
+                <div class="lightbox-controls">
+  
+    <div class="user_lightbox_control"><a href="#" class="organiser-toggle" _objid="O21882"></a></div>
+  
+
+  
+    <div class="user_basket_control"><a href="#" class="basket-toggle" _objid="O21882"></a></div>
+  
+</div>
+
+
+
+                <div style="margin:30px 0">
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                     
+                         
+                         
+                         
+                             <div class="full_record_data_value">
+                                 <b>Credit:</b> ©The Royal Society
+                             </div>
+                         
+                     
+                         
+                         
+                             <div class="full_record_data_caption">
+                                 <b>Image number:</b> RS.17181
+                             </div>
+                         
+                         
+                     
+                 </div>
+                
+                
+            </div>
+        </div>
+
+
+        <div class="item-col-fields object_left">
+            
+            
+                <h1>Portrait of Johannes Kepler</h1>
+            
+
+            
+                
+                    <div class="full_record_data">
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Date
+                            </div>
+                            <div class="full_record_data_value">
+                                17th century
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Sitter
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_person_id=AUTH312519">Johannes Kepler</a> (1571 - 1630, German) , Astronomer
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Creator
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_person_id=AUTH53885">Jacob van der Heyden</a> (1573 - 1645, German) , Artist
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Object type
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_object_type_val=%3dPV.0F">manuscript</a><br><a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_object_type_val=%3dPV.0T">print</a>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Archive reference number
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://catalogues.royalsociety.org/CalmView/Record.aspx?src=CalmView.Catalog&id=MS%2f648">MS/648</a>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Manuscript page number
+                            </div>
+                            <div class="full_record_data_value">
+                                v6 p101
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Material
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_material=%3dLE.0J">ink</a><br><a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_material=%3dLE.2%40">paper</a>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Technique
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_technique=%3dNH.0J">engraving</a>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Dimensions
+                            </div>
+                            <div class="full_record_data_value">
+                                height (Plate): 173mm<br>width (Plate): 119mm
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Subject
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_subject=%3dJS.2">Art &amp; culture</a>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Description
+                            </div>
+                            <div class="full_record_data_value">
+                                Portrait of Johannes Kepler, engraved by Jakob van der Heyden. <br><br>Johannes Kepler (1571-1630) was a German mathematician and astronomer/astrologer. He worked for Tycho Brahe and was an advisor to Emperor Rudolf II. <br><br>From a set of albums known as Collectanea Newtoniana, a selection of prints, original artwork and manuscripts relating to Newton, collected by Charles Turnor (1768-1853). Turnor was an astronomer, collector and Fellow of the Royal Society. He owned Woolsthorpe Manor (Newton’s birthplace).<br>
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Related fellows
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_person_id=AUTH6229">Isaac Newton</a> (1642 - 1727, British) , Natural philosopher
+                            </div>
+                            
+                        
+                            
+                            
+                            <div class="full_record_data_caption">
+                                Associated place
+                            </div>
+                            <div class="full_record_data_value">
+                                <a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_place=1.ZZZZZZZZZZZZZZZZZZZZZZZZZU">&lt;The World&gt;</a><br>&nbsp;&nbsp;&nbsp;&gt;&nbsp;<a href="https://pictures.royalsociety.org/results?mi_search_type=adv&mi_adv_search=yes&adv_place=1.ZZZZZZZZZZZZZZZZZZZZZZZZZU.5">Europe</a>
+                            </div>
+                            
+                        
+                            
+                            
+                        
+                            
+                            
+                        
+                    </div>
+                
+            
+        </div>
+
+    
+</div>
+
+
+
+
+
+
+
+
+
+    
+
+                </div>
+
+                
+
+            </section><!-- .content-wrap -->
+
+            
+
+
+
+
+            <section class="powered_by">
+                <a href="https://www.ssl.co.uk/products" target="_blank">Powered by CollectionsIndex+/CollectionsOnline</a>
+
+            </section>
+
+        </div><!-- End of container div -->
+
+        <!-- Responsive Menu -->
+        <script type="text/javascript" nonce="ZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTJmN2JjODQ3M2U4ZDI0ZjU2MjAwYjdhN2QyZTkzMzA5MmY3YmM4NDczZThkMjRmNTYyMDBiN2E3ZDJlOTMzMDkyZjdiYzg0NzNlOGQyNGY1NjIwMGI3YTdkMmU5MzMwOTI=">
+            $(function(){
+               /* $('.header .header_primary_menu .menu_bar ul').slicknav({
+                    duration: 500,
+                    label: ''
+                });
+
+                $('.slicknav_menu').insertAfter( $( ".header_primary_menu" ) );
+                */
+            });
+        </script>
+    </body>
+
+</html>
+
