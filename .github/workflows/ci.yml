@@ -1,0 +1,72 @@
+name: CI
+
+# 对应 ITERATION-PLAN-2026-07.md §9.1：pytest + mypy + ruff 全绿才可合并。
+# Batch 0 (止血批) 的地基——没有 CI，"241 通过"随时会悄悄变红。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Ruff check
+        run: ruff check udify/ tests/
+
+      - name: Ruff format check
+        run: ruff format --check udify/ tests/
+
+      - name: Mypy on new v3 modules (blocking)
+        # 新增的自包含 v3 模块已全量类型注解，必须 blocking（§9.1 全绿才可合并）。
+        # ``--follow-imports=silent`` 避免检查这些模块传递引用的旧 Session 4 代码
+        # （那些的类型债清偿后，再扩展到全包 mypy）。
+        run: |
+          mypy --follow-imports=silent \
+            udify/models/source.py \
+            udify/core/text_normalize.py \
+            udify/core/tool_gateway/sandbox.py \
+            udify/core/tool_gateway/policy.py \
+            udify/core/tool_gateway/lockfile.py \
+            udify/core/tool_gateway/audit.py \
+            udify/core/validation/static_validator.py \
+            udify/core/validation/runtime_probe.py \
+            udify/core/evaluation/eval_v3.py \
+            udify/core/planning/action_schemas.py
+
+      - name: Mypy on full package (report, non-blocking)
+        # 全包 mypy 仍有旧 Session 4 类型债；作为报告，不阻塞。
+        run: mypy udify/ || true
+        continue-on-error: true
+
+      - name: Pytest with coverage
+        # 覆盖率门槛当前设为 62%（实测基线）。整体目标是 80%（§9.2），
+        # 随测试债清偿逐步上调此值——门槛的目的是"不让覆盖率倒退"。
+        run: |
+          pytest tests/ \
+            --cov=udify \
+            --cov-report=term-missing \
+            --cov-fail-under=62
+
+      - name: UdifyBench（10 golden cases，成功判据 #7）
+        # 跑 miu2d 10 个 golden case，全过才可合并。
+        run: pytest tests/core/validation/test_batch3_validation.py::TestUdifyBench -q
