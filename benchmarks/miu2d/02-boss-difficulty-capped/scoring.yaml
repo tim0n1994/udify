@@ -1,0 +1,6 @@
+hard_constraints:
+- factor <= 1.35
+weights:
+  constraint: 0.3
+  goal: 0.45
+  scope: 0.25
