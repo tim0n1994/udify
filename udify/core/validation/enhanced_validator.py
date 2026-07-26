@@ -7,25 +7,26 @@ Udify Validation - Enhanced Validator
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
+from udify.core.execution.sandbox import SafetyReport, SandboxExecutor
 from udify.core.knowledge.knowledge_graph import GameKnowledgeGraph, KnowledgeWarning
-from udify.core.execution.sandbox import SandboxExecutor, SafetyReport
 from udify.core.security.sanitizer import OutputValidator
-from udify.models.cdl_patch import CDLPatch, PatchOperation
+from udify.models.cdl_patch import CDLPatch
 
 
 @dataclass
 class ValidationReport:
     """验证报告"""
-    is_valid: bool
-    errors: List[str]
-    warnings: List[str]
-    knowledge_warnings: List[KnowledgeWarning]
-    safety_report: Optional[SafetyReport] = None
-    stats: Dict[str, Any] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    is_valid: bool
+    errors: list[str]
+    warnings: list[str]
+    knowledge_warnings: list[KnowledgeWarning]
+    safety_report: SafetyReport | None = None
+    stats: dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> dict[str, Any]:
         return {
             "is_valid": self.is_valid,
             "error_count": len(self.errors),
@@ -34,8 +35,7 @@ class ValidationReport:
             "errors": self.errors,
             "warnings": self.warnings,
             "knowledge_warnings": [
-                {"level": w.level, "message": w.message}
-                for w in self.knowledge_warnings
+                {"level": w.level, "message": w.message} for w in self.knowledge_warnings
             ],
             "safety_report": self.safety_report.to_dict() if self.safety_report else None,
             "stats": self.stats,
@@ -81,8 +81,12 @@ class EnhancedValidator:
 
         # 4. 知识验证
         knowledge_warnings = self.knowledge_graph.validate_mod_against_knowledge(
-            [op.to_dict() if hasattr(op, "to_dict") else {"op_type": op.op_type.name, "payload": op.payload}
-             for op in patch.operations]
+            [
+                op.to_dict()
+                if hasattr(op, "to_dict")
+                else {"op_type": op.op_type.name, "payload": op.payload}
+                for op in patch.operations
+            ]
         )
 
         # 5. 安全验证（脚本）
@@ -95,16 +99,20 @@ class EnhancedValidator:
                 if code:
                     safety_report = self.sandbox.validate_script_safety(code, language)
                     if not safety_report.is_safe:
-                        errors.extend([
-                            f"安全警告: {v['message']}"
-                            for v in safety_report.vulnerabilities
-                            if v["level"] == "critical"
-                        ])
-                        warnings.extend([
-                            f"安全警告: {v['message']}"
-                            for v in safety_report.vulnerabilities
-                            if v["level"] in ["high", "warning"]
-                        ])
+                        errors.extend(
+                            [
+                                f"安全警告: {v['message']}"
+                                for v in safety_report.vulnerabilities
+                                if v["level"] == "critical"
+                            ]
+                        )
+                        warnings.extend(
+                            [
+                                f"安全警告: {v['message']}"
+                                for v in safety_report.vulnerabilities
+                                if v["level"] in ["high", "warning"]
+                            ]
+                        )
 
         # 6. 路径安全验证
         path_errors = self._validate_paths(patch)
@@ -125,7 +133,8 @@ class EnhancedValidator:
             "knowledge_warnings": len(knowledge_warnings),
             "critical_safety_issues": (
                 sum(1 for v in safety_report.vulnerabilities if v["level"] == "critical")
-                if safety_report else 0
+                if safety_report
+                else 0
             ),
         }
 
@@ -138,7 +147,7 @@ class EnhancedValidator:
             stats=stats,
         )
 
-    def _validate_references(self, patch: CDLPatch, graph: Any) -> List[str]:
+    def _validate_references(self, patch: CDLPatch, graph: Any) -> list[str]:
         """验证引用完整性"""
         errors = []
 
@@ -168,7 +177,7 @@ class EnhancedValidator:
 
         return errors
 
-    def _validate_numeric_ranges(self, patch: CDLPatch) -> List[str]:
+    def _validate_numeric_ranges(self, patch: CDLPatch) -> list[str]:
         """验证数值范围"""
         warnings = []
 
@@ -191,11 +200,13 @@ class EnhancedValidator:
                     # 检查小数
                     if isinstance(new_value, float) and key in ["MaxLife", "MaxMana", "Strength"]:
                         if new_value != int(new_value):
-                            warnings.append(f"属性 {key} 使用了小数 ({new_value})，INI 格式可能不支持")
+                            warnings.append(
+                                f"属性 {key} 使用了小数 ({new_value})，INI 格式可能不支持"
+                            )
 
         return warnings
 
-    def _validate_paths(self, patch: CDLPatch) -> List[str]:
+    def _validate_paths(self, patch: CDLPatch) -> list[str]:
         """验证路径安全"""
         errors = []
 
@@ -210,7 +221,7 @@ class EnhancedValidator:
 
         return errors
 
-    def _validate_checkpoints(self, patch: CDLPatch) -> List[str]:
+    def _validate_checkpoints(self, patch: CDLPatch) -> list[str]:
         """验证检查点（确保操作序列合理）"""
         warnings = []
 
@@ -219,7 +230,9 @@ class EnhancedValidator:
         for i, op in enumerate(patch.operations):
             key = f"{op.op_type.name}:{op.target_id}"
             if key in seen:
-                warnings.append(f"操作 {i} 重复了操作 {seen[key]}: {op.op_type.name} on {op.target_id}")
+                warnings.append(
+                    f"操作 {i} 重复了操作 {seen[key]}: {op.op_type.name} on {op.target_id}"
+                )
             seen[key] = i
 
         # 检查修改已删除的节点
@@ -235,6 +248,6 @@ class EnhancedValidator:
 
         return warnings
 
-    def get_knowledge_summary(self) -> Dict[str, Any]:
+    def get_knowledge_summary(self) -> dict[str, Any]:
         """获取知识验证摘要"""
         return self.knowledge_graph.get_knowledge_summary()
