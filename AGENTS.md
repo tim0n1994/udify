@@ -49,24 +49,40 @@ udify/
 │   ├── __init__.py
 │   ├── cli.py                  # 命令行入口
 │   ├── models/                 # 数据模型
-│   │   ├── content_graph.py    # ContentGraph / ContentNode / ContentEdge / ContentAsset
-│   │   └── cdl_patch.py        # CDLPatch / PatchOperation / PatchValidator / PatchApplicator / GraphDiffer
+│   │   ├── content_graph.py    # ContentGraph / ContentNode / ContentEdge / ContentAsset（+v3 证据链字段、checksum）
+│   │   ├── cdl_patch.py        # CDLPatch / PatchOperation(+ExecutionMode) / PatchValidator / PatchApplicator / GraphDiffer
+│   │   └── source.py           # v3 证据链原语：SourceSpan / Provenance / Confidence / Evidence / ToolRunRef
 │   └── core/                   # 核心引擎
-│       ├── pipeline.py         # 端到端管道 UdifyPipeline
+│       ├── pipeline.py         # 统一端到端管道 UdifyPipeline（旧 pipeline_v2.AutomatedModPipeline 已合并，保留为别名）
+│       ├── miu2d_pipeline.py   # miu2d 闭环编排器（NL→语义图→file_patch→VFS 预览，批次 2）
+│       ├── adapters/           # v3 引擎适配器层（EngineAdapter 协议 + miu2d 实现）
+│       │   ├── base.py         # EngineAdapter Protocol / DetectionResult
+│       │   ├── miu2d.py        # Miu2dAdapter（复用现有 parser，输出带 SourceSpan）
+│       │   ├── miu2d_dsl.py    # DslCommandRegistry（miu2d DSL 命令表，ADAPT-MIU2D-05）
+│       │   └── miu2d_world.py  # GameWorldGraphBuilder（感知+提升+关系推断，ADAPT-MIU2D-06）
+│       ├── tool_gateway/       # v3 Secure Tool Gateway（所有外部工具调用唯一入口）
+│       │   ├── gateway.py      # ToolGateway（策略→沙箱→执行→消毒→审计）
+│       │   ├── policy.py       # ToolPolicy / RiskLevel(R0-R4) / 路径 allowlist
+│       │   ├── audit.py        # ToolAuditChain（链式哈希审计）
+│       │   └── lockfile.py     # ToolLockfile / ToolPin（version+sha256 pin）
 │       ├── llm_client.py       # LLMClient（OpenAI/Anthropic 统一接口）
 │       ├── perception/         # 感知引擎
 │       │   ├── engine_detector.py
 │       │   ├── resource_extractor.py
 │       │   ├── mechanism_analyzer.py
 │       │   ├── incremental_perception.py   # 增量感知（P0）
+│       │   ├── semantic_lifter.py          # 语义提升器（PER-LIFT-01..04：标签+证据+置信度）
 │       │   └── parsers/        # miu2d 特化解析器
 │       │       ├── ini_parser.py
 │       │       ├── obj_parser.py
 │       │       ├── npc_parser.py
-│       │       └── lua_parser.py
+│       │       ├── lua_parser.py
+│       │       └── lua_ts_parser.py        # Tree-sitter Lua（ADAPT-MIU2D-04：函数/调用/危险 API）
 │       ├── planning/           # 规划引擎
 │       │   ├── state.py        # PlanState / Intent / PlanContext
 │       │   ├── action_space.py # ActionSpace
+│       │   ├── action_schemas.py # 动作 Schema（PLAN-ACTION-01..04：numeric/script/reward）
+│       │   ├── patch_synthesizer.py # Patch 合成器（PATCH-SYN-01..06：SourceSpan+INI/Lua/DSL+reverse）
 │       │   ├── value_function.py # ValueFunction / HeuristicValueFunction
 │       │   ├── mcts.py         # MCTSNode / MCTSTree
 │       │   ├── planner.py      # Planner / PlanResult
@@ -102,18 +118,16 @@ udify/
 │       │   ├── mod_manager.py  # MultiModManager / ModStack
 │       │   └── mod_exporter.py # ModExporter / ModManifest
 │       └── validation/         # 验证引擎
-│           └── enhanced_validator.py # EnhancedValidator
-└── tests/                      # 测试
-    ├── perception/
-    │   └── test_perception.py  # 19 个测试
-    ├── models/
-    │   └── test_cdl_patch.py   # 32 个测试
-    ├── core/planning/
-    │   └── test_planning.py    # 30 个测试
-    └── infrastructure/
-        ├── test_infrastructure.py      # 40 个测试
-        ├── test_advanced_modules.py    # 38 个测试
-        └── test_parsers_and_pipeline.py # 24 个测试
+│           ├── enhanced_validator.py # EnhancedValidator（v2）
+│           ├── static_validator.py   # StaticValidatorV3（VAL-STATIC-01..05：schema/引用/数值/语法/危险API）
+│           └── runtime_probe.py      # HeadlessRuntimeProbe（VAL-RUNTIME-01..05：ProbeSpec/启动/状态/报错/报告）
+└── tests/                      # 测试（337 个，全绿）
+    ├── perception/ models/ infrastructure/          # v2 基础（含 test_source.py 证据链）
+    ├── cognition/ evaluation/ toolchain/            # Session 4 测试债清偿（批次 0）
+    └── core/
+        ├── adapters/ tool_gateway/ perception/      # 批次 1-2（协议/网关/语义提升）
+        ├── planning/（含 test_batch2_planning.py）   # 批次 2（动作 Schema/Patch 合成）
+        └── validation/（含 test_batch3_validation.py，内含 UdifyBench 10 golden case）
 ```
 
 ---
@@ -135,7 +149,7 @@ pip install -e .
 ### 运行测试
 
 ```bash
-# 全部测试（183 个，~0.5 秒）
+# 全部测试（337 个，~0.7 秒）
 python3 -m pytest tests/ -v
 
 # 特定模块
@@ -174,6 +188,12 @@ IncrementalPerception.perceive(path) → ContentGraph
     ↓
 SessionManager.create_session() → ModSession
     ↓
+IntentClassifier.classify() → Intent / StructuredIntent（认知层）
+    ↓
+ReferenceResolver.resolve_from_structured_intent() → [Reference]
+    ↓
+ConflictDetector.detect() → [Conflict]
+    ↓
 Planner.plan(graph, intent) → PlanResult
     ↓
 CostController.plan_with_budget() → PlanResult（预算控制）
@@ -185,6 +205,8 @@ EnhancedValidator.validate(patch) → ValidationReport
 GameKnowledgeGraph.validate_mod_against_knowledge() → KnowledgeWarnings
     ↓
 VirtualFileSystem.write_file() → 预览模式
+    ↓
+IntentAlignmentEvaluator.evaluate() → 对齐评分（评估层）
     ↓
 PatchApplicator.apply(patch, graph) → ContentGraph（修改后）
     ↓
@@ -237,7 +259,7 @@ type:
 
 ## 7. 当前状态快照
 
-**截至 2026-04-28**：
+**截至 2026-07-27**（批次 0-3 完成，北极星达成；详见 docs/ITERATION-PLAN-2026-07.md）：
 
 | 模块 | 状态 | 测试 |
 |------|------|------|
@@ -264,9 +286,14 @@ type:
 | LLM 客户端 (LLMClient) | ✅ 完成 | — |
 | 执行调度器 (ExecutionScheduler) | ✅ 完成 | — |
 | MCP 服务端 (MCPServer) | ✅ 基础版 | — |
+| v3 证据链 (source.py) | ✅ 完成 | 批次 1 |
+| 引擎适配器 (adapters/miu2d) | ✅ 完成 | 批次 1-2 |
+| 安全工具网关 (tool_gateway) | ✅ 完成 | 批次 1 |
+| 静态验证/运行时探针 v3 | ✅ 完成 | 批次 3 |
+| UdifyBench (10 golden case) | ✅ 完成 | 批次 3 |
 | 前端 (Frontend) | ⬜ 未开始 | — |
 
-**已完成代码行数**: ~15,200 行 Python + ~2,900 行测试（Session 3 后）
+**已完成代码行数**: ~22,600 行 Python + ~5,000 行测试（批次 3 后，337 测试全绿）
 
 ---
 
@@ -302,6 +329,23 @@ type:
 - **核心需求来源**: `docs/VISION.md`, `docs/PLAN.md`, `docs/ARCHITECTURE-v2.md`
 - **最新进展**: `docs/PROGRESS-SESSION-3.md`
 - **市场验证**: `docs/COMMUNITY-RESEARCH.md`, `docs/RESEARCH-v3-GitHub-UGC-Agent.md`
+
+---
+
+## 11. JC 的协作风格偏好
+
+JC 对架构和文档工作的核心诉求是：先理解项目初心，再从宏观愿景、产业格局、开源生态和底层技术栈一路下钻到可执行工程细节。偏好的输出不是轻量建议，而是厚重、系统、可落地的技术文档体系。
+
+工作时应遵循：
+
+- **初心优先**：所有架构判断都要回到 Udify 的根本使命——让非技术用户用自然语言表达愿望，系统自动理解内容、规划修改、执行、验证、反馈。
+- **文档先行**：在大规模编码前，先形成面向工程师的技术调研、架构蓝图、功能设计、接口契约和实施地图。
+- **宏观到微观**：先站在产业和系统层面思考，再逐层下沉到功能域、模块、数据结构、接口、失败模式、测试夹具和 PR 切分。
+- **开源优先**：优先调研并整合成熟开源框架和社区工具，把自研重点放在语义提升、意图接地、语义 Patch、自动验证、兼容性和反馈演化等差异化能力。
+- **颗粒度足够细**：最终产出必须能让工程师直接拆任务开工，包括目录映射、模块职责、输入输出、验收标准、迁移顺序和第一批任务卡。
+- **宏大但落地**：允许从 AI 原生游戏工业、硬件/芯片、云基础设施、游戏引擎和生态平台的视角重塑方案，但必须回落到 Udify 当前可执行路径。
+
+一句话：JC 需要的是从愿景到工业蓝图再到工程施工图的技术宪章，而不是泛泛的架构概念。
 
 ---
 

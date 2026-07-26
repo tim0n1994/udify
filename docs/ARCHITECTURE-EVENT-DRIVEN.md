@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 事件驱动架构
 
 > **版本**: v1.0 | **日期**: 2026-04-27

@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 架构补充文档：社区、生态与商业层
 
 > **版本**: v2.1 | **日期**: 2026-04-27 | **状态**: 基于 COMMUNITY_RESEARCH.md 的架构细化

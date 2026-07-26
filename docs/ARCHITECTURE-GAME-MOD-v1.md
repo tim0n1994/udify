@@ -1,3 +1,9 @@
+<!--
+status: frozen
+frozen_at: 2026-07 (ITERATION-PLAN-2026-07.md §9.3 文档冻结)
+note: 被 v3 取代的历史架构。不再主动维护/扩写；如需解冻须先在 ITERATION-PLAN 获得明确同意。
+-->
+
 # Udify 游戏魔改架构设计 v1.0
 
 > **目标**: 基于 Udify 意图驱动架构 + miu2d 深度分析，制定可落地的游戏魔改系统架构
