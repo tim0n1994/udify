@@ -6,9 +6,10 @@ Udify Planning - Cost Controller
 
 from __future__ import annotations
 
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Callable, Coroutine, Dict, List, Optional
+from typing import Any
 
 from udify.core.infrastructure.config_center import config
 from udify.core.planning.planner import PlanResult
@@ -18,6 +19,7 @@ from udify.core.planning.state import PlanState
 @dataclass
 class CostRecord:
     """成本记录"""
+
     operation: str
     cost_usd: float
     tokens_input: int = 0
@@ -29,15 +31,16 @@ class CostRecord:
 @dataclass
 class CostReport:
     """成本报告"""
+
     budget: float
     spent: float
     remaining: float
-    records: List[CostRecord]
+    records: list[CostRecord]
     savings: float = 0.0
     llm_calls: int = 0
     local_calls: int = 0
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "budget": self.budget,
             "spent": self.spent,
@@ -47,6 +50,20 @@ class CostReport:
             "local_calls": self.local_calls,
             "record_count": len(self.records),
         }
+
+
+def _norm_key(s: str) -> str:
+    """归一化属性键：小写并去掉非字母数字字符（``MaxLife``/``max_life`` → ``maxlife``）。"""
+    return "".join(ch for ch in s.lower() if ch.isalnum())
+
+
+def _find_key_ci(props: dict, target: str) -> str | None:
+    """在属性字典中大小写/分隔符不敏感地查找目标键，返回原始键名。"""
+    norm_target = _norm_key(target)
+    for k in props:
+        if _norm_key(k) == norm_target:
+            return k
+    return None
 
 
 class LocalModelPlanner:
@@ -60,8 +77,6 @@ class LocalModelPlanner:
     async def plan(self, state: PlanState) -> PlanResult:
         """使用本地启发式规划"""
         from udify.models.cdl_patch import (
-            OpType,
-            PatchOperation,
             create_modify_property_op,
         )
 
@@ -73,20 +88,35 @@ class LocalModelPlanner:
         if any(w in intent for w in ["血量", "hp", "生命", "life"]):
             for node in state.graph.nodes[:3]:
                 if "boss" in node.name.lower() or "enemy" in node.name.lower():
-                    actions.append(create_modify_property_op(
-                        node_id=node.id,
-                        key="max_life",
-                        value=node.properties.get("max_life", 100) * 2,
-                    ))
+                    # 属性键大小写不敏感匹配（miu2d INI 用 MaxLife，其它来源可能用 max_life）
+                    life_key = _find_key_ci(node.properties, "max_life")
+                    cur_life = (
+                        node.properties[life_key]
+                        if life_key
+                        else node.properties.get("max_life", 100)
+                    )
+                    actions.append(
+                        create_modify_property_op(
+                            node_id=node.id,
+                            key=life_key or "max_life",
+                            value=cur_life * 2,
+                        )
+                    )
 
         # 经验类意图
         if any(w in intent for w in ["经验", "exp", "升级", "level"]):
             for node in state.graph.nodes[:3]:
-                actions.append(create_modify_property_op(
-                    node_id=node.id,
-                    key="exp_reward",
-                    value=node.properties.get("exp_reward", 10) * 2,
-                ))
+                exp_key = _find_key_ci(node.properties, "exp_reward")
+                cur_exp = (
+                    node.properties[exp_key] if exp_key else node.properties.get("exp_reward", 10)
+                )
+                actions.append(
+                    create_modify_property_op(
+                        node_id=node.id,
+                        key=exp_key or "exp_reward",
+                        value=cur_exp * 2,
+                    )
+                )
 
         from udify.core.planning.planner import PlanResult
 
@@ -109,12 +139,12 @@ class CostController:
     - 成本预警
     """
 
-    def __init__(self, budget: Optional[float] = None) -> None:
+    def __init__(self, budget: float | None = None) -> None:
         self.budget = budget or config.cost.budget_per_session
         self.spent = 0.0
-        self.records: List[CostRecord] = []
+        self.records: list[CostRecord] = []
         self.local_model = LocalModelPlanner()
-        self._llm_client: Optional[Any] = None
+        self._llm_client: Any | None = None
 
     def set_llm_client(self, client: Any) -> None:
         """设置 LLM 客户端"""
@@ -138,6 +168,7 @@ class CostController:
         if self.spent + estimated_cost > self.budget:
             # 超出预算，拒绝
             from udify.core.planning.planner import PlanResult
+
             return PlanResult(
                 actions=[],
                 estimated_value=0.0,
@@ -169,7 +200,7 @@ class CostController:
 
             return result
 
-        except Exception as e:
+        except Exception:
             # LLM 失败，降级到本地模型
             self._record_cost("planning_failed", 0.0)
             return await self._plan_with_local_model(state)
@@ -193,11 +224,13 @@ class CostController:
     def _record_cost(self, operation: str, cost: float, **kwargs) -> None:
         """记录成本"""
         self.spent += cost
-        self.records.append(CostRecord(
-            operation=operation,
-            cost_usd=cost,
-            **kwargs,
-        ))
+        self.records.append(
+            CostRecord(
+                operation=operation,
+                cost_usd=cost,
+                **kwargs,
+            )
+        )
 
     async def _plan_with_local_model(self, state: PlanState) -> PlanResult:
         """使用本地模型规划"""
@@ -220,7 +253,7 @@ class CostController:
             local_calls=local_calls,
         )
 
-    def check_budget(self) -> Dict[str, Any]:
+    def check_budget(self) -> dict[str, Any]:
         """检查预算状态"""
         remaining = self.budget - self.spent
         ratio = self.spent / self.budget if self.budget > 0 else 0

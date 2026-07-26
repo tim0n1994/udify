@@ -13,7 +13,7 @@ Planning Engine - Value Function
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional
+from typing import Any
 
 from udify.core.planning.state import PlanState
 
@@ -21,40 +21,40 @@ from udify.core.planning.state import PlanState
 class ValueFunction(ABC):
     """
     价值函数抽象基类
-    
+
     评估给定规划状态的价值，返回 [-1, 1] 范围内的分数。
     1.0 表示完美满足意图，-1.0 表示完全违背意图。
     """
-    
+
     @abstractmethod
     def evaluate(self, state: PlanState) -> float:
         """
         评估单个状态
-        
+
         Args:
             state: 规划状态
-        
+
         Returns:
             [-1, 1] 范围内的价值分数
         """
         pass
-    
-    def evaluate_batch(self, states: List[PlanState]) -> List[float]:
+
+    def evaluate_batch(self, states: list[PlanState]) -> list[float]:
         """
         批量评估（默认实现是逐个评估）
-        
+
         Args:
             states: 状态列表
-        
+
         Returns:
             价值分数列表
         """
         return [self.evaluate(s) for s in states]
-    
+
     def is_terminal_good(self, state: PlanState) -> bool:
         """
         判断终止状态是否"足够好"
-        
+
         用于提前终止搜索（如果已经找到满意解）。
         """
         value = self.evaluate(state)
@@ -64,20 +64,20 @@ class ValueFunction(ABC):
 class HeuristicValueFunction(ValueFunction):
     """
     启发式价值函数
-    
+
     使用规则启发式快速评估状态，不需要 LLM。
     适用于：
     1. 快速原型验证
     2. MCTS 的 rollout 阶段
     3. 作为 LLM 价值函数的 fallback
-    
+
     评估维度：
     1. 结构完整性（图是否仍然连通、一致）
     2. 意图匹配度（修改是否符合用户描述）
     3. 操作合理性（操作数量是否适中、是否有冗余）
     4. 保守性（是否保留了原始内容的重要部分）
     """
-    
+
     def __init__(
         self,
         structure_weight: float = 0.25,
@@ -89,103 +89,101 @@ class HeuristicValueFunction(ValueFunction):
         self.intent_weight = intent_weight
         self.operation_weight = operation_weight
         self.preservative_weight = preservative_weight
-    
+
     def evaluate(self, state: PlanState) -> float:
         """评估状态价值"""
         if state._cached_value is not None:
             return state._cached_value
-        
+
         scores = {
             "structure": self._evaluate_structure(state),
             "intent": self._evaluate_intent(state),
             "operation": self._evaluate_operations(state),
             "preservative": self._evaluate_preservative(state),
         }
-        
+
         value = (
-            scores["structure"] * self.structure_weight +
-            scores["intent"] * self.intent_weight +
-            scores["operation"] * self.operation_weight +
-            scores["preservative"] * self.preservative_weight
+            scores["structure"] * self.structure_weight
+            + scores["intent"] * self.intent_weight
+            + scores["operation"] * self.operation_weight
+            + scores["preservative"] * self.preservative_weight
         )
-        
+
         # 裁剪到 [-1, 1]
         value = max(-1.0, min(1.0, value))
-        
+
         state._cached_value = value
         return value
-    
+
     def _evaluate_structure(self, state: PlanState) -> float:
         """评估图结构完整性"""
         graph = state.graph
-        
+
         # 检查孤立节点
         connected_nodes = set()
         for edge in graph.edges:
             connected_nodes.add(edge.source)
             connected_nodes.add(edge.target)
-        
+
         total_nodes = len(graph.nodes)
         if total_nodes == 0:
             return 0.0
-        
+
         isolated_ratio = (total_nodes - len(connected_nodes)) / total_nodes
-        
+
         # 检查是否有循环依赖（简化检查：边数不应远大于节点数）
         edge_node_ratio = len(graph.edges) / max(total_nodes, 1)
         density_penalty = 0.0
         if edge_node_ratio > 3.0:
             density_penalty = min(0.3, (edge_node_ratio - 3.0) * 0.1)
-        
+
         score = 1.0 - isolated_ratio - density_penalty
         return max(0.0, score)
-    
+
     def _evaluate_intent(self, state: PlanState) -> float:
         """评估意图匹配度"""
         intent = state.intent
         graph = state.graph
-        
+
         if not intent.description:
             return 0.5  # 无明确意图时给中等分
-        
+
         # 简单的关键词匹配
         desc = intent.description.lower()
         score = 0.3  # 基础分
-        
+
         # 检查是否有操作执行
         if state.action_history:
             score += 0.2
-        
+
         # 检查意图关键词是否出现在图的属性中
         intent_words = set(desc.split())
-        graph_text = " ".join([
-            n.name for n in graph.nodes
-        ] + [
-            str(p) for n in graph.nodes for p in n.properties.values() if isinstance(p, str)
-        ]).lower()
-        
+        graph_text = " ".join(
+            [n.name for n in graph.nodes]
+            + [str(p) for n in graph.nodes for p in n.properties.values() if isinstance(p, str)]
+        ).lower()
+
         graph_words = set(graph_text.split())
         overlap = len(intent_words & graph_words)
         score += min(0.3, overlap * 0.05)
-        
+
         # 优先节点是否被修改
         if intent.priority_nodes:
             modified_priority = sum(
-                1 for op in state.action_history
-                if op.target_id in intent.priority_nodes
+                1 for op in state.action_history if op.target_id in intent.priority_nodes
             )
             score += min(0.2, modified_priority * 0.1)
-        
+
         return min(1.0, score)
-    
+
     def _evaluate_operations(self, state: PlanState) -> float:
         """评估操作合理性"""
         history = state.action_history
         context = state.context
-        
+
         if not history:
             return 0.5  # 未执行操作
-        
+
         # 操作数量适中加分
         op_count = len(history)
         if op_count <= 3:
@@ -196,39 +194,39 @@ class HeuristicValueFunction(ValueFunction):
             count_score = 0.5
         else:
             count_score = 0.2
-        
+
         # 检查冗余操作
-        seen_targets: Dict[str, int] = {}
+        seen_targets: dict[str, int] = {}
         redundancy_penalty = 0.0
         for op in history:
             key = f"{op.op_type.name}_{op.target_id}"
             seen_targets[key] = seen_targets.get(key, 0) + 1
             if seen_targets[key] > 2:
                 redundancy_penalty += 0.1
-        
+
         score = count_score - min(0.5, redundancy_penalty)
         return max(0.0, score)
-    
+
     def _evaluate_preservative(self, state: PlanState) -> float:
         """评估保守性（保留原始内容的程度）"""
         context = state.context
         history = state.action_history
-        
+
         if not history:
             return 1.0  # 完全保留
-        
+
         # 计算修改率
         remove_count = sum(1 for op in history if "REMOVE" in op.op_type.name)
         modify_count = sum(1 for op in history if "MODIFY" in op.op_type.name)
         add_count = sum(1 for op in history if "ADD" in op.op_type.name)
-        
+
         total = len(history)
         if total == 0:
             return 1.0
-        
+
         # 删除操作权重最高（破坏性最强）
         destruction_score = (remove_count * 1.0 + modify_count * 0.5 + add_count * 0.2) / total
-        
+
         # 根据保守性偏好调整
         score = 1.0 - destruction_score * (1.0 - context.preservative_bias)
         return max(0.0, score)
@@ -247,16 +245,17 @@ class LLMValueFunction(ValueFunction):
     def __init__(self, model_name: str = "gpt-4o-mini", provider: str = "openai") -> None:
         self.model_name = model_name
         self.provider = provider
-        self._cache: Dict[str, float] = {}
-        self._llm: Optional[Any] = None
+        self._cache: dict[str, float] = {}
+        self._llm: Any | None = None
         self._heuristic = HeuristicValueFunction()
-        self._llm_available: Optional[bool] = None
+        self._llm_available: bool | None = None
 
     def _get_llm(self) -> Any:
         """懒加载 LLM 客户端"""
         if self._llm is None:
             try:
                 from udify.core.llm_client import LLMClient
+
                 self._llm = LLMClient(provider=self.provider, model=self.model_name)
             except Exception:
                 self._llm_available = False
@@ -319,7 +318,7 @@ class LLMValueFunction(ValueFunction):
             action_summary.append(f"- {op.op_type.name}: {op.target_id}")
 
         # 提取图状态摘要
-        node_types: Dict[str, int] = {}
+        node_types: dict[str, int] = {}
         for node in state.graph.nodes:
             nt = node.type.name
             node_types[nt] = node_types.get(nt, 0) + 1

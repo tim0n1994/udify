@@ -17,12 +17,18 @@ from udify.core.planning import (
     MCTSConfig,
     MCTSNode,
     MCTSTree,
+    Planner,
     PlanResult,
     PlanState,
-    Planner,
 )
 from udify.core.planning.state import Intent, PlanContext
 from udify.core.planning.value_function import HeuristicValueFunction
+from udify.models.cdl_patch import (
+    OpType,
+    PatchOperation,
+    create_add_node_op,
+    create_modify_property_op,
+)
 from udify.models.content_graph import (
     ContentEdge,
     ContentGraph,
@@ -30,12 +36,6 @@ from udify.models.content_graph import (
     EdgeType,
     MediaType,
     NodeType,
-)
-from udify.models.cdl_patch import (
-    OpType,
-    PatchOperation,
-    create_add_node_op,
-    create_modify_property_op,
 )
 
 
@@ -190,7 +190,11 @@ class TestActionSpace:
     def test_modify_actions(self):
         """测试修改动作生成"""
         graph = ContentGraph(media_type=MediaType.GAME)
-        graph.add_node(ContentNode(id="n1", type=NodeType.CHARACTER, name="Hero", properties={"difficulty": "normal"}))
+        graph.add_node(
+            ContentNode(
+                id="n1", type=NodeType.CHARACTER, name="Hero", properties={"difficulty": "normal"}
+            )
+        )
         state = PlanState(
             graph=graph,
             intent=Intent(description="increase difficulty"),
@@ -299,24 +303,26 @@ class TestMCTSNode:
         """测试选择最佳子节点"""
         root = MCTSNode(state=root_state)
         root.visit_count = 1000
-        
+
         # 创建子节点
         child1 = MCTSNode(
-            state=root_state.copy(), parent=root,
+            state=root_state.copy(),
+            parent=root,
             action=create_add_node_op("c1", NodeType.CHARACTER, "A"),
         )
         child1.visit_count = 500
         child1.value_sum = 450.0  # avg = 0.9
-        
+
         child2 = MCTSNode(
-            state=root_state.copy(), parent=root,
+            state=root_state.copy(),
+            parent=root,
             action=create_add_node_op("c2", NodeType.CHARACTER, "B"),
         )
         child2.visit_count = 400
         child2.value_sum = 120.0  # avg = 0.3
-        
+
         root.children = [child1, child2]
-        
+
         # child1 有更高的平均价值且已被充分探索，应该被选中
         best = root.best_child(exploration_constant=1.414)
         assert best == child1
