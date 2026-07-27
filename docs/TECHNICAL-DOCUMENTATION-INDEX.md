@@ -2,8 +2,9 @@
 
 > 面向工程团队的阅读入口。
 >
-> **文档纪律（ITERATION-PLAN-2026-07.md §9.3）**：北极星达成前，文档只减不增。
-> 唯一活跃文档集收敛为下列 4 份；其余文档标注 `frozen` / `aspirational`，不再扩写。
+> **文档纪律（沿袭 ITERATION-PLAN-2026-07.md §9.3）**：文档只减不增，活跃集恒 ≤4 份；其余文档标注 `frozen` / `aspirational`，不再扩写。
+>
+> **2026-07 北极星已达成**（2026-07-27 批次 0-3 落库推送，337 测试全绿）。欠条台账见 MODULE-ATTACK-MAP-v3 §21。当前迭代：**产品化**（ITERATION-PLAN-2026-08.md）。
 
 ---
 
@@ -13,9 +14,9 @@
 
 | # | 文档 | 角色 |
 |---|---|---|
-| 1 | `ITERATION-PLAN-2026-07.md` | **本轮北极星与成功判据**——miu2d 单条黄金闭环、批次划分、红线 |
-| 2 | `MODULE-ATTACK-MAP-v3.md` | **任务台账**——按任务 ID 拆 PR、验收标准、代码位置建议 |
-| 3 | `ARCHITECTURE-OSS-OPTIMIZED-v3.md` | **架构边界**——v3 原语定义、模块边界、ADR |
+| 1 | `ITERATION-PLAN-2026-08.md` | **本轮北极星与成功判据**——产品闭环（ModJob/薄API/前端切片/LLM 可选增强）、批次划分、红线 15 条 |
+| 2 | `MODULE-ATTACK-MAP-v3.md` | **任务台账**——按任务 ID 拆 PR、验收标准、代码位置建议、§21 产品化扩展 |
+| 3 | `ARCHITECTURE-OSS-OPTIMIZED-v3.md` | **架构边界**——v3 原语定义、模块边界、ADR-v3-001..010 |
 | 4 | `TECHNICAL-DOCUMENTATION-INDEX.md` | **本文档**——索引与冻结状态 |
 
 > 规则：代码为准，文档滞后必须补，但**不允许再用新文档扩张未验证的架构承诺**。
@@ -56,6 +57,7 @@
 | `COMMUNITY_RESEARCH.md` / `COMMUNITY-RESEARCH-v2.md` | 社区调研——**frozen** |
 | `TECHNICAL_COMPETITIVE_ANALYSIS.md` | 竞品分析——**frozen** |
 | `PROGRESS-SESSION-{2,3,4}.md` | 历史进展报告——**frozen** |
+| `ITERATION-PLAN-2026-07.md` | 2026-07 迭代方案（北极星已达成）——**frozen**（被 2026-08 取代） |
 
 ---
 
@@ -85,9 +87,16 @@
 
 ## 5. 下一批工程切入
 
-参考 `ITERATION-PLAN-2026-07.md` §10 的批次划分。当前进度：
+参考 `ITERATION-PLAN-2026-08.md` §6 的批次划分。历史进度（2026-07，全部 ✅ 并已落库推送）：
 
-- **批次 0（止血）**：CI 骨架 ✅、Session 4 测试债清偿 ✅、双 pipeline 合并 ✅、文档冻结 ✅
-- **批次 1（数据地基）**：`DATA-CG-01..05` + `DATA-PATCH-01..06` + `ADAPT-ENGINE-01..04` + `TOOL-GW-01..06` ✅
-- **批次 2（miu2d 闭环）**：`ADAPT-MIU2D-01..09` + `PER-LIFT-01..04` + `PLAN-ACTION-01..04` + `PATCH-SYN-01..06` ✅（NL→语义图→file_patch→VFS 预览真实成立）
-- **批次 3（验证与基准）**：`VAL-STATIC-01..05` + `VAL-RUNTIME-01..05` + `EVAL-INTENT-01..04` + `BENCH-01..03` ✅（10 个 golden case 全过 + headless 运行时探针 + 静态验证 + 意图评估）= **北极星达成**
+- **批次 0（止血）**：CI 骨架、Session 4 测试债清偿、双 pipeline 合并、文档冻结
+- **批次 1（数据地基）**：`DATA-CG-01..05` + `DATA-PATCH-01..06` + `ADAPT-ENGINE-01..04` + `TOOL-GW-01..06`
+- **批次 2（miu2d 闭环）**：`ADAPT-MIU2D-01..09` + `PER-LIFT-01..04` + `PLAN-ACTION-01..04` + `PATCH-SYN-01..06`
+- **批次 3（验证与基准）**：`VAL-STATIC-01..05` + `VAL-RUNTIME-01..05` + `EVAL-INTENT-01..04` + `BENCH-01..03` = **7 月北极星达成**
+
+当前迭代（2026-08 产品化）：
+
+- **批次 4A（Job 基座）**：`ORCH-JOB-01..05` + `OBS-01..02` ⬜
+- **批次 4B（薄 API）**：`API-01..05` + `API-07/08` + `SRV-01` + `MOD-STACK-01..03` ⬜
+- **批次 5（前端切片）**：`UI-00` + `UI-01..04` + `UI-07` ⬜
+- **批次 6（意图真化与欠条）**：`COG-LLM-01..03` + `REAL-GAME-01..02` + `VAL-RUNTIME-06` + 覆盖率 62→70 ⬜
