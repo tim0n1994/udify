@@ -670,6 +670,46 @@ graph_version
 
 理由：Unity/.NET 生态中运行时 Patch 更安全、更可逆、更贴近社区习惯。
 
+### ADR-v3-006: Job 持久化用 stdlib sqlite3 + 文件工件（2026-08）
+
+状态：已接受。
+
+决策：ModJob 状态与事件流存 sqlite3（WAL），工件（graph/patch/vfs 快照/package/report）落 `.udify/jobs/<id>/`；不引入 ORM 与迁移框架，schema_version 表手工管理。
+
+理由：零新依赖满足"本地模式必须成立"红线；事件表同时充当 OBS-01 trace schema，一份数据两用。
+
+### ADR-v3-007: 薄 API 单用户免认证（2026-08）
+
+状态：已接受。
+
+决策：FastAPI + Pydantic v2，默认绑定 127.0.0.1:8765；统一响应信封 `{success,data,error,meta}`；错误体为 ErrorRecord（code=DOMAIN_CATEGORY_DETAIL、owner_module、retryable、suggested_action）。
+
+理由：当前安全模型是本机单用户，认证/多租户是未验证阶段的过早复杂度；信封与错误码沿用已冻结文档中经得起复用的部分。
+
+### ADR-v3-008: 进度通信轮询先行（2026-08）
+
+状态：已接受。
+
+决策：前端以 1s 轮询 `GET /jobs/{id}` 获取进度；SSE/WebSocket（API-06）推迟到轮询被实测证明不够。
+
+理由：最短可用路径；job_events 表天然支持增量拉取。
+
+### ADR-v3-009: 前端栈 Next.js 15 + TS strict + Tailwind 4 + TanStack Query（2026-08）
+
+状态：已接受。
+
+决策：目录 `web/`，pnpm 管理；不引入 Zustand/ReactFlow/Yjs；API client 手写薄封装，不上代码生成。
+
+理由：与既有文档方向一致并做减法——v0 只有审阅切片，无 DAG 编辑、无协作、无复杂客户端态。
+
+### ADR-v3-010: LLM 是可选增强层（2026-08）
+
+状态：已接受。
+
+决策：LLM 仅用于意图解析点位；Anthropic 结构化输出强约束到 StructuredIntent；每 job 调用次数与 token 预算封顶；游戏内容/工具输出只作为数据段（三源隔离）；无 API key 时代码路径完全不触网、全启发式降级。
+
+理由：把"关键词驱动"补成真"意图驱动"，同时不违反"本地必须成立""LLM 只产候选"两条红线。
+
 ---
 
 ## 10. 与现有代码映射

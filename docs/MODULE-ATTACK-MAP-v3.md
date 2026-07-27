@@ -776,3 +776,24 @@ v3 第一阶段成功，不看代码行数，看以下事实：
 6. Patch 能回滚，回滚后 checksum 一致。
 7. 至少 10 个 UdifyBench case 在 CI 中运行。
 8. 工程师能根据本文任务 ID 拆 PR，而不需要重新解释架构。
+
+---
+
+## 21. 2026-08 扩展任务（产品化迭代登记，见 ITERATION-PLAN-2026-08.md）
+
+北极星达成（2026-07-27，批次 0-3 落库并推送）后开启产品化迭代。本节登记新任务 ID；原有 ID 定义不变，其中 **API-01..05 与 ORCH-JOB-05、MOD-STACK-01..03、OBS-01..02 在本迭代提级为 P0**。
+
+| ID | 优先级 | 任务 | 验收 |
+|---|---|---|---|
+| API-07 | P0 | rollback endpoint | reverse patch + checksum 一致 |
+| API-08 | P0 | healthz | 版本 + 引擎可用性 |
+| SRV-01 | P0 | `udify serve` CLI 子命令 | uvicorn 起 app，默认 127.0.0.1:8765 |
+| UI-00 | P0 | web/ 脚手架（Next.js15+TS+Tailwind4+TanStack Query） | pnpm build 通过 |
+| UI-07 | P0 | Job 控制台（列表+新建+轮询时间线） | 提交后推进到 awaiting_review |
+| COG-LLM-01 | P1 | LLM 结构化意图解析（候选身份） | schema 强校验；三源隔离 |
+| COG-LLM-02 | P1 | LLM 预算护栏与降级 | 无 key 不触网，CI 全绿 |
+| COG-LLM-03 | P1 | Bench A/B（heuristic vs llm） | 对照报告 |
+| REAL-GAME-01 | P1 | 真实 miu2d 游戏验收资产（合法来源） | 真实 game_root 闭环留档 |
+| REAL-GAME-02 | P1 | 闭环留档进 artifacts | journal+package+report 入库 |
+
+欠条台账：A=CI 远端常绿（本迭代判据 7）；B=真 Playwright 探针（VAL-RUNTIME-06，批次 6）；C=真实 game_root 记录（REAL-GAME-01/02，批次 6）。未清偿必须在 INDEX 明文展期。
