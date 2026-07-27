@@ -99,6 +99,11 @@ def create_parser() -> argparse.ArgumentParser:
         default=Path(".udify"),
         help="状态目录（jobs.db 与任务工件，默认 ./.udify）",
     )
+    serve_parser.add_argument(
+        "--json-logs",
+        action="store_true",
+        help="输出单行 JSON 结构化日志（OBS-02）",
+    )
 
     return parser
 
@@ -330,6 +335,11 @@ async def cmd_serve(args: argparse.Namespace) -> int:
     except ImportError:
         print("❌ 缺少 server 依赖，请先安装: pip install -e '.[server]'")
         return 1
+
+    if args.json_logs:
+        from udify.core.infrastructure.json_logging import configure_json_logging
+
+        configure_json_logging()
 
     from udify.api.app import create_app
 
