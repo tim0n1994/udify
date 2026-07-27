@@ -54,7 +54,9 @@ jobs:
             udify/core/planning/action_schemas.py \
             udify/core/orchestration/mod_job.py \
             udify/core/orchestration/job_store.py \
-            udify/core/orchestration/job_runner.py
+            udify/core/orchestration/job_runner.py \
+            udify/api/app.py \
+            udify/api/schemas.py
 
       - name: Mypy on full package (report, non-blocking)
         # 全包 mypy 仍有旧 Session 4 类型债；作为报告，不阻塞。

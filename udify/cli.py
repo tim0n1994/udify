@@ -89,6 +89,17 @@ def create_parser() -> argparse.ArgumentParser:
     # validate 命令
     subparsers.add_parser("validate", help="验证游戏目录")
 
+    # serve 命令（SRV-01，2026-08 批次 4B）
+    serve_parser = subparsers.add_parser("serve", help="启动本地 API 服务（产品化后端）")
+    serve_parser.add_argument("--host", default="127.0.0.1", help="监听地址（默认仅本机）")
+    serve_parser.add_argument("--port", type=int, default=8765, help="端口（默认 8765）")
+    serve_parser.add_argument(
+        "--state-dir",
+        type=Path,
+        default=Path(".udify"),
+        help="状态目录（jobs.db 与任务工件，默认 ./.udify）",
+    )
+
     return parser
 
 
@@ -301,6 +312,7 @@ async def main() -> int:
         "rollback": cmd_rollback,
         "stats": cmd_stats,
         "validate": cmd_validate,
+        "serve": cmd_serve,
     }
 
     handler = commands.get(args.command)
@@ -309,6 +321,25 @@ async def main() -> int:
     else:
         print(f"未知命令: {args.command}")
         return 1
+
+
+async def cmd_serve(args: argparse.Namespace) -> int:
+    """serve 命令——启动薄 API（ADR-v3-007：默认 127.0.0.1 单用户）。"""
+    try:
+        import uvicorn
+    except ImportError:
+        print("❌ 缺少 server 依赖，请先安装: pip install -e '.[server]'")
+        return 1
+
+    from udify.api.app import create_app
+
+    app = create_app(state_dir=args.state_dir)
+    print(f"🚀 Udify API: http://{args.host}:{args.port}/api/v0/healthz")
+    print(f"📚 OpenAPI 文档: http://{args.host}:{args.port}/api/docs")
+    print(f"💾 状态目录: {args.state_dir.resolve()}")
+    server = uvicorn.Server(uvicorn.Config(app, host=args.host, port=args.port, log_level="info"))
+    await server.serve()
+    return 0
 
 
 def cli_entry() -> None:
