@@ -66,48 +66,75 @@ class Miu2dClosedLoop:
         self.schemas = ActionSchemaRegistry()
         self.synthesizer = PatchSynthesizer()
 
-    def run(self, intent: str) -> Miu2dPlanResult:
-        """执行完整闭环：自然语言 → 语义图 → file_patch 计划 → VFS 预览。"""
-        result = Miu2dPlanResult(success=False)
+    def perceive(self) -> ContentGraph:
+        """阶段 1：构建带证据语义图（ADAPT-MIU2D + PER-LIFT）。
 
-        # 1. 带证据语义图（ADAPT-MIU2D + PER-LIFT）
-        try:
-            graph = self.world_builder.build(self.game_root)
-        except Exception as e:
-            result.errors.append(f"感知失败: {e}")
-            return result
-        result.graph = graph
+        独立暴露给 ModJob 状态机按阶段驱动（ORCH-JOB，2026-08 批次 4A）。
+        """
+        return self.world_builder.build(self.game_root)
 
-        # 2. 意图 → 动作（PLAN-ACTION 匹配）
+    def plan(
+        self, graph: ContentGraph, intent: str
+    ) -> tuple[list[PlannedAction], CDLPatch | None, list[str]]:
+        """阶段 2：意图 → 动作 → file_patch 计划。
+
+        Returns:
+            (actions, patch, errors)。patch 为 None 时 errors 非空。
+        """
         actions = self._intent_to_actions(intent, graph)
         if not actions:
-            result.errors.append("无法从意图推导出可应用的动作")
-            return result
-        result.actions = actions
+            return [], None, ["无法从意图推导出可应用的动作"]
 
-        # 3. file_patch 计划（PATCH-SYN 合成）
         ops = self.synthesizer.synthesize(graph, actions)
         if not ops:
-            result.errors.append("Patch 合成未产生任何操作")
-            return result
+            return actions, None, ["Patch 合成未产生任何操作"]
 
         patch = CDLPatch(
             operations=ops,
             intent=intent,
             author="miu2d_closed_loop",
         )
-        result.patch = patch
+        return actions, patch, []
 
-        # 4. VFS 预览（不碰原文件）
+    def preview(self, patch: CDLPatch) -> tuple[VirtualFileSystem, list[str], str | None]:
+        """阶段 3：VFS 预览（不碰原文件）。
+
+        Returns:
+            (vfs, op_errors, fatal_error)。fatal_error 非 None 表示执行器
+            自身抛异常（此时 vfs 内容不可信）；op_errors 是单个操作的失败。
+        """
         vfs = VirtualFileSystem(self.game_root)
         executor = PatchExecutor(vfs)
         try:
             exec_result = executor.execute(patch)
-            if not exec_result["success"]:
-                result.errors.extend(f["error"] for f in exec_result["failed"])
         except Exception as e:
-            result.errors.append(f"VFS 执行失败: {e}")
+            return vfs, [], f"VFS 执行失败: {e}"
+        op_errors = [] if exec_result["success"] else [f["error"] for f in exec_result["failed"]]
+        return vfs, op_errors, None
+
+    def run(self, intent: str) -> Miu2dPlanResult:
+        """执行完整闭环：自然语言 → 语义图 → file_patch 计划 → VFS 预览。"""
+        result = Miu2dPlanResult(success=False)
+
+        try:
+            graph = self.perceive()
+        except Exception as e:
+            result.errors.append(f"感知失败: {e}")
             return result
+        result.graph = graph
+
+        actions, patch, plan_errors = self.plan(graph, intent)
+        result.actions = actions
+        if patch is None:
+            result.errors.extend(plan_errors)
+            return result
+        result.patch = patch
+
+        vfs, op_errors, fatal = self.preview(patch)
+        if fatal is not None:
+            result.errors.append(fatal)
+            return result
+        result.errors.extend(op_errors)
 
         result.vfs_diffs = vfs.get_all_diffs()
         result.success = len(result.errors) == 0

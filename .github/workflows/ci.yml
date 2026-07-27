@@ -51,7 +51,10 @@ jobs:
             udify/core/validation/static_validator.py \
             udify/core/validation/runtime_probe.py \
             udify/core/evaluation/eval_v3.py \
-            udify/core/planning/action_schemas.py
+            udify/core/planning/action_schemas.py \
+            udify/core/orchestration/mod_job.py \
+            udify/core/orchestration/job_store.py \
+            udify/core/orchestration/job_runner.py
 
       - name: Mypy on full package (report, non-blocking)
         # 全包 mypy 仍有旧 Session 4 类型债；作为报告，不阻塞。
