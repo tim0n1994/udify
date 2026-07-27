@@ -193,7 +193,19 @@ created → perceiving → planning → awaiting_review → applying → validat
 - 新任务 ID（API-07/08、SRV-01、UI-00/07、COG-LLM-01..03、REAL-GAME-01..02）已登记进 MODULE-ATTACK-MAP-v3 附录 §21。
 - 规则不变：代码为准、文档滞后必须补、不许新开宏大蓝图。
 
-## 9. 一页纸总结
+## 9. 执行日志（代码为准，日志滞后必须补）
+
+**2026-07-27（迭代启动即三批连发）**：
+
+- 批次 4A ✅：`udify/core/orchestration/`（mod_job/job_store/job_runner），44 测试。附带修复一个真缺陷：`CDLPatch` 序列化丢失全部 v3 字段（证据链落盘即消失，违反 ADR-v3-004），已补 `PatchOperation.to_dict/from_dict` 完整往返。
+- 批次 4B ✅：`udify/api/`（10 端点）+ `udify serve` + `--json-logs`（OBS-02），12 契约测试；serve 冒烟经 healthz 信封验证。
+- 批次 5 ✅：`web/`（Next.js 15 工作台），**判据 #4 浏览器全流程实测通过**：提交意图 → 时间线推进 → 审阅关口（DIFF/证据/风险）→ 批准 → 探针 6/6 → ModPackage 下载/回滚。
+- 判据状态：#1 ✅ #2 ✅（durable 测试）#3 ✅ #4 ✅ #5 ✅（UI 呈现 SourceSpan+R 档）#6 ✅ #7 ✅（远端 CI 绿，覆盖率门槛待升）#8 ✅ #9 ⬜（批次 6）#10 ✅。
+- **实测发现的产品缺陷（记入批次 6 输入）**：
+  1. "把Boss的血量翻倍"会把 Hero 的血量也翻倍——关键词引擎不做目标过滤（reference resolution 缺位），正是 COG-LLM-01 要解决的核心样例。
+  2. ini 重写产生同值 diff 噪声行（`Defense=10` 一删一增）——patch_executor 的 ini 序列化应保持未修改行字节不变。登记为 `PATCH-SYN-10`（P1）。
+
+## 10. 一页纸总结
 
 - **问题**：能力已验证但不可触达；状态不落盘；意图理解是关键词表；三张欠条。
 - **动作**：ModJob+SQLite（地基）→ 薄 API 8 端点 → Next.js 审阅切片 → LLM 可选增强 → 欠条清偿。

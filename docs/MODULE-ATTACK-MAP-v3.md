@@ -372,6 +372,7 @@ semantic_confidence =
 | PATCH-SYN-07 | P1 | binary asset emitter | 调 converter |
 | PATCH-SYN-08 | P1 | JSON patch emitter | RPG Maker |
 | PATCH-SYN-09 | P2 | runtime hook emitter | BepInEx/Harmony |
+| PATCH-SYN-10 | P1 | INI 重写字节保持 | 未修改行零 diff 噪声（2026-07-27 UI 实测发现） |
 
 ### EXEC-VFS：VFS Preview
 

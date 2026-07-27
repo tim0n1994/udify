@@ -291,9 +291,13 @@ type:
 | 安全工具网关 (tool_gateway) | ✅ 完成 | 批次 1 |
 | 静态验证/运行时探针 v3 | ✅ 完成 | 批次 3 |
 | UdifyBench (10 golden case) | ✅ 完成 | 批次 3 |
-| 前端 (Frontend) | ⬜ 未开始 | — |
+| ModJob 编排 (orchestration) | ✅ 完成 | 2026-08 批次 4A |
+| 薄 API (udify/api + serve) | ✅ 完成 | 2026-08 批次 4B |
+| 前端工作台 (web/, Next.js 15) | ✅ 审阅切片 | 2026-08 批次 5 |
 
-**已完成代码行数**: ~22,600 行 Python + ~5,000 行测试（批次 3 后，337 测试全绿）
+**已完成代码行数**: ~24,500 行 Python + ~5,700 行测试（395 测试全绿）+ web/ 前端
+
+**产品入口**：`udify serve`（API，127.0.0.1:8765）+ `cd web && pnpm dev`（工作台，localhost:3000）。状态目录 `./.udify/`（jobs.db + 任务工件）。
 
 ---
 

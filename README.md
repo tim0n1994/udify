@@ -98,24 +98,26 @@ Udiface 上线。创作者经济、社区治理、开放 API。
 
 ---
 
-## 快速开始
+## 快速开始（5 分钟）
 
-> ⚠️ 项目处于早期规划阶段，尚未有可运行的代码。文档先行，实现随后。
+> 当前能力：miu2d 引擎游戏的"自然语言 → 带证据修改计划 → 人工审阅 → 验证 → 可回滚 ModPackage"完整产品闭环（本地单用户）。
 
 ```bash
-# 克隆仓库
-git clone https://github.com/your-org/udify.git
-cd udify
+# 1. 安装（Python 3.12+）
+pip install -e ".[dev]"
 
-# 安装依赖（未来）
-pip install -r requirements.txt
+# 2. 跑测试（约 1 秒，395 个）
+python3 -m pytest tests/ -q
 
-# 启动开发环境（未来）
-docker-compose up -d
+# 3a. 命令行方式：直接对游戏目录下达意图（VFS 预览，不碰原文件）
+udify --game-root /path/to/miu2d-game mod "把Boss的血量翻倍"
 
-# 运行测试（未来）
-pytest
+# 3b. 产品方式：启动后端 + 前端工作台
+udify serve                      # API: http://127.0.0.1:8765/api/docs
+cd web && pnpm install && pnpm dev   # 工作台: http://localhost:3000
 ```
+
+工作台流程：填游戏目录 + 一句话意图 → 看文件 DIFF / 操作证据 / 风险档位 → 批准 → 静态验证 + 运行时探针 → 下载 ModPackage（可回滚）。
 
 ---
 
