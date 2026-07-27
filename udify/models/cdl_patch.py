@@ -104,6 +104,16 @@ class PatchTarget:
             "span_line_end": self.span_line_end,
         }
 
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> PatchTarget:
+        return cls(
+            node_id=data["node_id"],
+            property_key=data.get("property_key"),
+            file_path=data.get("file_path", ""),
+            span_line_start=data.get("span_line_start"),
+            span_line_end=data.get("span_line_end"),
+        )
+
 
 @dataclass(frozen=True)
 class PatchOperation:
@@ -153,6 +163,60 @@ class PatchOperation:
         elif isinstance(obj, set):
             return tuple(sorted(PatchOperation._hashable_payload(x) for x in obj))
         return obj
+
+    def to_dict(self) -> dict[str, Any]:
+        """完整序列化（含 v3 字段）。
+
+        v3 字段只在非默认值时输出，保证与旧格式的 JSON 兼容且体积小；
+        证据链（source_span/patch_target/reverse/risk）必须经得起落盘往返
+        （ADR-v3-004 Evidence-first——审阅与应用之间隔着一次持久化）。
+        """
+        d: dict[str, Any] = {
+            "op_type": self.op_type.name,
+            "target_id": self.target_id,
+            "payload": self.payload,
+        }
+        if self.execution_mode is not ExecutionMode.GRAPH_ONLY:
+            d["execution_mode"] = self.execution_mode.name
+        if self.source_span is not None:
+            d["source_span"] = self.source_span.to_dict()
+        if self.risk:
+            d["risk"] = self.risk
+        if self.planning_reason:
+            d["planning_reason"] = self.planning_reason
+        if self.patch_target is not None:
+            d["patch_target"] = self.patch_target.to_dict()
+        if self.preconditions:
+            d["preconditions"] = list(self.preconditions)
+        if self.postconditions:
+            d["postconditions"] = list(self.postconditions)
+        if self.reverse is not None:
+            d["reverse"] = self.reverse.to_dict()
+        return d
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> PatchOperation:
+        """从字典还原（v3 字段可选，旧格式兼容）。"""
+        from udify.models.source import SourceSpan  # 顶层 TYPE_CHECKING，运行时局部导入避免环
+
+        reverse_data = data.get("reverse")
+        span_data = data.get("source_span")
+        target_data = data.get("patch_target")
+        return cls(
+            op_type=OpType[data["op_type"]],
+            target_id=data["target_id"],
+            payload=data.get("payload", {}),
+            execution_mode=ExecutionMode[data["execution_mode"]]
+            if "execution_mode" in data
+            else ExecutionMode.GRAPH_ONLY,
+            source_span=SourceSpan.from_dict(span_data) if span_data else None,
+            risk=float(data.get("risk", 0.0)),
+            planning_reason=data.get("planning_reason", ""),
+            patch_target=PatchTarget.from_dict(target_data) if target_data else None,
+            preconditions=tuple(data.get("preconditions", ())),
+            postconditions=tuple(data.get("postconditions", ())),
+            reverse=cls.from_dict(reverse_data) if reverse_data else None,
+        )
 
 
 @dataclass
@@ -262,14 +326,7 @@ class CDLPatch:
             "author": self.author,
             "created_at": self.created_at.isoformat(),
             "parent_hash": self.parent_hash,
-            "operations": [
-                {
-                    "op_type": op.op_type.name,
-                    "target_id": op.target_id,
-                    "payload": op.payload,
-                }
-                for op in self.operations
-            ],
+            "operations": [op.to_dict() for op in self.operations],
             "conflicts": [c.to_dict() for c in self.conflicts],
         }
 
@@ -287,12 +344,7 @@ class CDLPatch:
             patch.created_at = datetime.fromisoformat(data["created_at"])
 
         for op_data in data.get("operations", []):
-            op = PatchOperation(
-                op_type=OpType[op_data["op_type"]],
-                target_id=op_data["target_id"],
-                payload=op_data.get("payload", {}),
-            )
-            patch.operations.append(op)
+            patch.operations.append(PatchOperation.from_dict(op_data))
 
         return patch
 
