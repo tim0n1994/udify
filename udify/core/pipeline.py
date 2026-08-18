@@ -22,6 +22,7 @@ from udify.core.cognition.conflict_detector import ConflictDetector
 from udify.core.cognition.intent import Intent, StructuredIntent
 from udify.core.cognition.intent_classifier import IntentClassifier
 from udify.core.cognition.reference_resolver import ReferenceResolver
+from udify.core.cognition.target_resolver import resolve_targets_grounded
 from udify.core.evaluation.intent_alignment import IntentAlignmentEvaluator
 from udify.core.execution.patch_executor import PatchExecutor
 from udify.core.execution.vfs import VirtualFileSystem
@@ -52,6 +53,7 @@ class PipelineResult:
     # 认知层产物（让 Session 4 的 cognition/evaluation 第一次成为可被触达的真实资产）
     structured_intent: StructuredIntent | None = None
     alignment: dict[str, Any] | None = None
+    timing_report: dict[str, Any] | None = None  # iter5 U3: JobTimingReport.to_dict()
 
     def summary(self) -> str:
         lines = [
@@ -185,11 +187,28 @@ class UdifyPipeline:
             session_id=session.session_id,
         )
 
-        # 4. 认知层：意图分类 → 结构化 → 参考解析 → 冲突检测
+        # 4. 认知层：意图分类 → 结构化 → 参考解析 → 目标接地 → 冲突检测
         classified: Intent = self.intent_classifier.classify(sanitized_intent, language)
         structured_intent = self.intent_classifier.to_structured(classified)
         references = self.reference_resolver.resolve_from_structured_intent(structured_intent)
         structured_intent.references.extend(references)
+
+        # 4b. 目标接地（iter7 M2-PR1）：把「第一个 Boss」这类序数/最高级引用接地到
+        # 具体节点，再交给规划层。这一步不需要 LLM——它是「语义过滤 + 子集内序数选择」
+        # 的确定性算法。此前 resolve_targets_grounded 零调用者，接地算法与主路径脱节，
+        # 于是「让第一个 Boss 更难」在规划层被无差别扩散到前 10 个节点（含 Hero）。
+        target_description = str(structured_intent.primary_goal.get("target") or "") or (
+            sanitized_intent
+        )
+        target_resolution = resolve_targets_grounded(graph, target_description)
+        if target_resolution.ambiguous:
+            # 歧义时不猜——记录警告，由审阅台/澄清流程接手（M2-PR2 贯通到 API/UI）
+            warnings.append(
+                "目标存在歧义，未唯一接地："
+                + ", ".join(
+                    f"{c.display_name or c.node_id}" for c in target_resolution.candidates[:5]
+                )
+            )
         conflicts = self.conflict_detector.detect(classified, structured_intent)
         if conflicts:
             structured_intent = self.conflict_detector.resolve_conflicts(
@@ -218,16 +237,25 @@ class UdifyPipeline:
             if structured_target
             else sanitized_intent
         )
+        # 接地结果经 priority_nodes 传给规划层——这是接地真正生效的那根线。
+        # 未接地（ambiguous 或无候选）时留空，规划层回退原有候选上限。
+        grounded_ids = (
+            target_resolution.chosen_ids()
+            if target_resolution.chosen and not target_resolution.ambiguous
+            else []
+        )
         state = PlanState(
             graph=graph,
-            intent=PlanIntent(description=plan_input),
+            intent=PlanIntent(description=plan_input, priority_nodes=grounded_ids),
             context=PlanContext(),
         )
 
         try:
+            # 必须走 plan_with_intent：plan() 内部用 ``Intent(description=...)`` 重建
+            # 意图，会把接地得到的 priority_nodes 丢掉（接线断在这里就等于没接）。
             plan_result = await self.cost_controller.plan_with_budget(
                 state,
-                lambda s: self.planner.plan(s.graph, s.intent.description),
+                lambda s: self.planner.plan_with_intent(s.graph, s.intent, s.context),
             )
         except Exception as e:
             errors.append(f"规划失败: {e}")
@@ -392,6 +420,35 @@ class UdifyPipeline:
             structured_intent=structured_intent,
             alignment=alignment,
         )
+
+    async def process_intent_timed(
+        self,
+        user_id: str,
+        intent: str,
+        preview_only: bool = True,
+        language: str = "zh",
+    ) -> PipelineResult:
+        """Run process_intent with phase timing (iter5 U3-LATENCY-PROFILE PR2).
+
+        Wraps the whole intent-processing call in a TimingCollector so the
+        returned PipelineResult carries a JobTimingReport. This is the
+        prerequisite for any honest "five-minute SLO" claim: without measured
+        per-phase latency, the SLO is a guess.
+        """
+        from udify.core.infrastructure.timer import TimingCollector
+        from udify.core.infrastructure.timing import PhaseCategory
+
+        collector = TimingCollector()
+        # The existing process_intent is one composite phase; finer-grained
+        # instrumentation inside it requires refactoring its internals. Here we
+        # time the full mandatory workload, which is the honest coarsest unit.
+        with collector.phase(
+            "process_intent", PhaseCategory.MANDATORY, {"intent_len": len(intent)}
+        ):
+            result = await self.process_intent(user_id, intent, preview_only, language)
+        report = collector.build_report(f"{result.session_id or 'pending'}")
+        result.timing_report = report.to_dict()
+        return result
 
     async def apply_pending_mod(self, session_id: str) -> dict[str, Any]:
         """应用待确认的 Mod"""

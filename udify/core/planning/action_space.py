@@ -193,16 +193,23 @@ class ActionSpace:
         # 根据意图确定要修改的属性
         target_properties = self._suggest_properties(intent)
 
-        for node in graph.nodes[:10]:  # 限制候选节点数
-            if intent.priority_nodes and node.id in intent.priority_nodes:
-                # 优先修改优先级节点
-                pass
-            else:
-                pass
+        # 目标接地（iter7 M2-PR1）：意图已接地到具体节点时，**只**对这些节点生成修改
+        # 操作。此前这里两个分支都是空 ``pass``——``priority_nodes`` 形同虚设，动作
+        # 空间对前 10 个节点无差别生成修改，这正是「让第一个 Boss 更难」会改到 Hero
+        # 的根因：接地算法再准，规划层不看它也没用。
+        if intent.priority_nodes:
+            grounded = [n for n in graph.nodes if n.id in intent.priority_nodes]
+            # 接地节点不在图内时不静默放行全图——宁可不产动作，交由上层澄清
+            candidate_nodes = grounded
+        else:
+            candidate_nodes = graph.nodes[:10]  # 未接地：保持原有候选上限
 
+        grounded_mode = bool(intent.priority_nodes)
+        for node in candidate_nodes:
             for prop_key, prop_value in target_properties.items():
-                # 生成属性修改
-                if prop_key in node.properties or random.random() < 0.3:
+                # 已接地的目标必定产动作，不走随机门——否则同一意图连续运行会得到
+                # 不同 Patch，违反成功判据 #1「Patch 稳定可复现」。
+                if grounded_mode or prop_key in node.properties or random.random() < 0.3:
                     actions.append(
                         create_modify_property_op(
                             node_id=node.id,
