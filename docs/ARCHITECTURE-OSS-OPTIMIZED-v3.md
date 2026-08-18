@@ -710,6 +710,30 @@ graph_version
 
 理由：把"关键词驱动"补成真"意图驱动"，同时不违反"本地必须成立""LLM 只产候选"两条红线。
 
+### ADR-v3-011: 前端外部数据必须先过运行时契约（2026-08）
+
+状态：已接受。
+
+决策：build-time public config、local preference、API envelope 与 endpoint data 均使用 Zod 白名单解码；API base 只允许无凭据、无 path/query/fragment 的根级 loopback HTTP URL；无效 override 整层回退并暴露诊断。localStorage 不可用时保留内存安全配置并暴露 `CONFIG_LOCAL_UNAVAILABLE`，读写删均不得向组件树抛错。状态机、风险准入、批准资格仍由后端拥有，前端 feature flag 只能控制展示。production import graph 不得依赖 MSW 或测试夹具。
+
+理由：TypeScript 只约束编译期，无法约束环境变量、localStorage 和网络响应。显式运行时边界可以阻止坏数据以 `undefined` 或错误权限渗入 UI，同时保留 local-first 的可恢复性。
+
+### ADR-v3-012: SQLite connection 生命周期是一个锁域（2026-08）
+
+状态：已接受。
+
+决策：单进程 JobStore 的共享 sqlite3 connection 在读、写、复合事务、审计校验和关闭上统一使用连接级 `RLock`；`transition` 的 job snapshot 与 event append 在一个 transaction 内提交。API shutdown 先停止新 submission，等待/取消 executor futures，再关闭 JobStore。
+
+理由：`check_same_thread=False` 只关闭线程身份检查，不提供 connection 并发安全。此前后台 `append_event` 与 lifespan `close`/API read 交错可产生错误状态甚至 CPython 进程崩溃；统一锁域和有序关闭把连接生命周期变为可证明的不变量。
+
+### ADR-v3-013: Next 15 传递依赖用可审计的定向 override（2026-08）
+
+状态：已接受。
+
+决策：保持 Next 15.5.22，不跨 major；在 pnpm 10 的 root manifest 中只定向 override `next>sharp=0.35.3` 与 `next>postcss=8.5.25`，有效 Node 下限为 20.9（CI 22）。frozen install 后必须阻塞运行 production high-severity audit、Next 上下文 sharp load、production build 与 desktop/mobile E2E。
+
+理由：npm 当前没有更高的 15.5 patch，15.5.22/甚至当前 Next 16 manifest 仍声明会落到受新 GHSA 影响的 sharp/postcss 范围。全局升级框架会扩大兼容风险；定向 override 把变更限制在两个上游已修版本。PostCSS 保持 8.x API，sharp 0.35 的实际兼容性由真实模块加载、Next build 与 E2E 共同证明，不能只以 audit exit 0 作为完成。
+
 ---
 
 ## 10. 与现有代码映射
@@ -724,8 +748,10 @@ graph_version
 | Secure Tool Gateway | `core/execution/tool_registry.py`, `mcp_server.py` | 初版 | policy、sandbox、audit、tool lock |
 | Validator | `core/validation/enhanced_validator.py` | 初版 | runtime probe、semantic validation |
 | Evaluator | `core/evaluation/intent_alignment.py` | 初版 | benchmark 化、可回归 |
-| ModJob | `core/session/session_manager.py`, `pipeline_v2.py` | 缺口 | durable job state |
+| ModJob | `core/orchestration/*`, `api/app.py` | 本地 durable | 连接级并发安全、事务化 transition、shutdown ordering |
 | Toolchain | `core/toolchain/__init__.py` | 初版 | adapter contract 和真实工具测试 |
+| Web runtime contract | `web/lib/config/*`, `web/lib/api/*` | 已实现 | versioned config、Zod boundary、diagnostics |
+| Web workbench | `web/features/jobs/*`, `web/components/*` | 已实现审阅切片 | 后端拥有状态/准入，URL 拥有 tab，local state 只管视图 |
 
 ---
 

@@ -10,6 +10,10 @@
 
 from __future__ import annotations
 
+import threading
+import time
+from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -41,8 +45,12 @@ def game_root(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def store(tmp_path: Path) -> JobStore:
-    return JobStore(tmp_path / "state" / "jobs.db")
+def store(tmp_path: Path) -> Iterator[JobStore]:
+    instance = JobStore(tmp_path / "state" / "jobs.db")
+    try:
+        yield instance
+    finally:
+        instance.close()
 
 
 @pytest.fixture
@@ -131,9 +139,12 @@ class TestJobStore:
         s1.close()
 
         s2 = JobStore(db)
-        assert s2.get(job.job_id) == job
-        assert len(s2.events(job.job_id)) == 1
-        assert s2.verify_chain(job.job_id)
+        try:
+            assert s2.get(job.job_id) == job
+            assert len(s2.events(job.job_id)) == 1
+            assert s2.verify_chain(job.job_id)
+        finally:
+            s2.close()
 
     def test_event_chain_verify_and_tamper(self, store: JobStore) -> None:
         job = ModJob.new("/g", "i", "/a")
@@ -165,6 +176,91 @@ class TestJobStore:
         store.save(job)
         with pytest.raises(InvalidTransitionError):
             store.transition(job, JobStatus.COMPLETED, event="nope")
+
+    def test_transition_rolls_back_snapshot_when_event_append_fails(
+        self, store: JobStore, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        job = ModJob.new("/g", "i", "/a")
+        store.save(job)
+
+        def fail_append(*args: object, **kwargs: object) -> None:
+            raise RuntimeError("injected event failure")
+
+        monkeypatch.setattr(store, "_append_event_unlocked", fail_append)
+        with pytest.raises(RuntimeError, match="injected event failure"):
+            store.transition(job, JobStatus.PERCEIVING, event="stage_started")
+
+        restored = store.get(job.job_id)
+        assert restored is not None
+        assert restored.status == JobStatus.CREATED
+        assert store.events(job.job_id) == []
+
+    def test_concurrent_transition_reads_and_audit_chain(self, store: JobStore) -> None:
+        """Readers never observe a partial snapshot/event transaction."""
+        job = ModJob.new("/g", "i", "/a")
+        store.save(job)
+        store.append_event(job.job_id, "created", "job_created")
+        stop = threading.Event()
+        failures: list[BaseException] = []
+        observed: list[JobStatus] = []
+
+        def read_loop() -> None:
+            while not stop.is_set():
+                try:
+                    current = store.get(job.job_id)
+                    assert current is not None
+                    observed.append(current.status)
+                    assert store.list_jobs()[0].status in JobStatus
+                    store.events(job.job_id)
+                    assert store.verify_chain(job.job_id)
+                except BaseException as exc:  # pragma: no cover - only captured for assertion
+                    failures.append(exc)
+                    stop.set()
+
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            readers = [pool.submit(read_loop) for _ in range(5)]
+            current = job
+            for target in (
+                JobStatus.PERCEIVING,
+                JobStatus.PLANNING,
+                JobStatus.AWAITING_REVIEW,
+            ):
+                current = store.transition(current, target, event=f"to_{target.value}")
+                time.sleep(0.01)
+            stop.set()
+            for reader in readers:
+                reader.result(timeout=5)
+
+        assert observed
+        assert failures == []
+        assert store.get(job.job_id) == current
+        assert store.verify_chain(job.job_id)
+
+    def test_close_is_serialized_and_idempotent(self, store: JobStore) -> None:
+        job = ModJob.new("/g", "i", "/a")
+        store.save(job)
+        entered = threading.Event()
+        release = threading.Event()
+
+        def guarded_write() -> None:
+            with store._lock:  # noqa: SLF001 - forces a deterministic close race
+                entered.set()
+                assert release.wait(timeout=5)
+                store.append_event(job.job_id, "test", "before_close")
+
+        writer = threading.Thread(target=guarded_write)
+        writer.start()
+        assert entered.wait(timeout=5)
+        closer = threading.Thread(target=store.close)
+        closer.start()
+        release.set()
+        writer.join(timeout=5)
+        closer.join(timeout=5)
+        assert not writer.is_alive() and not closer.is_alive()
+
+        store.close()
+        with pytest.raises(RuntimeError, match="job store is closed"):
+            store.get(job.job_id)
 
 
 # === 4A-4 JobRunner 全流程 ====================================================
@@ -290,10 +386,13 @@ class TestJobRunnerRecovery:
         s1.close()
 
         s2 = JobStore(db)
-        r2 = JobRunner(s2, tmp_path / "art")
-        restored = s2.get(job.job_id)
-        assert restored is not None
-        assert restored.status == JobStatus.AWAITING_REVIEW
-        done = r2.approve(job.job_id)
-        assert done.status == JobStatus.COMPLETED
-        assert s2.verify_chain(job.job_id)
+        try:
+            r2 = JobRunner(s2, tmp_path / "art")
+            restored = s2.get(job.job_id)
+            assert restored is not None
+            assert restored.status == JobStatus.AWAITING_REVIEW
+            done = r2.approve(job.job_id)
+            assert done.status == JobStatus.COMPLETED
+            assert s2.verify_chain(job.job_id)
+        finally:
+            s2.close()

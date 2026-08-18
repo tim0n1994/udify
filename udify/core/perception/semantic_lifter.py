@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import StrEnum
 
 from udify.models.content_graph import ContentGraph, ContentNode, NodeType
 from udify.models.source import Confidence, Evidence, SourceSpan, ToolRunRef
@@ -64,6 +65,22 @@ def _norm(s: str) -> str:
     return "".join(ch for ch in s.lower() if ch.isalnum())
 
 
+class LiftSource(StrEnum):
+    """Where a tag came from (iter6 M5, V4 research).
+
+    RULE: produced by deterministic pattern matching (no LLM).
+    LLM: produced by an LLM-assisted lift (requires an API key).
+    MISSING: a semantic tag that *would* need an LLM but none was available.
+
+    The lifter never fabricates ``LLM`` when no key is present; it reports
+    ``MISSING`` so downstream consumers know the semantic layer is degraded.
+    """
+
+    RULE = "rule"
+    LLM = "llm"
+    MISSING = "missing"
+
+
 @dataclass
 class TagResult:
     """单个节点的打标签结果。"""
@@ -71,6 +88,7 @@ class TagResult:
     tags: list[str] = field(default_factory=list)
     numeric_kinds: dict[str, str] = field(default_factory=dict)  # 属性键→语义类别
     evidence: list[Evidence] = field(default_factory=list)
+    source: LiftSource = LiftSource.RULE  # iter6: all rule-derived tags are RULE
 
 
 class SemanticLifter:

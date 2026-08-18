@@ -49,15 +49,20 @@ class ApiState:
         self.state_dir = state_dir
         self.store = JobStore(state_dir / "jobs.db")
         self.runner = JobRunner(self.store, state_dir / "jobs")
+        # SSE 进度流（iter4 M4 PR2）：独立 sqlite 文件，崩溃可恢复
+        from udify.core.orchestration.progress import ProgressStore  # noqa: PLC0415
+
+        self.progress_store = ProgressStore(str(state_dir / "progress.db"))
         # ponytail: 2 个工作线程对单用户本地场景绰绰有余；多用户是非目标（红线 #11）
         self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="udify-job")
         self.inflight: set[str] = set()
         self.lock = threading.Lock()
+        self._accepting = True
 
     def submit_exclusive(self, job_id: str, fn: Callable[[], Any]) -> bool:
         """为 job 提交独占后台任务；已有在跑的任务则返回 False。"""
         with self.lock:
-            if job_id in self.inflight:
+            if not self._accepting or job_id in self.inflight:
                 return False
             self.inflight.add(job_id)
 
@@ -70,8 +75,30 @@ class ApiState:
                 with self.lock:
                     self.inflight.discard(job_id)
 
-        self.executor.submit(_run)
+        try:
+            # Submit while holding the state lock so shutdown cannot pass the
+            # accepting check and close the executor between these two steps.
+            with self.lock:
+                if not self._accepting:
+                    self.inflight.discard(job_id)
+                    return False
+                self.executor.submit(_run)
+        except RuntimeError:
+            with self.lock:
+                self.inflight.discard(job_id)
+            return False
         return True
+
+    def shutdown(self) -> None:
+        """Stop submissions, wait for running jobs, then close durable state."""
+        with self.lock:
+            self._accepting = False
+        self.executor.shutdown(wait=True, cancel_futures=True)
+        with self.lock:
+            # Cancelled queued futures never entered ``_run`` and therefore
+            # cannot clear their own marker.
+            self.inflight.clear()
+        self.store.close()
 
 
 def _ok(data: Any, status_code: int = 200, meta: dict[str, Any] | None = None) -> JSONResponse:
@@ -123,8 +150,7 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
         if stuck:
             logger.info("recovering %d incomplete jobs", len(stuck))
         yield
-        state.executor.shutdown(wait=False, cancel_futures=True)
-        state.store.close()
+        state.shutdown()
 
     app = FastAPI(
         title="Udify API",
@@ -226,6 +252,15 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
     async def get_report(job_id: str) -> JSONResponse:
         job = _require_job(state, job_id)
         return _ok(_read_artifact(job.artifacts_dir, "report.json"))
+
+    # SSE 进度流（iter4 M4 PR2，T4-STREAMING-UX）：GET /jobs/{id}/events
+    from udify.api.job_events import make_job_events_route  # noqa: PLC0415
+
+    app.add_api_route(
+        f"{prefix}/jobs/{{job_id}}/events",
+        make_job_events_route(prefix),
+        methods=["GET"],
+    )
 
     @app.get(f"{prefix}/jobs/{{job_id}}/package")
     async def get_package(job_id: str) -> FileResponse:

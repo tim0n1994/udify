@@ -1,0 +1,5 @@
+[
+  {"id":1,"name":"Slime","battlerName":"","memberIndex":0,"params":[30,0,10,3,5,3,8,0]},
+  {"id":2,"name":"BossA","battlerName":"","memberIndex":0,"params":[500,50,50,20,30,15,40,100]},
+  {"id":3,"name":"BossC","battlerName":"","memberIndex":0,"params":[2000,200,120,50,60,30,80,300]}
+]

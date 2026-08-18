@@ -1,13 +1,15 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
+import { api, queryKeys } from "@/lib/api";
+import { useConfig } from "@/lib/config";
 
 export function HealthDot() {
+  const { config } = useConfig();
   const { data, isError } = useQuery({
-    queryKey: ["healthz"],
+    queryKey: queryKeys.health,
     queryFn: api.healthz,
-    refetchInterval: 5000,
+    refetchInterval: config.polling.healthMs,
   });
   const up = Boolean(data) && !isError;
   return (
@@ -19,7 +21,7 @@ export function HealthDot() {
         className={`h-2 w-2 rounded-full ${up ? "bg-ok" : "bg-err"}`}
         aria-hidden
       />
-      <span className={up ? "text-ok" : "text-err"}>{up ? "API" : "OFFLINE"}</span>
+      <span className={up ? "text-ink" : "text-err"}>{up ? "API 在线" : "API 离线"}</span>
     </span>
   );
 }

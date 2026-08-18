@@ -1,144 +1,224 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { api, ApiError } from "@/lib/api";
-import { fmtTime } from "@/lib/ui";
-import { StatusBadge } from "@/components/StatusBadge";
+import { RefreshCw } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/Button";
+import { ErrorState, Skeleton } from "@/components/ui/States";
+import { CommandPalette } from "@/features/jobs/cockpit/CommandPalette";
+import { EvidenceBay } from "@/features/jobs/cockpit/EvidenceBay";
+import { MissionStrip } from "@/features/jobs/cockpit/MissionStrip";
+import { OpsMatrix } from "@/features/jobs/cockpit/OpsMatrix";
+import { CreateJobForm } from "@/features/jobs/console/CreateJobForm";
+import { JobFilters } from "@/features/jobs/console/JobFilters";
+import { JobInspector } from "@/features/jobs/console/JobInspector";
+import { JobTable } from "@/features/jobs/console/JobTable";
+import {
+  filterJobs,
+  selectVisibleJob,
+  type JobFilter,
+} from "@/features/jobs/console/filters";
+import { api, ApiError, jobsPollInterval, queryKeys } from "@/lib/api";
+import { useConfig } from "@/lib/config";
+import { useSound } from "@/lib/sound";
 
 export default function ConsolePage() {
+  return (
+    <Suspense fallback={null}>
+      <ConsolePageContent />
+    </Suspense>
+  );
+}
+
+function ConsolePageContent() {
   const router = useRouter();
-  const qc = useQueryClient();
-  const [gameRoot, setGameRoot] = useState("");
-  const [intent, setIntent] = useState("");
+  const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+  const { config } = useConfig();
+  const sound = useSound();
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<JobFilter>("all");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [formError, setFormError] = useState<ApiError | null>(null);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    if (status && ["all", "awaiting_review", "active", "completed", "failed"].includes(status)) {
+      setFilter(status as JobFilter);
+    }
+  }, [searchParams]);
 
   const jobs = useQuery({
-    queryKey: ["jobs"],
+    queryKey: queryKeys.jobs,
     queryFn: api.listJobs,
-    refetchInterval: 2000,
+    refetchInterval: (query) =>
+      jobsPollInterval(
+        query.state.data,
+        config,
+        typeof document === "undefined" || document.visibilityState === "visible",
+      ),
   });
 
   const create = useMutation({
-    mutationFn: () => api.createJob(gameRoot.trim(), intent.trim()),
-    onSuccess: (job) => {
+    mutationFn: ({ gameRoot, intent }: { gameRoot: string; intent: string }) =>
+      api.createJob(gameRoot, intent),
+    onSuccess: async (job) => {
       setFormError(null);
-      setIntent("");
-      qc.invalidateQueries({ queryKey: ["jobs"] });
+      sound.play("create");
+      await queryClient.invalidateQueries({ queryKey: queryKeys.jobs });
       router.push(`/jobs/${job.job_id}`);
     },
-    onError: (e) => setFormError(e instanceof ApiError ? e : null),
+    onError: (error) => setFormError(error instanceof ApiError ? error : null),
   });
 
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const filtered = useMemo(
+    () => filterJobs(jobs.data ?? [], search, filter),
+    [filter, jobs.data, search],
+  );
+  const selected = selectVisibleJob(filtered, selectedId);
+
   return (
-    <div className="space-y-10">
-      {/* 新任务：整个产品的第一入口 */}
-      <section className="relative overflow-hidden rounded-md border border-edge bg-panel p-6">
-        <div
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
-          aria-hidden
-        />
-        <h1 className="mb-1 font-mono text-sm uppercase tracking-[0.2em] text-accent">
-          新建 Mod 任务
-        </h1>
-        <p className="mb-5 text-sm text-muted">
-          指向一个 miu2d 游戏目录，用一句话说出你想要的改动。系统会生成带证据的修改计划，等你审阅批准。
+    <div className="mx-auto max-w-[1500px] space-y-5">
+      <CommandPalette open={paletteOpen} jobs={jobs.data} onClose={() => setPaletteOpen(false)} />
+
+      <MissionStrip jobs={jobs.data} onOpenCommand={() => setPaletteOpen(true)} />
+
+      <header className="flex flex-wrap items-end justify-between gap-4 border-b border-edge pb-5">
+        <div>
+          <p className="dossier-index">Evidence operations · C-00</p>
+          <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            证据驾驶舱
+          </h1>
+          <div className="dossier-rule" aria-hidden />
+          <p className="mt-3 max-w-xl text-sm text-muted">
+            意图一经提交，感知→规划→证据→审阅→验证→打包全程可追溯；审计链失配会在 1 秒内变红。
+          </p>
+        </div>
+        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-faint">
+          Udify · local · single-user
         </p>
-        <form
-          className="grid gap-4 md:grid-cols-[1fr_1.2fr_auto]"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (gameRoot.trim() && intent.trim()) create.mutate();
-          }}
-        >
-          <label className="block">
-            <span className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-faint">
-              游戏目录 game_root
-            </span>
-            <input
-              value={gameRoot}
-              onChange={(e) => setGameRoot(e.target.value)}
-              placeholder="/path/to/miu2d-game"
-              className="w-full rounded-sm border border-edge bg-bg px-3 py-2 font-mono text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none"
-              required
-            />
-          </label>
-          <label className="block">
-            <span className="mb-1 block font-mono text-[10px] uppercase tracking-widest text-faint">
-              修改意图 intent
-            </span>
-            <input
-              value={intent}
-              onChange={(e) => setIntent(e.target.value)}
-              placeholder="让第一个 Boss 更难，但不要单纯翻倍血量"
-              className="w-full rounded-sm border border-edge bg-bg px-3 py-2 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none"
-              required
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={create.isPending || !gameRoot.trim() || !intent.trim()}
-            className="self-end rounded-sm border border-accent bg-accent/15 px-5 py-2 font-mono text-sm font-semibold tracking-wider text-accent transition hover:bg-accent/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            {create.isPending ? "创建中…" : "生成计划 →"}
-          </button>
-        </form>
-        {formError && (
-          <div className="mt-4 rounded-sm border border-err/40 bg-err/10 px-4 py-3 text-sm">
-            <p className="font-mono text-xs text-err">{formError.record.code}</p>
-            <p className="mt-1 text-ink">{formError.record.message}</p>
-            {formError.record.suggested_action && (
-              <p className="mt-1 text-xs text-muted">→ {formError.record.suggested_action}</p>
-            )}
-          </div>
-        )}
+      </header>
+
+      <section aria-labelledby="create-heading" className="dossier p-4 sm:p-5">
+        <p className="dossier-index">C-02 · Intent intake</p>
+        <h2 id="create-heading" className="sr-only">
+          创建任务
+        </h2>
+        <div className="mt-3">
+          <CreateJobForm
+            pending={create.isPending}
+            apiError={formError}
+            onSubmit={async (input) => {
+              await create.mutateAsync(input);
+            }}
+          />
+        </div>
       </section>
 
-      {/* 任务台账 */}
-      <section>
-        <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-            任务台账
-          </h2>
-          <span className="font-mono text-[10px] text-faint">
-            {jobs.data ? `${jobs.data.length} 条` : "…"}
-          </span>
+      <section aria-labelledby="matrix-heading" className="space-y-3">
+        <div className="flex items-baseline justify-between">
+          <div>
+            <p className="dossier-index">C-03 · Ops heat matrix</p>
+            <h2 id="matrix-heading" className="mt-1 text-sm font-semibold text-ink">
+              生产矩阵
+            </h2>
+          </div>
+          <p className="font-mono text-[10px] text-faint">hover / Enter 深链到任务</p>
         </div>
-        {jobs.isError && (
-          <div className="rounded-md border border-err/40 bg-err/10 px-4 py-6 text-center text-sm text-muted">
-            后端离线 —— 在项目目录运行{" "}
-            <code className="rounded bg-bg px-1.5 py-0.5 font-mono text-accent">
-              udify serve
-            </code>{" "}
-            后自动恢复
-          </div>
-        )}
-        {jobs.data && jobs.data.length === 0 && (
-          <div className="rounded-md border border-dashed border-edge px-4 py-10 text-center text-sm text-faint">
-            还没有任务。上面提交第一个意图。
-          </div>
-        )}
-        <ul className="divide-y divide-edge overflow-hidden rounded-md border border-edge">
-          {jobs.data?.map((job) => (
-            <li key={job.job_id}>
-              <button
-                onClick={() => router.push(`/jobs/${job.job_id}`)}
-                className="flex w-full items-center gap-4 bg-panel px-4 py-3 text-left transition hover:bg-panel-2 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
-              >
-                <span className="font-mono text-xs text-faint">{job.job_id}</span>
-                <span className="min-w-0 flex-1 truncate text-sm text-ink">
-                  {job.intent}
-                </span>
-                <span className="hidden font-mono text-[11px] text-faint md:block">
-                  {fmtTime(job.created_at)}
-                </span>
-                <StatusBadge status={job.status} />
-              </button>
-            </li>
-          ))}
-        </ul>
+        <OpsMatrix jobs={jobs.data} />
       </section>
+
+      <section className="surface overflow-hidden" aria-labelledby="recent-jobs-title">
+        <div className="flex flex-wrap items-center gap-3 border-b border-edge px-4 py-3 sm:px-5">
+          <div className="mr-auto">
+            <p className="dossier-index">C-03b · Feed</p>
+            <h2 id="recent-jobs-title" className="text-sm font-semibold text-ink">
+              任务流
+            </h2>
+            <p className="mt-0.5 font-mono text-[10px] text-faint">
+              {jobs.data ? `${jobs.data.length} 条后端记录` : "正在读取本地 JobStore"}
+            </p>
+          </div>
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => void jobs.refetch()}
+            disabled={jobs.isFetching}
+            aria-label="刷新任务"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${jobs.isFetching ? "animate-spin" : ""}`} aria-hidden />
+            刷新
+          </Button>
+        </div>
+
+        <JobFilters
+          search={search}
+          filter={filter}
+          onSearch={setSearch}
+          onFilter={setFilter}
+          onClear={() => {
+            setSearch("");
+            setFilter("all");
+          }}
+        />
+
+        {jobs.isLoading ? (
+          <div className="space-y-px p-1" aria-label="正在加载任务">
+            {Array.from({ length: 5 }, (_, index) => (
+              <Skeleton key={index} className="h-12" />
+            ))}
+          </div>
+        ) : null}
+
+        {jobs.isError ? (
+          <div className="p-4">
+            <ErrorState
+              title={jobs.error instanceof ApiError ? jobs.error.record.code : "API_OFFLINE"}
+              message={
+                jobs.error instanceof ApiError ? jobs.error.record.message : "无法加载任务"
+              }
+              action={jobs.error instanceof ApiError ? jobs.error.record.suggested_action : undefined}
+              onRetry={() => void jobs.refetch()}
+            />
+          </div>
+        ) : null}
+
+        {jobs.data ? (
+          <div
+            className={
+              config.features.showJobInspector
+                ? "grid xl:grid-cols-[minmax(0,1fr)_320px]"
+                : "block"
+            }
+          >
+            <JobTable
+              jobs={filtered}
+              selectedId={selected?.job_id ?? null}
+              hasFilters={Boolean(search.trim()) || filter !== "all"}
+              onSelect={(job) => setSelectedId(job.job_id)}
+              onOpen={(job) => router.push(`/jobs/${job.job_id}`)}
+            />
+            {config.features.showJobInspector ? (
+              <JobInspector job={selected} onOpen={() => selected && router.push(`/jobs/${selected.job_id}`)} />
+            ) : null}
+          </div>
+        ) : null}
+      </section>
+
+      <EvidenceBay job={selected} jobs={jobs.data ?? []} />
     </div>
   );
 }

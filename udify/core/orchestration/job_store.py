@@ -99,18 +99,24 @@ def _event_hash(
 class JobStore:
     """ModJob 的 durable 存储（进程内线程安全）。
 
-    # ponytail: 一把全局写锁 + WAL，单机单进程（uvicorn 单 worker）足够；
+    # ponytail: 一把连接级 RLock + WAL，单机单进程（uvicorn 单 worker）足够；
+    # sqlite3 connection 的读、写、事务和关闭均必须在同一锁域内；
     # 多进程/多机时升级为服务化存储，届时幂等键 (job_id, seq) 已预留。
     """
 
     def __init__(self, db_path: Path) -> None:
         db_path.parent.mkdir(parents=True, exist_ok=True)
         self._db_path = db_path
-        self._lock = threading.Lock()
+        # sqlite3 connections cannot be used concurrently, even with
+        # ``check_same_thread=False``.  A re-entrant lock lets compound
+        # operations (transition / verify_chain) reuse the same guarded
+        # helpers without opening a second transaction or deadlocking.
+        self._lock = threading.RLock()
+        self._closed = False
         self._conn = sqlite3.connect(str(db_path), check_same_thread=False)
-        self._conn.execute("PRAGMA journal_mode=WAL")
-        self._conn.execute("PRAGMA synchronous=NORMAL")
         with self._lock, self._conn:
+            self._conn.execute("PRAGMA journal_mode=WAL")
+            self._conn.execute("PRAGMA synchronous=NORMAL")
             self._conn.executescript(_SCHEMA)
             row = self._conn.execute("SELECT version FROM schema_version").fetchone()
             if row is None:
@@ -126,56 +132,70 @@ class JobStore:
 
     def save(self, job: ModJob) -> None:
         """插入或整行覆盖 job 快照。"""
-        with self._lock, self._conn:
-            self._conn.execute(
-                """
-                INSERT INTO jobs (job_id, game_root, intent, status, created_at,
-                                  updated_at, artifacts_dir, error_json, checkpoint_json)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(job_id) DO UPDATE SET
-                    status=excluded.status,
-                    updated_at=excluded.updated_at,
-                    error_json=excluded.error_json,
-                    checkpoint_json=excluded.checkpoint_json
-                """,
-                (
-                    job.job_id,
-                    job.game_root,
-                    job.intent,
-                    job.status.value,
-                    job.created_at,
-                    job.updated_at,
-                    job.artifacts_dir,
-                    json.dumps(job.error.to_dict()) if job.error else None,
-                    json.dumps(job.checkpoint, default=str),
-                ),
-            )
+        with self._lock:
+            self._ensure_open_unlocked()
+            with self._conn:
+                self._save_unlocked(job)
+
+    def _save_unlocked(self, job: ModJob) -> None:
+        """Write a job snapshot inside the caller-owned lock/transaction."""
+        self._conn.execute(
+            """
+            INSERT INTO jobs (job_id, game_root, intent, status, created_at,
+                              updated_at, artifacts_dir, error_json, checkpoint_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(job_id) DO UPDATE SET
+                status=excluded.status,
+                updated_at=excluded.updated_at,
+                error_json=excluded.error_json,
+                checkpoint_json=excluded.checkpoint_json
+            """,
+            (
+                job.job_id,
+                job.game_root,
+                job.intent,
+                job.status.value,
+                job.created_at,
+                job.updated_at,
+                job.artifacts_dir,
+                json.dumps(job.error.to_dict()) if job.error else None,
+                json.dumps(job.checkpoint, default=str),
+            ),
+        )
 
     def get(self, job_id: str) -> ModJob | None:
-        row = self._conn.execute(
-            "SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            " artifacts_dir, error_json, checkpoint_json FROM jobs WHERE job_id = ?",
-            (job_id,),
-        ).fetchone()
+        with self._lock:
+            self._ensure_open_unlocked()
+            row = self._conn.execute(
+                "SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                " artifacts_dir, error_json, checkpoint_json FROM jobs WHERE job_id = ?",
+                (job_id,),
+            ).fetchone()
         return self._row_to_job(row) if row else None
 
     def list_jobs(self, limit: int = 50, offset: int = 0) -> list[ModJob]:
-        rows = self._conn.execute(
-            "SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            " artifacts_dir, error_json, checkpoint_json FROM jobs"
-            " ORDER BY created_at DESC LIMIT ? OFFSET ?",
-            (limit, offset),
-        ).fetchall()
+        with self._lock:
+            self._ensure_open_unlocked()
+            rows = self._conn.execute(
+                "SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                " artifacts_dir, error_json, checkpoint_json FROM jobs"
+                " ORDER BY created_at DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
         return [self._row_to_job(r) for r in rows]
 
     def list_by_status(self, statuses: frozenset[JobStatus]) -> list[ModJob]:
+        if not statuses:
+            return []
         placeholders = ",".join("?" for _ in statuses)
-        rows = self._conn.execute(
-            f"SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            f" artifacts_dir, error_json, checkpoint_json FROM jobs"
-            f" WHERE status IN ({placeholders}) ORDER BY created_at",
-            tuple(s.value for s in statuses),
-        ).fetchall()
+        with self._lock:
+            self._ensure_open_unlocked()
+            rows = self._conn.execute(
+                f"SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                f" artifacts_dir, error_json, checkpoint_json FROM jobs"
+                f" WHERE status IN ({placeholders}) ORDER BY created_at",
+                tuple(s.value for s in statuses),
+            ).fetchall()
         return [self._row_to_job(r) for r in rows]
 
     @staticmethod
@@ -200,51 +220,70 @@ class JobStore:
         """追加一条链式哈希事件（审计 + trace）。"""
         payload = payload or {}
         ts = time.time()
-        with self._lock, self._conn:
-            row = self._conn.execute(
-                "SELECT seq, record_hash FROM job_events WHERE job_id = ?"
-                " ORDER BY seq DESC LIMIT 1",
-                (job_id,),
-            ).fetchone()
-            seq = (row[0] + 1) if row else 1
-            prev = row[1] if row else ""
-            record_hash = _event_hash(job_id, seq, ts, stage, event, payload, prev)
-            self._conn.execute(
-                "INSERT INTO job_events (job_id, seq, ts, stage, event, payload_json,"
-                " prev_hash, record_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (
-                    job_id,
-                    seq,
-                    ts,
-                    stage,
-                    event,
-                    json.dumps(payload, default=str),
-                    prev,
-                    record_hash,
-                ),
-            )
+        with self._lock:
+            self._ensure_open_unlocked()
+            with self._conn:
+                return self._append_event_unlocked(job_id, stage, event, payload, ts=ts)
+
+    def _append_event_unlocked(
+        self,
+        job_id: str,
+        stage: str,
+        event: str,
+        payload: dict[str, Any],
+        *,
+        ts: float,
+    ) -> JobEvent:
+        """Append an event inside the caller-owned lock/transaction."""
+        row = self._conn.execute(
+            "SELECT seq, record_hash FROM job_events WHERE job_id = ? ORDER BY seq DESC LIMIT 1",
+            (job_id,),
+        ).fetchone()
+        seq = (row[0] + 1) if row else 1
+        prev = row[1] if row else ""
+        record_hash = _event_hash(job_id, seq, ts, stage, event, payload, prev)
+        self._conn.execute(
+            "INSERT INTO job_events (job_id, seq, ts, stage, event, payload_json,"
+            " prev_hash, record_hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            (
+                job_id,
+                seq,
+                ts,
+                stage,
+                event,
+                json.dumps(payload, default=str),
+                prev,
+                record_hash,
+            ),
+        )
         return JobEvent(job_id, seq, ts, stage, event, payload, prev, record_hash)
 
     def events(self, job_id: str, after_seq: int = 0) -> list[JobEvent]:
-        rows = self._conn.execute(
-            "SELECT job_id, seq, ts, stage, event, payload_json, prev_hash, record_hash"
-            " FROM job_events WHERE job_id = ? AND seq > ? ORDER BY seq",
-            (job_id, after_seq),
-        ).fetchall()
-        return [JobEvent(r[0], r[1], r[2], r[3], r[4], json.loads(r[5]), r[6], r[7]) for r in rows]
+        with self._lock:
+            self._ensure_open_unlocked()
+            rows = self._conn.execute(
+                "SELECT job_id, seq, ts, stage, event, payload_json, prev_hash, record_hash"
+                " FROM job_events WHERE job_id = ? AND seq > ? ORDER BY seq",
+                (job_id, after_seq),
+            ).fetchall()
+            return [
+                JobEvent(r[0], r[1], r[2], r[3], r[4], json.loads(r[5]), r[6], r[7]) for r in rows
+            ]
 
     def verify_chain(self, job_id: str) -> bool:
         """校验事件链完整性（ORCH-JOB-04：篡改任意一条即断裂）。"""
-        prev = ""
-        for ev in self.events(job_id):
-            if ev.prev_hash != prev:
-                return False
-            if _event_hash(ev.job_id, ev.seq, ev.ts, ev.stage, ev.event, ev.payload, prev) != (
-                ev.record_hash
-            ):
-                return False
-            prev = ev.record_hash
-        return True
+        with self._lock:
+            self._ensure_open_unlocked()
+            prev = ""
+            for ev in self.events(job_id):
+                if ev.prev_hash != prev:
+                    return False
+                if _event_hash(ev.job_id, ev.seq, ev.ts, ev.stage, ev.event, ev.payload, prev) != (
+                    ev.record_hash
+                ):
+                    return False
+                prev = ev.record_hash
+            return True
 
     # ------------------------------------------------------------ transition
 
@@ -258,19 +297,37 @@ class JobStore:
         error: JobError | None = None,
         checkpoint_update: dict[str, Any] | None = None,
     ) -> ModJob:
-        """状态迁移 + 快照落库 + 事件追加（同一把锁内，原子）。"""
+        """状态迁移 + 快照落库 + 事件追加（同一事务中，原子）。"""
         new_job = job.with_status(target, error=error, checkpoint_update=checkpoint_update)
         merged_payload = dict(payload or {})
         merged_payload["from"] = job.status.value
         merged_payload["to"] = target.value
         if error is not None:
             merged_payload["error"] = error.to_dict()
-        self.save(new_job)
-        self.append_event(job.job_id, stage=target.value, event=event, payload=merged_payload)
+        with self._lock:
+            self._ensure_open_unlocked()
+            with self._conn:
+                self._save_unlocked(new_job)
+                self._append_event_unlocked(
+                    job.job_id,
+                    stage=target.value,
+                    event=event,
+                    payload=merged_payload,
+                    ts=time.time(),
+                )
         return new_job
 
     def close(self) -> None:
-        self._conn.close()
+        """Close after any in-flight operation; later calls fail deterministically."""
+        with self._lock:
+            if self._closed:
+                return
+            self._conn.close()
+            self._closed = True
+
+    def _ensure_open_unlocked(self) -> None:
+        if self._closed:
+            raise RuntimeError("job store is closed")
 
 
 __all__ = ["JobEvent", "JobStore"]

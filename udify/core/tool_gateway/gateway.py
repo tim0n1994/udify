@@ -17,6 +17,7 @@ import subprocess
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 from udify.core.tool_gateway.audit import ToolAuditChain, ToolCallRecord, now_iso
 from udify.core.tool_gateway.lockfile import ToolLockfile
@@ -164,6 +165,132 @@ class ToolGateway:
             return result
         result = runner(request)
         result.decision = decision
+        self._audit(request, decision, result)
+        return result
+
+    def call_approved(self, request: ToolCallRequest, human_approved: bool) -> ToolCallResult:
+        """带人工批准凭证的执行路径（AGENT-LOOP-03）。
+
+        human_approved=True 且风险 <= R3 时放行人工门；R4（网络/发布）不在本方法
+        放行。路径 allowlist 与审计照常生效。这使审批显式且可审计，而非旁路策略。
+        """
+        from udify.core.tool_gateway.policy import RiskLevel
+
+        decision = self.policy.evaluate(
+            tool_id=request.tool_id,
+            capability=request.capability,
+            requested_paths=request.requested_paths or None,
+            timeout=request.timeout,
+        )
+        if decision.requires_human_confirmation and not human_approved:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                blocked_reason="requires human confirmation",
+                decision=decision,
+            )
+            self._audit(request, decision, result)
+            return result
+        if decision.risk >= RiskLevel.R4:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                blocked_reason="R4 requires elevated approval, not approvable here",
+                decision=decision,
+            )
+            self._audit(request, decision, result)
+            return result
+        # 已批准且 <= R3：直接执行（不再次走 policy.block），审计一致。
+        timeout = (
+            request.timeout if request.timeout is not None else self.policy.max_timeout_seconds
+        )
+        import time
+
+        start = time.monotonic()
+        try:
+            proc = subprocess.run(request.args, capture_output=True, text=True, timeout=timeout)
+            duration = time.monotonic() - start
+            stdout = proc.stdout or ""
+            stderr = proc.stderr or ""
+            artifact = None
+            if len(stdout) > _MAX_INLINE_OUTPUT and self.artifact_dir is not None:
+                artifact = self._write_artifact(request, stdout)
+                stdout = stdout[:_MAX_INLINE_OUTPUT] + "\n[truncated, see artifact]"
+            result = ToolCallResult(
+                success=proc.returncode == 0,
+                return_code=proc.returncode,
+                stdout=stdout,
+                stderr=stderr,
+                output_artifact=artifact,
+                decision=decision,
+                duration_seconds=duration,
+            )
+        except subprocess.TimeoutExpired:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                stderr=f"timed out after {timeout}s",
+                blocked_reason="timeout",
+                decision=decision,
+            )
+        except FileNotFoundError:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                stderr=f"tool not found: {request.args[0] if request.args else ''}",
+                blocked_reason="tool_not_found",
+                decision=decision,
+            )
+        self._audit(request, decision, result)
+        return result
+
+    def call_sandboxed(
+        self,
+        request: ToolCallRequest,
+        sandbox_executor: Any,
+        human_approved: bool = False,
+    ) -> ToolCallResult:
+        """R3+ 工具调用经沙箱执行（iter3 N3 / S4-SANDBOX）。
+
+        fail-closed：R3+ 操作必须经沙箱；沙箱不可用（backend 返回
+        seatbelt_unavailable 等）则拒绝，不降级为普通 subprocess。R4 仍需更高级别
+        流程。审计照常覆盖。这修复 iter2 call_approved 直接 subprocess 绕沙箱的缺口。
+        """
+        from udify.core.tool_gateway.policy import RiskLevel
+
+        decision = self.policy.evaluate(
+            tool_id=request.tool_id,
+            capability=request.capability,
+            requested_paths=request.requested_paths or None,
+            timeout=request.timeout,
+        )
+        # R3+ 需人工门
+        if decision.requires_human_confirmation and not human_approved:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                blocked_reason="requires human confirmation",
+                decision=decision,
+            )
+            self._audit(request, decision, result)
+            return result
+        # R4 不在本路径放行
+        if decision.risk >= RiskLevel.R4:
+            result = ToolCallResult(
+                success=False,
+                return_code=None,
+                blocked_reason="R4 requires elevated approval",
+                decision=decision,
+            )
+            self._audit(request, decision, result)
+            return result
+        # 经沙箱执行（runner = sandbox_executor.run）
+        result = sandbox_executor.run(request)
+        result.decision = decision
+        # fail-closed：沙箱不可用则拒绝
+        if result.blocked_reason in {"seatbelt_unavailable", "sandbox_unavailable"}:
+            result.success = False
+            result.blocked_reason = "sandbox unavailable (fail-closed, no degrade)"
         self._audit(request, decision, result)
         return result
 

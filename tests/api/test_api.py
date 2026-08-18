@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import io
+import threading
 import time
 import zipfile
 from pathlib import Path
@@ -19,6 +20,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from udify.api.app import create_app
+from udify.core.orchestration import JobStore
 
 
 @pytest.fixture
@@ -180,6 +182,36 @@ class TestJobLifecycle:
         last_seq = all_events[-1]["seq"]
         rest = client.get(f"/api/v0/jobs/{job_id}?after_seq={last_seq}").json()["data"]["events"]
         assert rest == []
+
+    def test_lifespan_waits_for_running_job_before_store_close(
+        self, tmp_path: Path, game_root: Path
+    ) -> None:
+        """A running future may finish its final DB write before lifespan closes SQLite."""
+        state_dir = tmp_path / "shutdown-state"
+        app = create_app(state_dir=state_dir)
+        state = app.state.udify
+        started = threading.Event()
+
+        def delayed_advance(job_id: str) -> None:
+            started.set()
+            time.sleep(0.08)
+            state.store.append_event(job_id, "test", "shutdown_probe")
+
+        state.runner.advance_to_review = delayed_advance
+        with TestClient(app) as local_client:
+            response = local_client.post(
+                "/api/v0/jobs",
+                json={"game_root": str(game_root), "intent": "翻倍血量"},
+            )
+            assert response.status_code == 202
+            job_id = response.json()["data"]["job_id"]
+            assert started.wait(timeout=5)
+
+        reopened = JobStore(state_dir / "jobs.db")
+        try:
+            assert any(event.event == "shutdown_probe" for event in reopened.events(job_id))
+        finally:
+            reopened.close()
 
 
 class TestModStack:
