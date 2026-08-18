@@ -13,6 +13,30 @@ from udify.core.execution.vfs import VirtualFileSystem
 from udify.models.cdl_patch import CDLPatch, OpType, PatchOperation
 
 
+def _split_keep_eol(content: str) -> tuple[list[str], str]:
+    """字节级稳定拆行（PATCH-SYN-10 修复）。
+
+    与 ``str.splitlines()`` 不同，保留每行的行尾（``\\n``/``\\r\\n``），
+    这样重组（``"".join``）能精确还原原始字节，未修改行不会因行尾归一化
+    而在 diff 上表现为删除/新增。返回 (带行尾的行列表, 检测到的行分隔符)。
+    """
+    if "\r\n" in content:
+        sep = "\r\n"
+    elif "\r" in content and "\n" not in content:
+        sep = "\r"
+    else:
+        sep = "\n"
+    lines: list[str] = []
+    buf = content
+    while sep and sep in buf:
+        idx = buf.index(sep) + len(sep)
+        lines.append(buf[:idx])
+        buf = buf[idx:]
+    if buf:
+        lines.append(buf)
+    return lines, sep
+
+
 class PatchExecutionError(Exception):
     """Patch 执行错误"""
 
@@ -192,7 +216,7 @@ class PatchExecutor:
 
     def _modify_ini_ci(self, content: str, section: str, key: str, value: Any) -> str:
         """大小写不敏感的 INI 属性修改（修复合成器 key 与文件 key 大小写不一致）。"""
-        lines = content.splitlines()
+        lines, line_sep = _split_keep_eol(content)
         in_section = False
         key_norm = "".join(ch for ch in key.lower() if ch.isalnum())
         modified = False
@@ -207,13 +231,13 @@ class PatchExecutor:
                 current_norm = "".join(ch for ch in current_key.lower() if ch.isalnum())
                 if current_norm == key_norm:
                     indent = line[: len(line) - len(line.lstrip())]
-                    lines[i] = f"{indent}{current_key}={value}"
+                    lines[i] = f"{indent}{current_key}={value}{line_sep}"
                     modified = True
                     break
 
         if not modified:
             return self._add_ini_section(content, section, {key: value})
-        return "\n".join(lines)
+        return "".join(lines)
 
     def _execute_lua_insert(self, op: PatchOperation) -> list[str]:
         """PATCH-SYN-04: 在 Lua 文件中插入脚本片段（位置 = 函数名末尾）。"""
@@ -286,8 +310,10 @@ class PatchExecutor:
 
         # 追加到 section 末尾或文件末尾
         if section and file_path.endswith((".npc", ".txt")):
-            # 在 section 末尾追加
-            lines = content.splitlines()
+            # 在 section 末尾追加（字节保真，PATCH-SYN-10）
+            lines, sep = _split_keep_eol(content) if content else ([], "\n")
+            if lines and not lines[-1].endswith(("\n", "\r")):
+                lines[-1] += sep
             in_section = False
             insert_at = len(lines)
             for i, line in enumerate(lines):
@@ -297,8 +323,8 @@ class PatchExecutor:
                         insert_at = i
                         break
                     in_section = stripped[1:-1].strip() == section
-            lines.insert(insert_at, cmd_line)
-            new_content = "\n".join(lines)
+            lines.insert(insert_at, f"{cmd_line}{sep}")
+            new_content = "".join(lines)
         else:
             new_content = content.rstrip("\n") + "\n" + cmd_line + "\n"
 
@@ -414,7 +440,7 @@ class PatchExecutor:
 
     def _modify_ini(self, content: str, section: str, key: str, value: Any) -> str:
         """修改 INI 文件中的属性"""
-        lines = content.splitlines()
+        lines, line_sep = _split_keep_eol(content)
         in_section = False
         modified = False
 
@@ -432,7 +458,7 @@ class PatchExecutor:
                 current_key = line.split("=", 1)[0].strip()
                 if current_key == key:
                     indent = line[: len(line) - len(line.lstrip())]
-                    lines[i] = f"{indent}{key}={value}"
+                    lines[i] = f"{indent}{key}={value}{line_sep}"
                     modified = True
                     break
 
@@ -441,7 +467,7 @@ class PatchExecutor:
             content = self._add_ini_section(content, section, {key: value})
             return content
 
-        return "\n".join(lines)
+        return "".join(lines)
 
     def _add_ini_section(self, content: str, section: str, properties: dict[str, Any]) -> str:
         """在 INI 文件中添加新 section，或在已存在的 section 内追加属性。
@@ -450,7 +476,11 @@ class PatchExecutor:
         必须直接在该 section 末尾追加属性行，**不能**再回调 ``_modify_ini``——否则
         key 仍不存在会再次回调本方法，形成无限递归。
         """
-        lines = content.splitlines() if content else []
+        lines, sep = _split_keep_eol(content) if content else ([], "\n")
+
+        # 末行若无行尾，补上——否则追加内容会与之粘连
+        if lines and not lines[-1].endswith(("\n", "\r")):
+            lines[-1] += sep
 
         # 检查 section 是否已存在
         for idx, line in enumerate(lines):
@@ -460,22 +490,28 @@ class PatchExecutor:
                 while insert_at < len(lines) and not lines[insert_at].strip().startswith("["):
                     insert_at += 1
                 for key, value in properties.items():
-                    lines.insert(insert_at, f"{key}={value}")
+                    lines.insert(insert_at, f"{key}={value}{sep}")
                     insert_at += 1
-                return "\n".join(lines)
+                return "".join(lines)
 
         # 添加新 section
         if lines and lines[-1].strip():
-            lines.append("")
-        lines.append(f"[{section}]")
+            lines.append(sep)
+        lines.append(f"[{section}]{sep}")
         for key, value in properties.items():
-            lines.append(f"{key}={value}")
+            lines.append(f"{key}={value}{sep}")
 
-        return "\n".join(lines)
+        return "".join(lines)
 
     def _remove_ini_section(self, content: str, section: str) -> str:
-        """从 INI 文件中删除 section"""
-        lines = content.splitlines()
+        """从 INI 文件中删除 section（字节保真，PATCH-SYN-10）。
+
+        用 ``_split_keep_eol`` 而非 ``splitlines()``：后者丢弃行尾信息，配合
+        ``"\\n".join`` 会把 CRLF 归一化成 LF 并吞掉尾换行——**即使删除的是一个
+        不存在的 section**，这个零改动操作也会让整个文件产生字节差异，直接击穿
+        「未修改字节逐字节不变」的 pass-to-pass 回归断言。
+        """
+        lines, _ = _split_keep_eol(content)
         result = []
         in_target_section = False
 
@@ -492,11 +528,11 @@ class PatchExecutor:
             if not in_target_section:
                 result.append(line)
 
-        return "\n".join(result)
+        return "".join(result)
 
     def _modify_obj(self, content: str, entry: str, key: str, value: Any) -> str:
-        """修改 OBJ 文件中的属性"""
-        lines = content.splitlines()
+        """修改 OBJ 文件中的属性（字节保真，PATCH-SYN-10）。"""
+        lines, line_sep = _split_keep_eol(content)
         in_entry = False
         modified = False
 
@@ -524,7 +560,7 @@ class PatchExecutor:
                     current_key = line.split("=", 1)[0].strip()
                     if current_key == key:
                         indent = line[: len(line) - len(line.lstrip())]
-                        lines[i] = f"{indent}{key}={value}"
+                        lines[i] = f"{indent}{key}={value}{line_sep}"
                         modified = True
                         break
 
@@ -532,23 +568,56 @@ class PatchExecutor:
             # 添加属性到条目
             return self._add_obj_entry(content, entry, {key: value})
 
-        return "\n".join(lines)
+        return "".join(lines)
+
+    def _modify_json(self, content: str, dotted_key: str, value: Any) -> str:
+        """字节级稳定 JSON 修改（iter3 N2 / S3-CROSSPATCH）。
+
+        保留键序、缩进风格；只改目标字段，浮点精度不漂移。dotted_key 用点号
+        定位嵌套（如 "Enemies.0.hp"）。stdlib json 解析保留 dict 插入序，用
+        检测到的原 indent 重新序列化。
+        """
+        import json
+
+        data = json.loads(content)
+        indent = self._detect_json_indent(content)
+        keys = dotted_key.split(".")
+        cur: Any = data
+        for k in keys[:-1]:
+            cur = cur[int(k)] if isinstance(cur, list) else cur[k]
+        last = keys[-1]
+        if isinstance(cur, list):
+            cur[int(last)] = value
+        else:
+            cur[last] = value
+        return json.dumps(data, ensure_ascii=False, indent=indent) + "\n"
+
+    @staticmethod
+    def _detect_json_indent(content: str) -> int | None:
+        """检测 JSON 缩进空格数（字节稳定重序列化用）。"""
+        import re
+
+        m = re.search(r"\n( +)\S", content)
+        return len(m.group(1)) if m else None
 
     def _add_obj_entry(self, content: str, entry: str, properties: dict[str, Any]) -> str:
-        """在 OBJ 文件中添加新条目"""
-        lines = content.splitlines() if content else []
+        """在 OBJ 文件中添加新条目（字节保真，PATCH-SYN-10）。"""
+        lines, sep = _split_keep_eol(content) if content else ([], "\n")
+
+        if lines and not lines[-1].endswith(("\n", "\r")):
+            lines[-1] += sep
 
         if lines and lines[-1].strip():
-            lines.append("")
-        lines.append(entry)
+            lines.append(sep)
+        lines.append(f"{entry}{sep}")
         for key, value in properties.items():
-            lines.append(f"    {key}={value}")
+            lines.append(f"    {key}={value}{sep}")
 
-        return "\n".join(lines)
+        return "".join(lines)
 
     def _remove_obj_entry(self, content: str, entry: str) -> str:
-        """从 OBJ 文件中删除条目"""
-        lines = content.splitlines()
+        """从 OBJ 文件中删除条目（字节保真，PATCH-SYN-10）。"""
+        lines, _ = _split_keep_eol(content)
         result = []
         in_target_entry = False
 
@@ -574,4 +643,4 @@ class PatchExecutor:
 
             result.append(line)
 
-        return "\n".join(result)
+        return "".join(result)
