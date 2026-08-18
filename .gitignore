@@ -72,3 +72,6 @@ logs/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+# Agent session working state (orchestrate-sol-browser handoffs, src zips, screenshots)
+.ai-bridge/
+artifacts/
