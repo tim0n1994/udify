@@ -19,11 +19,16 @@ JobRunner（ORCH-JOB-02/03，2026-08 批次 4A）。
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 from udify.core.miu2d_pipeline import Miu2dClosedLoop
 from udify.core.mod_manager.mod_exporter import ModExporter, ModManifest
+from udify.core.orchestration.gate_orchestrator import (
+    DeliveryTier,
+    GateOrchestrator,
+)
 from udify.core.orchestration.job_store import JobStore
 from udify.core.orchestration.mod_job import JobError, JobStatus, ModJob
 from udify.core.validation.runtime_probe import HeadlessRuntimeProbe, probes_for_graph
@@ -235,12 +240,52 @@ class JobRunner:
             )
         vfs_diffs = vfs.get_all_diffs()
         static_report = StaticValidatorV3().validate(patch, graph, vfs_diffs)
-        probe_report = HeadlessRuntimeProbe().run(graph, probes_for_graph(graph), vfs_diffs)
+
+        # M3-PR2：按引擎分派探针。此前固定走 run(graph)，run_by_engine 是死代码，
+        # 报告不带 engine_coverage——「探针通过」无法区分「真的 headless 跑过」与
+        # 「只是静态代理」。分派后每份报告都带诚实分级。
+        probe_report = _run_probe_by_engine(
+            graph, vfs_diffs, game_root=Path(job.game_root), job_id=job.job_id
+        )
+
+        # M3-PR1：五道闸门编排。此前 GateOrchestrator 零调用者，JobRunner 是线性
+        # glue，没有统一降级策略。final_tier 取所有阻断闸门的最低值。
+        verdict = GateOrchestrator().run_gates(
+            job.job_id,
+            _JobGateContext(
+                graph=graph,
+                intent=job.intent,
+                patch=patch,
+                manifests=(),
+                resolved_targets=[op.target_id for op in patch.operations],
+                ambiguous=False,
+                sandboxed=True,
+                validation_passed=not static_report.blocking_errors and probe_report.passed,
+                validation_skipped=probe_report.engine_coverage == "UNVERIFIABLE",
+                dependency_conflicts=[],
+            ),
+        )
+
         _write_json(
             artifacts / "report.json",
             {
                 "static_validation": static_report.to_dict(),
                 "probe": probe_report.to_dict(),
+                "engine_coverage": probe_report.engine_coverage,
+                "gate_verdict": {
+                    "final_tier": verdict.final_tier.value,
+                    "final_tier_reason": verdict.final_tier_reason,
+                    "gates": [
+                        {
+                            "name": g.name.value,
+                            "lifecycle": g.lifecycle.value,
+                            "verdict": g.verdict.value,
+                            "evidence": g.evidence,
+                            "delivery_tier": g.delivery_tier.value,
+                        }
+                        for g in verdict.gates
+                    ],
+                },
                 "graph_checksum_before": expected,
                 "graph_checksum_applied_on": actual,
             },
@@ -252,6 +297,15 @@ class JobRunner:
                 f"静态验证阻塞错误 {len(static_report.blocking_errors)} 条，详见 report.json",
                 retryable=False,
                 suggested_action="查看 report.json 的 blocking_errors，调整意图后重试",
+            )
+        # 降级铁律：闸门判定 NONE（被阻断）时不得继续打包交付。
+        if verdict.final_tier is DeliveryTier.NONE:
+            return self._fail(
+                job,
+                "JOB_GATE_BLOCKED",
+                f"闸门阻断：{verdict.final_tier_reason}",
+                retryable=False,
+                suggested_action="查看 report.json 的 gate_verdict，按 evidence 调整后重试",
             )
 
         # 阶段：packaging
@@ -454,6 +508,67 @@ class JobRunner:
                 suggested_action=suggested_action,
             ),
         )
+
+
+@dataclass
+class _JobGateContext:
+    """GateOrchestrator 的 GateContext 实现（M3-PR1）。
+
+    闸门用 ``getattr`` 读取可选字段，因此这里必须把每个闸门需要的事实都显式提供，
+    缺失即被当作"未提供"而降级——不要依赖默认值蒙混过关。
+    """
+
+    graph: Any
+    intent: Any
+    patch: Any
+    manifests: Any
+    resolved_targets: list[str]
+    ambiguous: bool
+    sandboxed: bool
+    validation_passed: bool
+    validation_skipped: bool
+    dependency_conflicts: list[Any]
+
+
+def _detect_engine_id(game_root: Path) -> str:
+    """从游戏根目录判定引擎（决定探针分派与诚实分级）。"""
+    if (game_root / "project.godot").exists():
+        return "godot"
+    if (game_root / "www" / "data" / "System.json").exists() or (
+        game_root / "data" / "System.json"
+    ).exists():
+        return "rpgmv"
+    return "miu2d"
+
+
+def _run_probe_by_engine(
+    graph: Any,
+    vfs_diffs: list[dict[str, Any]],
+    *,
+    game_root: Path,
+    job_id: str,
+) -> Any:
+    """按引擎分派运行时探针，报告一律带诚实的 engine_coverage（M3-PR2）。
+
+    Godot 有真原生 headless，且存在 probe 脚本时走 ``run_by_engine``；其余引擎沿用
+    headless 代理，但**显式标注**覆盖等级，不谎称"运行时验证通过"：
+
+    - Godot          → NATIVE_HEADLESS（真跑）
+    - RPGMV          → AUTOMATED_NON_HEADLESS（NW.js 无真 headless）
+    - 其它/未植入    → UNVERIFIABLE（只有静态分析）
+    """
+    engine_id = _detect_engine_id(game_root)
+    probe = HeadlessRuntimeProbe()
+    probe_script = game_root / "probe.gd"
+    if engine_id == "godot" and probe_script.exists():
+        return probe.run_by_engine(engine_id, game_root, probe_script, job_id=job_id)
+
+    report = probe.run(graph, probes_for_graph(graph), vfs_diffs)
+    report.engine_coverage = {
+        "godot": "NATIVE_HEADLESS",
+        "rpgmv": "AUTOMATED_NON_HEADLESS",
+    }.get(engine_id, "UNVERIFIABLE")
+    return report
 
 
 def _state_error(job: ModJob, message: str) -> JobError:
