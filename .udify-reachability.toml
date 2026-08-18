@@ -1,0 +1,718 @@
+# 可达性门禁 allowlist（FIT-03）。
+# 每条必须有 symbol / reason / expires 三字段；expires 到期未清 = CI 红。
+# 过期日期把「展期」从静默动作变成必须显式续签的动作。
+
+[[allow]]
+symbol = "module:udify.core.cognition.intent_trace"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.cognition.llm_budget"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.cognition.llm_intent"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.cognition.llm_pricing"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.cognition.trace_audit"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.evaluation.benchmark_runner"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.evaluation.eval_v3"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.evaluation.miu2d_cases"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.agent_loop"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.builtin_tools"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.executor"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.mcp_server"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.scheduler"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.execution.tool_registry"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.feedback"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.feedback.feedback_loop"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion.engine_detect"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion.fs_view"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion.graph_build"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion.root_discovery"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.ingestion.security"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.decision_record"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.conflict_report"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.json_merge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.lua_merge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.semantic_merge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.text_merge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.mod_manager.real_merge.types"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway.audit"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway.gateway"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway.lockfile"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway.policy"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.tool_gateway.sandbox"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.toolchain"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.core.validation.playwright_probe"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "module:udify.models.detection"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d:get_action_schemas"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d:emit_patch"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d:build_runtime_probes"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d:package_mod"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d_dsl:is_known"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.adapters.miu2d_dsl:all_commands"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.cognition.reference_resolver:extract_features_for_planning"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.execution.sandbox:execute_sandboxed"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.execution.sandbox:execute_in_docker"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.execution.seatbelt_profile:profile_for_temp_staging"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.execution.vfs:set_binary"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.audit_log:get_session_logs"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.audit_log:get_user_logs"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.audit_log:get_all_logs"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.backup_manager:create_snapshot"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.backup_manager:restore_snapshot"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.backup_manager:create_delta_backup"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.backup_manager:list_snapshots"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.backup_manager:cleanup_old_snapshots"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.cache_manager:contains"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.cache_manager:invalidate"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.cache_manager:invalidate_pattern"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.event_bus:subscribe"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.event_bus:unsubscribe"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.event_bus:get_history"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:save_graph"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:load_graph"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:list_graphs"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:save_session_manager"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:load_session_manager"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.state_persistence:clear_all"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.infrastructure.timer:check_optional_budget"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.knowledge.knowledge_graph:get_recommended_pattern"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.knowledge.knowledge_graph:get_related_mechanics"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.knowledge.knowledge_graph:get_npc_archetype"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.knowledge.knowledge_graph:get_map_region"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.knowledge.knowledge_graph:is_valid_magic_combo"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:find_matching_templates"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:get_user_history"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:get_similar_executions"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:get_successful_patterns"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:update_knowledge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:get_knowledge"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:enrich_from_patch"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.memory.memory_store:enrich_from_feedback"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.dependency_graph:uninstall_order"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_exporter:export_directory"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_exporter:import_zip"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_exporter:list_exported_mods"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:install_mod"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:check_dependency_conflicts"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:uninstall_mod"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:enable_mod"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:disable_mod"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:create_mod_stack"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:get_installed_mods"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:get_active_mods"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:get_mod_conflicts"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.mod_manager.mod_manager:check_compatibility"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.gate_orchestrator:needs_clarification"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.job_runner:recover_incomplete"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.mod_job:is_progressing"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:CancellationToken"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:cancel"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:is_cancelled"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:ProgressEmitter"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:subscribe"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:unsubscribe"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.orchestration.progress:latest"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception:perceive_content"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.engine_detector:detect_multiple"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.engine_detector:detect_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.incremental_perception:invalidate_file"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.mechanism_analyzer:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.mechanism_analyzer:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.mechanism_analyzer:analyze_mechanisms"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.parsers.ini_parser:apply_patch_to_content"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:supported_engine"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:extract_all"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.perception.resource_extractor:extract_resources"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.pipeline:process_intent_timed"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.action_schemas:all_schemas"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.cost_controller:set_llm_client"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.cost_controller:check_budget"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.mcts:get_best_path"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.patch_synthesizer:build_reverse"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.value_function:evaluate_batch"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.planning.value_function:LLMValueFunction"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.session.session_manager:create_checkpoint"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.session.session_manager:add_feedback"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.session.session_manager:close_session"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.core.session.session_manager:get_user_sessions"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.cdl_patch:is_empty"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.cdl_patch:GraphDiffer"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.cdl_patch:create_add_asset_op"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.cdl_patch:create_remove_asset_op"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.content_graph:get_neighbors"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.content_graph:create_resource_node"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.content_graph:create_mechanic_node"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.semantic:is_combatant"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13
+
+[[allow]]
+symbol = "udify.models.semantic:set_semantic"
+reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
+expires = 2026-11-13

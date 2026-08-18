@@ -33,6 +33,13 @@ jobs:
       - name: Ruff check
         run: ruff check udify/ tests/
 
+      - name: 可达性门禁（FIT-01..04，红线 #16，blocking）
+        # 拦截「有实现、有测试、ruff/mypy 全过，但主路径从不调用」的孤儿模块/符号。
+        # 红线 #10「必须有测试」对孤儿完全失效——孤儿恰恰是有测试的。
+        # 存量 147 条已冻结进 .udify-reachability.toml 基线（2026-11-13 到期），
+        # 本步只阻塞**新增**孤儿与**过期未清**的豁免条目。
+        run: python3 scripts/check_reachability.py
+
       - name: Ruff format check
         run: ruff format --check udify/ tests/
 
@@ -75,3 +82,69 @@ jobs:
       - name: UdifyBench（10 golden cases，成功判据 #7）
         # 跑 miu2d 10 个 golden case，全过才可合并。
         run: pytest tests/core/validation/test_batch3_validation.py::TestUdifyBench -q
+
+  web-quality:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Install locked frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Production dependency audit (high severity blocking)
+        run: pnpm audit:prod
+
+      - name: ESLint 9 (blocking)
+        run: pnpm lint
+
+      - name: TypeScript strict (blocking)
+        run: pnpm typecheck
+
+      - name: Vitest component and contract tests (MSW)
+        run: pnpm test --run
+
+      - name: Next.js production build
+        run: pnpm build
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Playwright mocked E2E (desktop + mobile)
+        run: pnpm test:e2e
+
+  bench-gate:
+    # iter4 M5 PR2（T5-EVAL-CI-LOOP）：评测驱动 CI 回归闭环。
+    # 跑 heuristic/resolver/mock_llm 三引擎，对比 git-tracked baseline.json，
+    # 任一指标退化（低于基线 5%）则 block。首次无基线退化为 informational。
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Bench-gate（退化检测，block on regression）
+        run: python3 tests/bench/ci_gate.py
