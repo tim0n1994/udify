@@ -81,6 +81,7 @@ class ProbeReport:
     game_started: bool = False
     state_readable: bool = False
     console_error_count: int = 0
+    engine_coverage: str = ""  # iter5 U2: NATIVE_HEADLESS / AUTOMATED_NON_HEADLESS / UNVERIFIABLE
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -254,6 +255,52 @@ class HeadlessRuntimeProbe:
 
     def __init__(self, launcher: PlaywrightLauncher | None = None) -> None:
         self.launcher = launcher or PlaywrightLauncher()
+
+    def run_by_engine(
+        self,
+        engine_id: str,
+        staging_dir: Path,
+        probe_script: Path,
+        job_id: str = "",
+    ) -> ProbeReport:
+        """Dispatch to a real headless probe by engine (iter5 U2-VERIFIED-EXECUTION PR2).
+
+        Only Godot 4 has a true native headless mode. Other engines fall back to
+        the honest "headless proxy" (no synthetic PASS). The returned ProbeReport
+        carries the EngineCoverage so the caller knows how strong the validation is.
+        """
+        report = ProbeReport()
+        if engine_id.lower() in ("godot", "godot4"):
+            from udify.core.validation.godot_probe import run_godot_headless
+
+            vr = run_godot_headless(staging_dir, probe_script, job_id=job_id)
+            report.game_started = vr.status.value not in ("FAILED_CRASH", "SKIPPED")
+            report.passed = vr.status.value == "PASSED"
+            report.engine_coverage = vr.engine_coverage.value
+            for err in vr.errors:
+                result = ProbeResult(
+                    probe_id=f"{job_id}-godot-{err.kind.value}",
+                    passed=False,
+                    kind=ProbeKind.START,
+                    evidence=f"[GODOT HEADLESS] {err.kind.value}: {err.message}",
+                )
+                report.results.append(result)
+        else:
+            # Honest degradation: no native headless for this engine.
+            report.game_started = False
+            report.passed = False
+            report.engine_coverage = (
+                "AUTOMATED_NON_HEADLESS" if "rpg" in engine_id.lower() else "UNVERIFIABLE"
+            )
+            report.results.append(
+                ProbeResult(
+                    probe_id=f"{job_id}-engine-skip",
+                    passed=False,
+                    kind=ProbeKind.START,
+                    evidence=f"[ENGINE DISPATCH] {engine_id} has no native headless probe; skipped honestly",
+                )
+            )
+        return report
 
     def run(
         self,

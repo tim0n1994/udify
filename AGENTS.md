@@ -23,11 +23,15 @@
 | 测试 | pytest, hypothesis | TDD，目标 80%+ 覆盖率 |
 | 类型检查 | mypy | strict mode |
 | 代码风格 | ruff | 替代 black + isort + flake8 |
+| API / 本地持久化 | FastAPI + sqlite3 WAL | 单用户、127.0.0.1；Job 工件落盘 |
+| 前端 | Next.js 15 + React 19 + TypeScript strict + Tailwind 4 | Zod runtime contract、TanStack Query、Radix primitives |
+| Web 测试 | Vitest + Testing Library + MSW + Playwright | unit/component + mocked Chromium desktop/mobile |
+| Web 供应链 | pnpm 10 + production audit | Node ≥20.9；high/critical 阻塞；Next 定向 sharp/postcss override |
 | 图数据库 | Neo4j (预留) | ContentGraph 持久化 |
 | 关系数据库 | PostgreSQL (预留) | 元数据、审计日志 |
 | 向量数据库 | Pinecone (预留) | 语义搜索 |
 | 容器 | Docker, gVisor (预留) | 沙箱执行 |
-| 前端 | React + ReactFlow (预留) | DAG 可视化编辑器 |
+| DAG 编辑器 | ReactFlow (预留) | 当前工作台尚未引入 |
 | 构建 | hatchling | pyproject.toml 标准 |
 
 ---
@@ -121,7 +125,14 @@ udify/
 │           ├── enhanced_validator.py # EnhancedValidator（v2）
 │           ├── static_validator.py   # StaticValidatorV3（VAL-STATIC-01..05：schema/引用/数值/语法/危险API）
 │           └── runtime_probe.py      # HeadlessRuntimeProbe（VAL-RUNTIME-01..05：ProbeSpec/启动/状态/报错/报告）
-└── tests/                      # 测试（337 个，全绿）
+├── web/                        # Next.js 15 本地工作台
+│   ├── app/                    # 任务控制台与 /jobs/[id] 审阅页
+│   ├── config/ lib/config/     # v1 默认值、Zod 配置契约与诊断
+│   ├── lib/api/                # envelope/data runtime decode、query/polling
+│   ├── features/jobs/          # console/review 专用 feature 组件
+│   ├── test/                   # Vitest/RTL/MSW（不进 production import graph）
+│   └── e2e/                    # Playwright Chromium desktop/mobile
+└── tests/                      # Python 测试（399 个，全绿）
     ├── perception/ models/ infrastructure/          # v2 基础（含 test_source.py 证据链）
     ├── cognition/ evaluation/ toolchain/            # Session 4 测试债清偿（批次 0）
     └── core/
@@ -149,7 +160,7 @@ pip install -e .
 ### 运行测试
 
 ```bash
-# 全部测试（337 个，~0.7 秒）
+# 全部 Python 测试（当前 399 个）
 python3 -m pytest tests/ -v
 
 # 特定模块
@@ -174,6 +185,23 @@ mypy udify/
 ruff check udify/ tests/
 ruff format udify/ tests/
 ```
+
+### Web 门禁
+
+```bash
+cd web
+pnpm install --frozen-lockfile
+pnpm audit:prod
+pnpm lint
+pnpm typecheck
+pnpm test --run
+pnpm build
+pnpm test:e2e
+```
+
+Playwright E2E 通过 route interception 使用明确的 mock API；真实本地验收需要另启 `udify serve`。公开配置来自 `NEXT_PUBLIC_UDIFY_CONFIG` 与无凭据、根级回环 `NEXT_PUBLIC_UDIFY_API`，必须经过 Zod 运行时解码；localStorage 异常必须保留内存安全配置与可见诊断。
+
+供应链约束：Node.js ≥20.9（CI 22）；`pnpm.overrides` 将 Next 的 `sharp` 固定到 0.35.3、`postcss` 固定到 8.5.25。原因是 Next 15.5.22 已是当前 15.5 最新 patch，但其声明范围仍会解析到受 GHSA-f88m-g3jw-g9cj / GHSA-6g55-p6wh-862q / GHSA-r28c-9q8g-f849 影响的版本。不得删除 override 而不同时证明 production audit、build 与 E2E。
 
 ---
 
@@ -259,7 +287,7 @@ type:
 
 ## 7. 当前状态快照
 
-**截至 2026-07-27**（批次 0-3 完成，北极星达成；详见 docs/ITERATION-PLAN-2026-07.md）：
+**截至 2026-07-29**（批次 5B 本地门禁完成；详见 docs/ITERATION-PLAN-2026-08.md §11）：
 
 | 模块 | 状态 | 测试 |
 |------|------|------|
@@ -293,9 +321,10 @@ type:
 | UdifyBench (10 golden case) | ✅ 完成 | 批次 3 |
 | ModJob 编排 (orchestration) | ✅ 完成 | 2026-08 批次 4A |
 | 薄 API (udify/api + serve) | ✅ 完成 | 2026-08 批次 4B |
-| 前端工作台 (web/, Next.js 15) | ✅ 审阅切片 | 2026-08 批次 5 |
+| 前端工作台 (web/, Next.js 15) | ✅ 可配置审阅切片 | 31 unit/component + 4 mocked E2E |
+| JobStore 并发与关闭协议 | ✅ 完成 | API/编排 59；竞态循环 40/40 |
 
-**已完成代码行数**: ~24,500 行 Python + ~5,700 行测试（395 测试全绿）+ web/ 前端
+**当前门禁快照**: Python 399 测试全绿；Web ESLint/tsc/Vitest/production build/Playwright desktop+mobile 全绿。全包 mypy 仍有历史债，只宣称迭代方案指定的 15 文件子集通过。
 
 **产品入口**：`udify serve`（API，127.0.0.1:8765）+ `cd web && pnpm dev`（工作台，localhost:3000）。状态目录 `./.udify/`（jobs.db + 任务工件）。
 

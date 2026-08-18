@@ -1,0 +1,4 @@
+[
+  {"id":1,"name":"Harold","characterName":"Actor1","characterIndex":0,"classId":1,"initialLevel":1,"maxLevel":99,"expParams":[0,30,0,30]},
+  {"id":2,"name":"Therese","characterName":"Actor1","characterIndex":1,"classId":2,"initialLevel":1,"maxLevel":99,"expParams":[0,30,0,30]}
+]

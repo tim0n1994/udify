@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-08-05T22:42:26.528870+00:00",
+  "case_count": 30,
+  "engines": {
+    "heuristic": {
+      "intent_type_accuracy": 0.4666666666666667,
+      "target_precision": 0.06666666666666667,
+      "misfire_avoidance": 0.9
+    },
+    "resolver": {
+      "intent_type_accuracy": 0.4,
+      "target_precision": 1.0,
+      "misfire_avoidance": 1.0
+    },
+    "mock_llm": {
+      "intent_type_accuracy": 0.4,
+      "target_precision": 1.0,
+      "misfire_avoidance": 1.0
+    }
+  }
+}

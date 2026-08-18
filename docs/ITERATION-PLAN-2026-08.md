@@ -211,3 +211,110 @@ created → perceiving → planning → awaiting_review → applying → validat
 - **动作**：ModJob+SQLite（地基）→ 薄 API 8 端点 → Next.js 审阅切片 → LLM 可选增强 → 欠条清偿。
 - **判据**：§3.2 十条，判据 2（durable）/4（浏览器全流程）/7（CI 常绿）不可谈判。
 - **纪律**：红线 15 条；能力不扩圈，体验补到位；每个 PR 有任务 ID、有测试、有验收。
+
+## 11. 批次 5B 执行级设计与结果（2026-07-29）
+
+> 状态：**已实现并完成本地阻塞门禁**。本节保留编码前施工图，并把真实运行结果、mock/real 边界和剩余风险一起落账；“脚本已配置”不等于“门禁已运行”。
+
+### 11.1 目标和边界
+
+- 目标：把已有 `/` 与 `/jobs/[id]` 从可演示切片升级为可配置、可审阅、可阻塞验证的本地产品工作台。
+- 不扩展安全边界：风险档位、批准资格、状态迁移、路径策略和工具决策仍完全由后端拥有；前端 feature 只决定是否展示。
+- 不做 Storybook、Zustand、ReactFlow、SSE/WebSocket、认证或云部署；它们不是当前两个页面的最小必要依赖。
+
+### 11.2 模块和状态所有权
+
+```text
+web/config/defaults.ts           经审计的 v1 安全默认值
+web/lib/config/*                 Zod 契约、env/local preference 合并、诊断
+web/lib/api/*                    Zod envelope/data decode、query keys、polling policy
+web/components/ui/*              Button/Input/Dialog/Tabs/Skeleton/Empty/Error
+web/components/shell/*           AppShell/SidebarNav/TopStatus
+web/features/jobs/console/*      创建表单、过滤、表格、selected-row inspector
+web/features/jobs/review/*       file rail、line diff、operation/evidence、timeline/checklist/actions
+web/test/*                       Vitest + Testing Library + MSW（仅测试包图）
+web/e2e/*                        Playwright 真浏览器；默认使用明示 mock API
+```
+
+| 状态 | 唯一事实来源 | 前端权限 |
+|---|---|---|
+| Job/plan/report/risk/checklist | FastAPI + JobStore + 工件 | decode、查询、展示；不本地重算准入 |
+| 当前审阅 tab | URL `?tab=` | 读写 URL，使刷新/复制可复现 |
+| 选中文件/操作 | Review workspace local state | 临时视图状态，不持久化 |
+| density/default tab | versioned local preference | 只影响展示，坏数据可重置 |
+| 品牌/导航/轮询 | defaults + checked public env | 受 v1 Zod 白名单约束 |
+
+### 11.3 配置加载与失败语义
+
+```text
+frozen defaults
+  -> NEXT_PUBLIC_UDIFY_CONFIG 完整 JSON 解析/字段白名单
+  -> NEXT_PUBLIC_UDIFY_API 回环 HTTP URL 单独校验
+  -> localStorage(udify.display.preferences) v1
+  -> resolved display config + diagnostics[]
+```
+
+- env JSON 非法：整个 env override 不进入 resolved config，使用安全默认值并在 UI/测试诊断中保留原因。
+- local preference 旧版/损坏：只忽略该层，不污染 build config；用户可一键重置。
+- API 任何不符合 envelope/data schema 的 2xx/4xx 响应都转为可诊断 `ApiError`，不让 `undefined` 渗入组件树。
+
+### 11.4 组件和主流程
+
+1. 任务控制台：`CreateJobForm -> JobFilters -> JobTable -> JobInspector`；搜索覆盖 intent/game_root，状态可筛选，row 可键盘选中/打开。
+2. Job 审阅：`JobHeader -> URL ReviewTabs -> FileRail + DiffPane + Timeline/Checklist -> OperationTable`；操作证据点击反向定位文件和行。
+3. 状态动作：批准、拒绝、回滚均走可访问 confirm dialog；对话框展示文件数、操作数、最高风险和静态阻塞，最终仍以 API 响应为准。
+4. 已完成任务暴露 package URL 与 rollback；failed/rejected/rolled_back 均是显式终态，不显示伪进度。
+
+### 11.5 测试金字塔和迁移顺序
+
+1. 先修 JobStore/lifespan 关闭协议：统一 `RLock`，`transition` 单事务，executor 等待已运行 future 后才 close。
+2. 再建配置与 API decode 纯函数层，用 Vitest/MSW 锁定坏配置、坏信封、旧 preference 和 polling policy。
+3. 最后迁移页面到专用 feature 组件，每步保持 `lint + typecheck + unit + build`可运行。
+4. Playwright desktop/mobile 以 route interception 做可重复 mocked E2E；真本地 FastAPI 流程另行运行并与 mocked 证据分栏。
+
+门禁：Python 子集/全量；Web ESLint 9、TypeScript strict、Vitest、Next production build、Playwright Chromium desktop/mobile。CI 中的 mock 不进入 production import graph。
+
+### 11.6 实现结果和证据
+
+- `web/lib/config/*` 已实现 v1 Zod 配置契约：默认值 → `NEXT_PUBLIC_UDIFY_CONFIG` → 回环 `NEXT_PUBLIC_UDIFY_API` → versioned local display preference；非法层被整层丢弃并产生可见诊断。Mods/系统不能在没有真实路由时被配置为启用。
+- `web/lib/api/*` 已实现统一 envelope/data 运行时解码、`ApiError`、query key 和页面可见性感知轮询；production 模块不 import MSW。
+- `/` 已迁移为任务控制台（创建、搜索、状态筛选、键盘打开、选中预览），`/jobs/[id]` 已迁移为 URL 驱动三标签审阅台（文件 rail、带行号 diff、操作/证据、时间线、检查表、批准/拒绝/回滚确认）。loading/empty/error/terminal 均有显式状态。
+- OSS 采用：Zod 4、Radix Tabs/AlertDialog/Slot、jsdiff、Lucide、CVA/clsx/tailwind-merge、Vitest/Testing Library/MSW、Playwright；不引入 Storybook，因为当前只有两个页面，Vitest 状态夹具与阻塞 E2E 已覆盖关键状态，Storybook 会增加独立构建与版本维护面。
+- SQLite 并发缺陷已修复：JobStore 的同一 connection 在所有读/写/事务/关闭上统一走连接级 `RLock`；状态快照与事件追加为单事务；API shutdown 先停止接收、等待/取消 futures，再关闭 store。原 `test_plan_not_ready_404` 进程崩溃循环修复后 40/40 通过。
+
+### 11.7 真实门禁记录
+
+| 层 | 命令 | 结果 | 验证类型 |
+|---|---|---|---|
+| Python style | `ruff check udify/ tests/` + `ruff format --check udify/ tests/` | 通过；115 files formatted | real local |
+| Python type | §8 指定 15 文件 `mypy --follow-imports=silent` | 0 issue | real local；全包历史 strict 未宣称通过 |
+| Python test | `pytest tests/api tests/core/orchestration -q` / `pytest tests/ -q` | 59 / 399 passed | real local，Python 3.13.13 |
+| Web lint/type | `pnpm lint` / `pnpm typecheck` | exit 0 | real local |
+| Web supply chain | `pnpm audit --prod --audit-level high` | 0 vulnerability；exit 0 | real npm advisory database |
+| Web unit | `pnpm test --run` | 9 files、31 tests passed | Vitest/RTL/MSW |
+| Web build | `pnpm build` | Next 15.5.22 通过；`/` 152 kB、job 页 177 kB first load | production build |
+| Web E2E | `pnpm test:e2e` | Chromium desktop/mobile 4/4 passed | mocked API route interception |
+| 产品链路 | create → review → approve → validate → package | 探针 6/6、package link 可用、browser console 0 warning/error | real FastAPI + real browser |
+| 移动端 | 390×844 job review | `innerWidth=scrollWidth=bodyScrollWidth=390` | real browser |
+
+### 11.8 未完成与风险（不改写成功定义）
+
+1. 当前真实后端 PatchOperation 的 SourceSpan 只定位到文件，`line_start/line_end` 为空；UI 明示“文件级证据（无行号）”并显示 `可定位 SourceSpan 0/2`，没有伪造行号。精确行证据仍是后端数据质量债。
+2. “Boss 攻击力翻倍”真实样例仍错误修改 Hero；属于既有 COG-LLM/reference resolution 缺口，批次 5B 只把错误清晰呈现，没有在前端重算语义。
+3. ini 重写仍产生同值 remove/add 噪声；`PATCH-SYN-10` 未在本批修复。
+4. E2E 是明确的 mocked API；另行完成的真实本地后端链路验证不等同于远端 CI 或真实商业游戏验收。Storybook、认证、SSE、远端部署仍在本批边界外。
+
+### 11.9 独立静态审查闭环（2026-07-29）
+
+- 任务筛选后，Inspector 只允许从 filtered rows 中保留 selection；隐藏的旧 selected ID 会回退到第一条可见任务或 null。
+- public API base 现在拒绝 credentials、非根 path、query、fragment、HTTPS 和非 loopback host；端口仍允许。
+- localStorage getter/read/write/remove 任一步抛出 SecurityError/QuotaExceeded 时，ConfigProvider 保留内存安全配置并追加 `CONFIG_LOCAL_UNAVAILABLE` 可见诊断；reset 不再向组件树抛错。
+- 上述回归加入 Vitest 参数化/组件测试；最终 Web 门禁为 9 files、31 tests，build 与 mocked E2E 复跑通过。
+
+### 11.10 供应链与测试资源复核（2026-07-29）
+
+- npm 当前无 Next 15.5.23，15.5.22 仍是 15.5 最新 patch；其 manifest 仍声明 `postcss 8.4.31` 与 optional `sharp ^0.34.3`，单升 Next 无法清除新公告。
+- `pnpm.overrides` 只定向替换 Next 的传递依赖：`postcss 8.5.25`（patched ≥8.5.18）与 `sharp 0.35.3`（patched ≥0.35.0）。sharp 0.35 的 Node 下限为 20.9，因此项目/CI 明示 Node ≥20.9 / Node 22。
+- `pnpm audit --prod --audit-level high` 从独立验收的 1 moderate + 3 high 变为 `No known vulnerabilities found`；CI 在 frozen install 后阻塞运行 `pnpm audit:prod`。
+- Next 上下文真实加载 `sharp 0.35.3 / libvips 8.18.3`，随后 lint、typecheck、31 tests、production build 与 4 E2E 全绿，证明 override 不只让审计静音。
+- API/编排测试的 `store` fixture 原先 return 而不 teardown，两个 reopen 测试也漏关第二个 store。改成 yield/finally 与局部 finally 后，59 / 399 tests 在 `ResourceWarning=always` 且 `PytestUnraisableExceptionWarning=error` 下只剩 1 条第三方 Starlette deprecation；覆盖率 64.00%。生产契约未变。

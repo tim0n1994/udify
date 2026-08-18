@@ -551,9 +551,10 @@ semantic_confidence =
 | ORCH-JOB-02 | P0 | checkpoint record | graph/patch/vfs |
 | ORCH-JOB-03 | P0 | pause/resume | human gate |
 | ORCH-JOB-04 | P0 | audit chain link | hash chain |
-| ORCH-JOB-05 | P1 | local durable persistence | JSON/SQLite |
+| ORCH-JOB-05 | P0 | local durable persistence | SQLite WAL；同一 connection 全生命周期加锁 |
 | ORCH-JOB-06 | P2 | Temporal workflow | replay-safe |
 | ORCH-JOB-07 | P2 | WebSocket progress | UI |
+| ORCH-JOB-08 | P0 | snapshot/event 原子迁移与 shutdown ordering | transition 回滚测试；后台 future 结束后再 close |
 
 ### OBS：可观测性
 
@@ -591,6 +592,8 @@ semantic_confidence =
 | UI-04 | P2 | runtime probe report | evidence |
 | UI-05 | P2 | ReactFlow plan DAG | op dependencies |
 | UI-06 | P3 | Mod marketplace page | quality score |
+| UI-CONFIG-01 | P0 | versioned runtime config | Zod 白名单；坏 env/local 层可诊断回退 |
+| UI-QA-01 | P0 | Web 阻塞质量门 | prod audit + ESLint + tsc + Vitest + build + desktop/mobile Playwright |
 
 ---
 
@@ -791,6 +794,11 @@ v3 第一阶段成功，不看代码行数，看以下事实：
 | SRV-01 | P0 | `udify serve` CLI 子命令 | uvicorn 起 app，默认 127.0.0.1:8765 |
 | UI-00 | P0 | web/ 脚手架（Next.js15+TS+Tailwind4+TanStack Query） | pnpm build 通过 |
 | UI-07 | P0 | Job 控制台（列表+新建+轮询时间线） | 提交后推进到 awaiting_review |
+| UI-CONFIG-01 | P0 | v1 runtime config（brand/nav/feature/polling/density/default tab） | Zod decode；defaults→env→local；错误诊断可见 |
+| UI-CONTRACT-01 | P0 | API runtime contract | envelope/data decode；错误统一为 ApiError |
+| UI-REVIEW-01 | P0 | Job 审阅工作台 | URL tab、file rail、line diff、operation/evidence、confirm actions |
+| UI-QA-01 | P0 | 前端阻塞门禁 | lint/type/unit/build/Chromium desktop+mobile 进入 CI |
+| ORCH-JOB-08 | P0 | sqlite connection 并发与关闭协议 | RLock 全连接；transition 单事务；executor-before-close |
 | COG-LLM-01 | P1 | LLM 结构化意图解析（候选身份） | schema 强校验；三源隔离 |
 | COG-LLM-02 | P1 | LLM 预算护栏与降级 | 无 key 不触网，CI 全绿 |
 | COG-LLM-03 | P1 | Bench A/B（heuristic vs llm） | 对照报告 |
@@ -798,3 +806,5 @@ v3 第一阶段成功，不看代码行数，看以下事实：
 | REAL-GAME-02 | P1 | 闭环留档进 artifacts | journal+package+report 入库 |
 
 欠条台账：A=CI 远端常绿（本迭代判据 7）；B=真 Playwright 探针（VAL-RUNTIME-06，批次 6）；C=真实 game_root 记录（REAL-GAME-01/02，批次 6）。未清偿必须在 INDEX 明文展期。
+
+批次 5B 落地记录（2026-07-29）：`UI-CONFIG-01`、`UI-CONTRACT-01`、`UI-REVIEW-01`、`UI-QA-01`、`ORCH-JOB-08` 已实现；Python 399 tests、Web 31 unit/component tests、mocked Chromium E2E 4 tests 本地通过。独立静态审查追加锁定 filtered selection、root-only credential-free loopback API base、Storage throw 的内存降级与可见诊断。供应链复核追加 Next 定向 `sharp 0.35.3` / `postcss 8.5.25` override 与 production audit 阻塞门；fixture teardown 清零自有 unclosed database warnings。真实 FastAPI + browser 完成 create→review→approve→validate→package。当前 SourceSpan 真实工件缺行号，UI 只承诺文件级证据；这不是 `UI-REVIEW-01` 的完成证明之外的后端数据完成。

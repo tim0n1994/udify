@@ -6,12 +6,17 @@ Udify Execution - Sandboxed Execution
 
 from __future__ import annotations
 
+import os
+import resource
+import shutil
 import subprocess
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from udify.core.execution.seatbelt_profile import build_seatbelt_profile
 from udify.core.infrastructure.config_center import config
 
 
@@ -69,6 +74,23 @@ class SafetyReport:
         }
 
 
+@dataclass(frozen=True)
+class SandboxExecutionResult:
+    """Result of a real sandbox-exec execution (iter6 M4).
+
+    ``status`` distinguishes an actual sandboxed run from an honest refusal to
+    execute unsandboxed. It is never fabricated: ``status="sandboxed"`` means
+    ``sandbox-exec`` was actually invoked.
+    """
+
+    status: str  # "sandboxed" | "unsandboxed"
+    exit_code: int | None
+    stdout: str
+    stderr: str
+    duration_ms: int
+    reason: str = ""
+
+
 class SandboxManager:
     """
     沙箱管理器
@@ -111,6 +133,84 @@ class SandboxExecutor:
         self.cpu_limit = config.security.sandbox_cpu_limit
         self.timeout = config.security.sandbox_timeout_seconds
         self.network_disabled = config.security.enable_network_isolation
+
+    def execute_sandboxed(
+        self,
+        cmd: list[str],
+        *,
+        workdir: str,
+        game_dir: str,
+        timeout_s: int = 30,
+    ) -> SandboxExecutionResult:
+        """Execute *cmd* under a real macOS Seatbelt sandbox (iter6 M4, V6 research).
+
+        Builds a deny-default Seatbelt profile via ``build_seatbelt_profile``, writes
+        it to a temp file, and wraps the command with ``sandbox-exec -f <profile>``.
+        If ``sandbox-exec`` is not on ``PATH`` (non-macOS or stripped), the command is
+        **not executed** and the result honestly reports ``status="unsandboxed"``
+        rather than pretending a sandbox was active.
+
+        Args:
+            cmd: The command vector to run (e.g. ``["lua", "script.lua"]``).
+            workdir: A writable staging directory the sandbox may write to.
+            game_dir: The (read-only) game directory the sandbox may read.
+            timeout_s: Wall-clock timeout; also applied as RLIMIT_CPU.
+
+        Returns:
+            A ``SandboxExecutionResult`` distinguishing ``sandboxed`` from
+            ``unsandboxed`` and carrying stdout/stderr/exit_code.
+        """
+        t0 = time.time()
+        if not shutil.which("sandbox-exec"):
+            return SandboxExecutionResult(
+                status="unsandboxed",
+                exit_code=None,
+                stdout="",
+                stderr="",
+                duration_ms=int((time.time() - t0) * 1000),
+                reason="sandbox-exec not found on PATH; refusing to run unsandboxed",
+            )
+
+        profile_text = build_seatbelt_profile(
+            writable_dirs=[workdir],
+            allow_network=False,
+            allow_process_exec=True,
+        )
+        fd, profile_path = tempfile.mkstemp(suffix=".sb")
+        try:
+            with os.fdopen(fd, "w") as f:
+                f.write(profile_text)
+            try:
+                proc = subprocess.run(
+                    ["sandbox-exec", "-f", profile_path, *cmd],
+                    cwd=workdir,
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_s,
+                    preexec_fn=lambda: resource.setrlimit(
+                        resource.RLIMIT_CPU,
+                        (timeout_s, timeout_s),
+                    ),
+                )
+                return SandboxExecutionResult(
+                    status="sandboxed",
+                    exit_code=proc.returncode,
+                    stdout=proc.stdout,
+                    stderr=proc.stderr,
+                    duration_ms=int((time.time() - t0) * 1000),
+                    reason="",
+                )
+            except subprocess.TimeoutExpired:
+                return SandboxExecutionResult(
+                    status="sandboxed",
+                    exit_code=-9,
+                    stdout="",
+                    stderr=f"execution timed out after {timeout_s}s",
+                    duration_ms=int((time.time() - t0) * 1000),
+                    reason="timeout",
+                )
+        finally:
+            os.unlink(profile_path)
 
     def execute_lua(self, code: str, context: dict[str, Any] | None = None) -> ExecutionResult:
         """
@@ -294,6 +394,38 @@ class SandboxExecutor:
 
         scan_time = time.time() - start_time
         is_safe = not any(v["level"] == "critical" for v in vulnerabilities)
+
+        # 5. 研究级危险 API 静态分析（iter5 U4-SANDBOX-REAL）。
+        # ScriptAnalyzer 提供比上面内联正则更完整的真实 API 清单（含 JS），
+        # 作为纵深防御的补充层。任一 CRITICAL 命中即标 is_safe=False。
+        try:
+            from udify.core.security.script_analyzer import analyze_script
+
+            analysis = analyze_script(language, code)
+            for call in analysis.blocked_apis:
+                level = "critical" if call.severity.value in ("CRITICAL", "HIGH") else "warning"
+                vulnerabilities.append(
+                    {
+                        "level": level,
+                        "type": "script_analyzer",
+                        "message": call.suggestion,
+                        "api": call.name,
+                        "line": call.line,
+                    }
+                )
+            is_safe = is_safe and not any(
+                v["level"] == "critical" and v.get("type") == "script_analyzer"
+                for v in vulnerabilities
+            )
+        except Exception:
+            # ScriptAnalyzer 是补充层，失败不应阻塞主检测，但必须诚实不静默通过。
+            vulnerabilities.append(
+                {
+                    "level": "warning",
+                    "type": "analyzer_unavailable",
+                    "message": "ScriptAnalyzer 不可用，仅使用基础正则检测",
+                }
+            )
 
         return SafetyReport(
             is_safe=is_safe,

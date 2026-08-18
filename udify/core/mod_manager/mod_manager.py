@@ -11,6 +11,12 @@ from datetime import datetime
 from enum import Enum, auto
 from typing import Any
 
+from udify.core.mod_manager.dependency_graph import (
+    DependencyConflict,
+    graph_from_manifests,
+)
+from udify.core.mod_manager.mod_exporter import ModManifest
+
 
 class ModStatus(Enum):
     """Mod 状态"""
@@ -267,6 +273,36 @@ class MultiModManager:
             errors=errors,
             installed_files=files,
         )
+
+    def check_dependency_conflicts(self, candidate: ModManifest) -> list[DependencyConflict]:
+        """DAG-aware dependency conflict check (iter6 M2, PR3 wiring).
+
+        Builds a DependencyGraph from all installed manifests plus the *candidate*
+        and runs ``detect_conflicts`` to surface CYCLE / MISSING / VERSION issues
+        that the linear check in ``install_mod`` misses (e.g. transitive cycles
+        and multi-hop missing deps).
+
+        Args:
+            candidate: The manifest of the mod being considered for install.
+
+        Returns:
+            A list of DependencyConflict records; empty if clean.
+        """
+        manifests = []
+        for mid, mod in self._installed.items():
+            manifests.append(
+                ModManifest(
+                    mod_id=mid,
+                    name=mod.name,
+                    version=mod.version,
+                    author=mod.author,
+                    dependencies=mod.dependencies,
+                )
+            )
+        manifests.append(candidate)
+        graph = graph_from_manifests(manifests)
+        active = {m.mod_id for m in manifests}
+        return graph.detect_conflicts(active)
 
     async def uninstall_mod(self, mod_id: str) -> UninstallResult:
         """卸载 Mod"""

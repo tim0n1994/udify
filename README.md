@@ -90,11 +90,11 @@ Udiface 上线。创作者经济、社区治理、开放 API。
 
 | 层级 | 技术 |
 |------|------|
-| 后端 | Python 3.12+, FastAPI, PostgreSQL, Redis |
-| 前端 | Next.js 14+, TypeScript, Tailwind CSS |
-| AI/ML | PyTorch, Transformers, Claude/GPT-4, Stable Diffusion |
-| 基础设施 | Docker, Kubernetes, AWS/GCP |
-| 开发 | Git, GitHub Actions, pytest, Ruff, MyPy |
+| 后端 | Python 3.12+, FastAPI, sqlite3 WAL + 文件工件（本地模式） |
+| 前端 | Next.js 15, React 19, TypeScript strict, Tailwind 4, TanStack Query, Zod |
+| 交互/差异 | Radix UI primitives, jsdiff, Lucide |
+| 测试 | pytest, Ruff, MyPy 子集门禁；Vitest/Testing Library/MSW；Playwright Chromium |
+| 预留而非当前依赖 | PostgreSQL/Redis、Docker/Kubernetes、云部署、多租户认证 |
 
 ---
 
@@ -106,18 +106,28 @@ Udiface 上线。创作者经济、社区治理、开放 API。
 # 1. 安装（Python 3.12+）
 pip install -e ".[dev]"
 
-# 2. 跑测试（约 1 秒，395 个）
+# 2. 跑后端测试（当前 399 个）
 python3 -m pytest tests/ -q
 
 # 3a. 命令行方式：直接对游戏目录下达意图（VFS 预览，不碰原文件）
 udify --game-root /path/to/miu2d-game mod "把Boss的血量翻倍"
 
 # 3b. 产品方式：启动后端 + 前端工作台
-udify serve                      # API: http://127.0.0.1:8765/api/docs
-cd web && pnpm install && pnpm dev   # 工作台: http://localhost:3000
+udify serve                               # API: http://127.0.0.1:8765/api/docs
+cd web && pnpm install --frozen-lockfile
+pnpm dev                                  # 工作台: http://localhost:3000
+
+# 4. Web 阻塞门禁（生产 build 后 Playwright 会启动 next start）
+pnpm audit:prod                           # high/critical production advisory 阻塞
+pnpm lint && pnpm typecheck && pnpm test --run
+pnpm build && pnpm test:e2e
 ```
 
 工作台流程：填游戏目录 + 一句话意图 → 看文件 DIFF / 操作证据 / 风险档位 → 批准 → 静态验证 + 运行时探针 → 下载 ModPackage（可回滚）。
+
+公开配置使用 `NEXT_PUBLIC_UDIFY_CONFIG`（v1 JSON）与 `NEXT_PUBLIC_UDIFY_API`（仅接受无凭据、根级回环 HTTP URL，可带端口）；非法值或不可用 localStorage 会回退到内存安全配置并在设置面板显示诊断。Playwright E2E 使用可重复的 mock API；真实 FastAPI 链路需按上面的后端 + 前端双进程方式单独验收。
+
+Web 要求 Node.js ≥20.9（CI 使用 Node 22）。Next 15.5.22 当前上游仍声明易受新公告影响的 `sharp ^0.34.3` 与 `postcss 8.4.31`，因此 lockfile 通过定向 pnpm override 固定 Next 的传递依赖为 `sharp 0.35.3`、`postcss 8.5.25`；修改 override 后必须重新运行 frozen install、`pnpm audit:prod`、build 和 E2E。
 
 ---
 

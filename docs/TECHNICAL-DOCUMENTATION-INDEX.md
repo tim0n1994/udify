@@ -16,7 +16,7 @@
 |---|---|---|
 | 1 | `ITERATION-PLAN-2026-08.md` | **本轮北极星与成功判据**——产品闭环（ModJob/薄API/前端切片/LLM 可选增强）、批次划分、红线 15 条 |
 | 2 | `MODULE-ATTACK-MAP-v3.md` | **任务台账**——按任务 ID 拆 PR、验收标准、代码位置建议、§21 产品化扩展 |
-| 3 | `ARCHITECTURE-OSS-OPTIMIZED-v3.md` | **架构边界**——v3 原语定义、模块边界、ADR-v3-001..010 |
+| 3 | `ARCHITECTURE-OSS-OPTIMIZED-v3.md` | **架构边界**——v3 原语定义、模块边界、ADR-v3-001..013 |
 | 4 | `TECHNICAL-DOCUMENTATION-INDEX.md` | **本文档**——索引与冻结状态 |
 
 > 规则：代码为准，文档滞后必须补，但**不允许再用新文档扩张未验证的架构承诺**。
@@ -76,7 +76,7 @@
 
 ## 4. 后续维护规则
 
-1. **活跃集只改 4 份**：新增内容只能进 `ITERATION-PLAN-2026-07.md` / `MODULE-ATTACK-MAP-v3.md` / `ARCHITECTURE-OSS-OPTIMIZED-v3.md` / 本索引。
+1. **活跃集只改 4 份**：新增内容只能进 `ITERATION-PLAN-2026-08.md` / `MODULE-ATTACK-MAP-v3.md` / `ARCHITECTURE-OSS-OPTIMIZED-v3.md` / 本索引。
 2. 修改实际代码模块结构时，同步更新 `MODULE-ATTACK-MAP-v3.md` 的"代码位置建议"。
 3. 改变架构边界或 ADR 时，同步更新 `ARCHITECTURE-OSS-OPTIMIZED-v3.md`。
 4. 新增 benchmark case 时，同步更新 `MODULE-ATTACK-MAP-v3.md` 的 UdifyBench 清单。
@@ -99,4 +99,7 @@
 - **批次 4A（Job 基座）**：`ORCH-JOB-01..05` + `OBS-01..02` ✅（2026-07-27：12 态状态机 + SQLite WAL 双表 + 链式哈希事件流 + 崩溃恢复 + 图漂移守卫，44 测试）
 - **批次 4B（薄 API）**：`API-01..05` + `API-07/08` + `SRV-01` + `MOD-STACK-01..03` ✅（2026-07-27：10 端点 + 统一信封 + udify serve + mods 冲突检测，12 契约测试）
 - **批次 5（前端切片）**：`UI-00` + `UI-01..04` + `UI-07` ✅（2026-07-27：Next.js 工作台浏览器全流程验收通过——判据 #4）
+- **批次 5B（产品门禁与审阅 UX）**：`UI-CONFIG-01` + `UI-CONTRACT-01` + `UI-REVIEW-01` + `UI-QA-01` + `ORCH-JOB-08` ✅（2026-07-29：Zod runtime boundary、任务控制台/URL 审阅台、sqlite lifecycle 修复；独立审查补 filtered selection、API base、Storage failure、prod audit 与 fixture teardown；Python 399、Web unit 31、mocked E2E 4 全绿；真实本地 create→package 通过）
 - **批次 6（意图真化与欠条）**：`COG-LLM-01..03` + `REAL-GAME-01..02` + `VAL-RUNTIME-06` + 覆盖率 62→70 ⬜（进行中）
+
+批次 5B 的完成边界：前端与本地连接生命周期是 code/test complete；远端 CI 状态未在本地任务中复核；真实 PatchOperation 当前只有文件级 SourceSpan，无精确行号；Boss 目标过滤与 ini 同值 diff 噪声继续由批次 6 / `PATCH-SYN-10` 跟踪。
