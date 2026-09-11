@@ -11,6 +11,7 @@ import { riskLevel } from "@/lib/ui";
 export function JobActions({
   job,
   plan,
+  auditValid,
   highestRisk,
   approvePending,
   rejectPending,
@@ -21,6 +22,7 @@ export function JobActions({
 }: {
   job: Job;
   plan: Plan;
+  auditValid: boolean | null;
   highestRisk: number;
   approvePending: boolean;
   rejectPending: boolean;
@@ -53,13 +55,14 @@ export function JobActions({
             onConfirm={() => onReject(reason.trim() || "审阅后拒绝")}
           />
           <ConfirmDialog
-            trigger={<Button type="button" variant="primary" className="w-full" disabled={!plan.static_validation.passed}><CheckCircle2 className="h-4 w-4" aria-hidden /> 批准并应用</Button>}
+            trigger={<Button type="button" variant="primary" className="w-full" disabled={!plan.static_validation.passed || auditValid !== true || approvePending || rejectPending}><CheckCircle2 className="h-4 w-4" aria-hidden /> 批准并应用</Button>}
             title="批准并应用到 VFS？"
             description="后端将再次校验图版本与状态门，然后验证并生成可回滚 ModPackage。原始游戏文件保持不变。"
             details={details}
             confirmLabel="确认批准"
             pending={approvePending}
-            onConfirm={onApprove}
+            confirmDisabled={auditValid !== true || !plan.static_validation.passed || rejectPending}
+            onConfirm={() => { if (auditValid === true && plan.static_validation.passed && !rejectPending) onApprove(); }}
           />
         </div>
       ) : null}

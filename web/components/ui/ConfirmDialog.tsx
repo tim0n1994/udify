@@ -13,6 +13,7 @@ export function ConfirmDialog({
   confirmLabel,
   danger = false,
   pending = false,
+  confirmDisabled = false,
   onConfirm,
 }: {
   trigger: ReactNode;
@@ -22,6 +23,7 @@ export function ConfirmDialog({
   confirmLabel: string;
   danger?: boolean;
   pending?: boolean;
+  confirmDisabled?: boolean;
   onConfirm: () => void;
 }) {
   return (
@@ -50,7 +52,7 @@ export function ConfirmDialog({
               <Button
                 type="button"
                 variant={danger ? "danger" : "primary"}
-                disabled={pending}
+                disabled={pending || confirmDisabled}
                 onClick={onConfirm}
               >
                 {pending ? "提交中…" : confirmLabel}

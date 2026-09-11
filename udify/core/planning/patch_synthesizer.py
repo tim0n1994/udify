@@ -84,7 +84,12 @@ class PatchSynthesizer:
         target_kind = action.params.get("numeric_kind") or action.params.get("kind")
 
         # 找到匹配的数值属性键
-        prop_key = self._find_numeric_key(node, target_kind)
+        explicit_key = action.params.get("numeric_key")
+        prop_key = (
+            explicit_key
+            if isinstance(explicit_key, str)
+            else self._find_numeric_key(node, target_kind)
+        )
         if prop_key is None:
             return None
 
@@ -263,6 +268,7 @@ class PatchSynthesizer:
             for key in node.properties:
                 if _NUMERIC_ATTRIBUTES.get(_norm(key)) == target_kind:
                     return key
+            return None
         # 无指定类别：找第一个 health/offense 数值
         for key, value in node.properties.items():
             if isinstance(value, (int, float)):

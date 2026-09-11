@@ -45,7 +45,7 @@ function ConsolePageContent() {
 
   useEffect(() => {
     const status = searchParams.get("status");
-    if (status && ["all", "awaiting_review", "active", "completed", "failed"].includes(status)) {
+    if (status && ["all", "awaiting_clarification", "awaiting_review", "active", "completed", "failed"].includes(status)) {
       setFilter(status as JobFilter);
     }
   }, [searchParams]);
@@ -104,7 +104,7 @@ function ConsolePageContent() {
           </h1>
           <div className="dossier-rule" aria-hidden />
           <p className="mt-3 max-w-xl text-sm text-muted">
-            意图一经提交，感知→规划→证据→审阅→验证→打包全程可追溯；审计链失配会在 1 秒内变红。
+            任务、审阅与 Mod 产物
           </p>
         </div>
         <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-faint">

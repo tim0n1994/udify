@@ -1,9 +1,14 @@
 import { DEFAULT_PUBLIC_CONFIG } from "@/config/defaults";
 import { jobsPollInterval, jobPollInterval } from "@/lib/api";
-import { jobsFixture } from "@/test/fixtures";
+import { jobsFixture, makeJob } from "@/test/fixtures";
 import { filterJobs, selectVisibleJob } from "./filters";
 
 describe("job filtering and polling", () => {
+  it("finds waiting clarification tasks after reopening history", () => {
+    const job = makeJob({ job_id: "clarify-job", status: "awaiting_clarification" });
+    expect(filterJobs([...jobsFixture, job], "clarify", "awaiting_clarification")).toEqual([job]);
+    expect(jobPollInterval("awaiting_clarification", DEFAULT_PUBLIC_CONFIG)).toBe(false);
+  });
   it("searches intent, path and id and groups terminal statuses", () => {
     expect(filterJobs(jobsFixture, "NPC", "all")).toHaveLength(1);
     expect(filterJobs(jobsFixture, "/games/miu2d", "failed")[0]?.status).toBe("failed");

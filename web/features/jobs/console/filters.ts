@@ -1,6 +1,6 @@
 import { ACTIVE_STATUSES, type Job } from "@/lib/api";
 
-export type JobFilter = "all" | "awaiting_review" | "active" | "completed" | "failed";
+export type JobFilter = "all" | "awaiting_clarification" | "awaiting_review" | "active" | "completed" | "failed";
 
 export function filterJobs(jobs: Job[], search: string, filter: JobFilter): Job[] {
   const needle = search.trim().toLocaleLowerCase("zh-CN");

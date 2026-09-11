@@ -318,3 +318,140 @@ frozen defaults
 - `pnpm audit --prod --audit-level high` 从独立验收的 1 moderate + 3 high 变为 `No known vulnerabilities found`；CI 在 frozen install 后阻塞运行 `pnpm audit:prod`。
 - Next 上下文真实加载 `sharp 0.35.3 / libvips 8.18.3`，随后 lint、typecheck、31 tests、production build 与 4 E2E 全绿，证明 override 不只让审计静音。
 - API/编排测试的 `store` fixture 原先 return 而不 teardown，两个 reopen 测试也漏关第二个 store。改成 yield/finally 与局部 finally 后，59 / 399 tests 在 `ResourceWarning=always` 且 `PytestUnraisableExceptionWarning=error` 下只剩 1 条第三方 Starlette deprecation；覆盖率 64.00%。生产契约未变。
+
+### 11.11 AGENTS.md 重构与门禁复核（2026-09-03）
+
+- 根 `AGENTS.md` 重构为 9 节：技术栈表移入新 §3，web 专属门禁契约逐字迁入新建 `web/AGENTS.md`（原 189–204 行），mypy 15 文件清单固化为 `scripts/typecheck.sh`（与 CI 清单一致）。技术栈表、D1–D3、快照模块表、JC 协作风格等段落与 HEAD 逐字节一致。
+- Python 门禁（.venv）：`ruff check udify/ tests/` exit 0；`bash scripts/typecheck.sh` exit 0；`pytest tests/ -q` 860 passed / 2 skipped。裸 `python3`（Homebrew）因 GHSA 受影响 chromium 环境确定性失败 4 个 runtime-probe 用例（`Page.wait_for_function` 15s 超时），属与本变更无关的既有环境问题，已在 AGENTS.md 记录。
+- 供应链：新增 `pnpm.overrides["postcss>nanoid"]="3.3.18"`（pnpm 10 拒绝三级选择器，无法写 `next>postcss>nanoid`），清除新公告 GHSA-2v37-7h3g-55p8；lockfile diff 仅 nanoid 3.3.16→3.3.18 与 override 记录。`audit:prod`、lint、typecheck、Vitest 49、production build 复跑全绿。
+- E2E 根因修正：3000 端口被用户另一项目（gesture-synth-weld vite dev server）占用，此前 8 例全部打到外部应用而失败。`playwright.config.ts` 增加 `E2E_PORT` 环境变量覆盖端口（默认仍 3000，行为不变）；`E2E_PORT=3100 pnpm test:e2e` 8/8 passed（desktop+mobile Chromium，exit 0），Playwright 自建 production server 复验。
+
+## 12. iter8：真实可审阅闭环（2026-09-08）
+
+状态：**本轮 A1–A10 本地验收完成（2026-09-09），代码未提交、未发布**。本节是当前执行依据；前文与 iter2–iter7 报告的测试数字均为历史快照，不能充当本轮通过证据。本轮在既有四份活跃文档内维护设计，不增加新的宏大蓝图。
+
+### 12.1 回顾与选择
+
+Udify 的长期使命仍是让非技术用户用意图驱动内容改造。当前产品承诺是本地浏览器里的“表达愿望 → 审阅 → 批准 → 获取可撤回的包”，本轮继续兑现这个承诺。
+
+2026-09-08 从当前代码直接确认的差距：
+
+| 差距 | 当前证据 | 本轮处理 |
+|---|---|---|
+| iter7 接地修复与浏览器入口不是同一条链 | `pipeline.py` 的通用规划接地测试与 `JobRunner → Miu2dClosedLoop.plan` 分离 | 在实际 miu2d API/浏览器路径验收目标与字段，不能借 RPGMV 单测证明产品正确 |
+| 闸门接入但事实输入不真实 | `job_runner.py` 存在 `ambiguous=False`、`sandboxed=True`、`dependency_conflicts=[]` | 从实际规划与执行工件取得事实；未运行的检查不能作为已通过证据 |
+| 运行覆盖等级可能来自引擎名 | 无 Godot 探针仍可能标为 `NATIVE_HEADLESS`，RPGMV 静态代理可能标为自动运行 | 等级由实际启动与观测结果决定；静态检查、未运行、运行失败分开 |
+| 前端进度能力未形成产品闭环 | `useJobProgress`/`JobProgressPanel` 存在，但真实审阅页面未消费；进度与持久审计存在两种来源 | 产品使用持久 `job_events`，SSE 与轮询消费同一事件流 |
+| 原游戏与包的操作语义需要说清 | JobRunner 写 VFS 与任务工件，不安装到原 `game_root` | 明示生成包、验证覆盖、撤回包；不能把撤回下载工件说成已还原用户游戏 |
+| 旧完成声明不足以证明恢复与撤回 | 模块测试、报告与浏览器实际入口之间缺少同一任务证据 | 用真实本地 HTTP、浏览器、重启及 ZIP 字节检查验证完整任务 |
+
+选项比较：多引擎扩展可以兑现更广场景，但当前入口尚需补全；清理全部孤儿可以改善代码结构，但不能单独证明改对内容。本轮选择把实际 miu2d 入口做成可解释、可恢复的完整闭环。RPGMV 的既有能力保留，其浏览器产品化另列后续任务，不宣称本轮完成多引擎统一。
+
+### 12.2 本轮产品目标与边界
+
+用户从浏览器提交 miu2d 目录与意图，系统先确定语义类别、目标和修改字段。目标唯一时给出精确 Patch；目标歧义时展示候选并持久等待澄清。用户批准后只生成任务目录中的 ModPackage，报告明确静态检查与真实运行证据；撤回后不再能从 API 下载该任务的包。刷新、断连与后端重启不丢失审阅、澄清或撤回状态。
+
+原始 `game_root` 在感知、预览、批准、验证、打包、撤回的全过程逐字节不变。这里的“撤回”是撤销本地任务的包交付资格和相关工件状态；已经被用户另存的 ZIP 无法远程收回，系统也不声称安装或还原了原游戏。
+
+本轮继续使用本地单用户 FastAPI、SQLite、Next.js 与现有适配器。不新增云服务、认证、市场、DAG 编辑器或自由执行的 LLM agent。SSE 的采用在本节明确更新前文红线 13/ADR-v3-008 的“先轮询”阶段决策：后端已具备事件端点，本轮将它接入真实 UI，并保留同源持久事件轮询作为回退。
+
+### 12.3 架构与状态契约
+
+主链路：`浏览器 → API → JobRunner → Miu2dClosedLoop → Patch/VFS → 验证工件 → Package`。目标解析与澄清结果必须穿过这条链，不在前端重新猜测，也不通过另一个引擎的测试替代。
+
+| 契约 | 约束与失败语义 |
+|---|---|
+| 目标选择 | 先按语义类别筛选，再在类别内应用序数、名称或最高级选择；显式字段与倍率进入计划；不得退回全部角色或任意首个节点 |
+| 澄清 | 歧义产生结构化候选与原因，暂停任务；候选选择必须对应原任务与当前图版本；缺失、失效或非法选择不应用 Patch |
+| 持久状态 | 澄清请求、选择结果、审阅计划、批准与撤回状态落盘；状态迁移和审计事件保持事务一致；重启不能把等待用户输入的任务自动批准 |
+| 批准与恢复 | 批准依据已审阅的计划和图版本；原游戏漂移拒绝应用；重复批准和恢复不能产生重复副作用，也不能绕过当前状态门 |
+| 交付证据 | 报告区分生成包、静态检查、运行验证和沙箱事实；没有进程启动与观测证据时不能显示原生或浏览器运行通过；不适用与未知不伪装成功 |
+| 包与撤回 | 包路径与可下载资格以持久任务状态为准；撤回完成后，即使旧文件仍在磁盘或后端重启，旧下载端点也拒绝交付；失败中断可以恢复完成撤回 |
+| 事件源 | `job_events` 是生命周期事件唯一权威来源；SSE 的 `id` 和轮询游标均使用持久 seq；同一任务按 seq 单调消费、去重、补发 |
+| UI 生命周期 | 从历史列表进入、刷新、后台任务完成、SSE 断连、轮询回退、批准、拒绝与撤回都更新同一任务；终态和等待输入状态不遗留无意义的请求循环 |
+| 兼容 | 保留现有 API 信封和结构化错误；新增字段在 Python 与 Zod 边界同步；旧任务无新增证据时展示未知，不补造历史事实 |
+
+澄清与撤回的具体端点、状态枚举以及报告字段以实现时的 API schema 为准，必须由后端与前端共同收敛，不能出现两套状态名称。新增状态需要同时更新持久化读取、迁移表、恢复逻辑和 UI 状态分支。
+
+### 12.4 并行工作流与所有权
+
+| 工作流 | 主要代码范围 | 必须交付的用户行为 | 依赖 |
+|---|---|---|---|
+| I8-INTENT | `miu2d_pipeline.py`、现有目标解析与规划模块、对应测试 | 真实入口的类别过滤、序数/字段/倍率、结构化歧义结果 | 与 I8-JOB 协调规划结果契约 |
+| I8-JOB | `orchestration/job_runner.py`、`mod_job.py`、`job_store.py`、相关 API schema | 持久澄清、批准状态门、诚实报告、可恢复包撤回 | 消费规划结果；给 API/UI 提供稳定状态 |
+| I8-EVENT | `api/job_events.py`、事件路由及契约测试 | 同一 `job_events` 的 SSE/轮询、续传与去重 | 与 I8-JOB 协调状态事务；避免重复事件存储 |
+| I8-WEB | `web` API 契约、任务审阅/进度/报告组件与测试 | 候选澄清、真实覆盖提示、实时生命周期、撤回后的正确操作状态 | 使用已确认 API 契约；不重算后端业务事实 |
+| I8-QA | 真实本地服务与浏览器验收、工件比对 | HTTP → 浏览器 → ZIP 精确修改 → 重启 → 撤回的证据 | 核心链路集成后执行；单元测试可先行 |
+| I8-DOC | 本节与技术索引 | 当前状态、验收台账、未完成义务 | 按已观察结果回写，不提前打勾 |
+
+并行实现按文件所有权隔离；共享 `JobRunner`、状态模型与 API 契约由对应负责人统筹。每批集成包含接线和验证，不再拆成“本轮写逻辑、下一轮接主路径”。最终由主调度检查真实入口、合并差异与全链路证据。
+
+### 12.5 验收矩阵
+
+以下是本轮必须取得的证据，不是已经执行的测试报告。准备包含玩家、普通敌人和至少两个 Boss 的 miu2d 测试资产，保留原始字节快照；资产来源及是否为合成 fixture 必须注明。
+
+| ID | 场景 | 通过条件与权威证据 |
+|---|---|---|
+| A1 | 真实 HTTP 创建“第一个 Boss 攻击力翻倍” | 实际 JobRunner 产生的计划只选第一个 Boss 的攻击字段；玩家、普通敌人与其他 Boss 不被修改；同时覆盖类别内排序而非全局首项 |
+| A2 | 字段与约束 | 明确的血量、攻击、倍率和否定约束不会被默认动作覆盖；无法可靠承载的意图进入澄清或明确失败，不悄悄生成另一种修改 |
+| A3 | 歧义与恢复 | 浏览器展示候选；刷新和重启后同一任务仍等待选择；有效选择后进入审阅；非法/过期候选与未澄清批准被拒绝 |
+| A4 | 真实交付与字节 | 浏览器批准并下载真实 ZIP；解压验证目标字段值，非目标文件及未修改部分保持字节；原 `game_root` 全文件 checksum 从始至终不变 |
+| A5 | 证据真实性 | 静态成功但未启动运行时、缺探针、验证失败等场景报告/UI 正确区分；无运行、沙箱或依赖检查证据时不显示已通过对应检查 |
+| A6 | 进度与断连 | 真实 API 的 SSE 与轮询读取同一持久事件；断连续传不漏状态、不重复展示；SSE 失败可轮询完成；浏览器真实页面挂载与状态更新有证据 |
+| A7 | 批准恢复与漂移 | 重新打开服务可恢复待审阅及中断任务；重复批准不重复副作用；审阅后修改游戏源数据会被版本守卫拒绝 |
+| A8 | 撤回与恢复 | 浏览器撤回后下载不可用；旧下载 URL 在服务重启后仍拒绝；中断撤回可以恢复；界面不宣称已回收用户另存的文件或修改原游戏 |
+| A9 | 浏览器完整流程 | 真实 FastAPI 与真实浏览器完成创建、澄清、审阅、批准、报告、下载、历史恢复、撤回；desktop/mobile 无关键控件遮挡；不能仅用 mocked route 证明 |
+| A10 | 回归门禁 | 按当前 `AGENTS.md`/`web/AGENTS.md` 运行相关测试、Python lint/typecheck/full pytest、可达性门禁及 Web lint/type/unit/build/E2E；每条记录实际命令、退出码和证据路径 |
+
+不把 Python 测试数量增加视为产品验收。A1–A9 必须能追溯到实际入口和同一任务的计划、状态、事件及工件；窄范围测试只能证明对应边界。远端 CI 需要独立观察，不能由本地绿灯推断。
+
+### 12.6 进度与证据台账
+
+2026-09-09 实跑台账。浏览器资产是仓库自建合成 miu2d fixture，不是真实商业游戏；运行的是实际 CLI/FastAPI、SQLite 与 Next.js 生产构建，没有 mock 产品执行路径。
+
+| 项目 | 当前状态 | 证据 / 下一步 |
+|---|---|---|
+| 当前入口及历史差距审计 | 已取证（静态） | `JobRunner → Miu2dClosedLoop`、闸门常量、探针覆盖赋值、未挂载的进度组件；尚不能据此推断所有运行行为 |
+| 迭代范围与验收定义 | 已明确 | 本节 12.2–12.5；不等于实现完成 |
+| I8-INTENT | 已实现 / 已验证 | A1–A3：`tests/core/test_miu2d_grounding.py` 覆盖类别、序数、字段、倍率、否定约束、缺字段、多目标及不支持复合意图；真实 HTTP 只修改 BossA Attack |
+| I8-JOB | 已实现 / 已验证 | A3–A5/A7/A8：`test_package_integrity.py` 覆盖审阅摘要、源文件漂移、额外字节/文件、补偿恢复与撤回；原文件保持 CRLF 字节 |
+| I8-EVENT | 已实现 / 已验证 | A6：持久 `job_events` 单源；`test_detail_snapshot.py` 验证独立 WAL writer 下 detail 的事务一致性；真实 HTTP 验证 Last-Event-ID 与 seq；手机浏览器中止 SSE 后轮询完成 |
+| I8-WEB | 已实现 / 已验证 | A3/A5/A6/A8/A9：候选选择、刷新/历史恢复、审计批准门、静态范围和未执行探针、任务进度、撤回下载；95 unit/component tests 通过；旧正面 coverage 缺明确执行证据时总览及结果项均中性呈现 |
+| 真实 HTTP/浏览器/ZIP 验收 | 已通过 | HTTP 3 例包含重启、源漂移与撤回；最终生产浏览器 desktop/mobile 共 4 例，43.6 秒，0 skipped/failed/flaky；工件 `.ai-bridge/iter8-real-browser-final/` |
+| 本轮完整门禁 | 已通过（明确跳过项见下） | Python 955 passed / 2 skipped、覆盖率 70.39%；Web lint/type/unit/build、mock 8 例和真实 4 例 E2E 通过 |
+| 最终范围审查 | 已完成 | 独立检查 A1–A9 工件与代码，A10 由主调度按实际命令收口；`git diff --check` EXIT 0；原始游戏不变与后续义务保留，不宣称真实游戏运行或全平台完成 |
+
+最终生产浏览器证据：`report.json` 的 `expected=4, unexpected=0, skipped=0, flaky=0`；测试 API `127.0.0.1:18765`、Web `127.0.0.1:13180`，使用全新临时状态，完成后测试服务已退出。直接任务 desktop `bed8c2440bee`、mobile `5d268447a2eb`；同一澄清全流程任务 desktop `55c44f30846e`、mobile `7312ff263858`。后两者经历史恢复、选择 BossC、批准、下载 ZIP（Attack 90→180、其他字节不变）、撤回、刷新与旧 URL 404；原始游戏全部文件从创建到撤回保持逐字节一致。截图、下载 ZIP、计划、报告和任务状态均保存在上述目录。上一轮 production 工件也保留，未覆盖或拿旧构建替代最终回归。
+
+| 门禁 | 本轮实际命令 | 结果 / 证据 |
+|---|---|---|
+| Python lint / format | `.venv/bin/ruff check udify/ tests/`；`.venv/bin/ruff format --check udify/ tests/` | EXIT 0；207 文件格式通过 |
+| blocking mypy | `bash scripts/typecheck.sh` | EXIT 0；15 文件；不代表全包 strict 通过 |
+| Python 全量 + coverage | `.venv/bin/python -m pytest tests/ -q --cov=udify --cov-report=xml:.ai-bridge/iter8-coverage.xml --cov-report=term --cov-fail-under=62 --junitxml=.ai-bridge/iter8-pytest.xml` | EXIT 0；955 passed / 2 skipped / 8 warnings，45.24 秒；9406/13362 行，70.39% |
+| 可达性 | `.venv/bin/python scripts/check_reachability.py` | EXIT 0；133 modules、93 reachable、138 known orphan 全部有 allowlist；不是零孤儿 |
+| Web install / audit | `pnpm install --frozen-lockfile`；`pnpm audit:prod`（web） | EXIT 0；无已知生产依赖漏洞；esbuild build-script 的现有提示保留 |
+| Web 静态 / unit | `pnpm lint`；`pnpm typecheck`；`pnpm test --run`（web） | 全部 EXIT 0；20 文件、95 tests 通过 |
+| Web production build | `NEXT_PUBLIC_UDIFY_API=http://127.0.0.1:18765 pnpm build`（web） | EXIT 0；Next 15.5.22，实际生产包用于下面真实测试 |
+| 真实浏览器 | `REAL_E2E_WEB_MODE=production pnpm exec playwright test --config playwright.real.config.ts`（web） | EXIT 0；4 passed，43.6 秒；`.ai-bridge/iter8-real-browser-final/report.json` |
+| Mock 浏览器 | `E2E_PORT=13181 pnpm test:e2e`（web） | 最终构建 EXIT 0；8 passed，55.4 秒，单 worker；`.ai-bridge/playwright-mock-results/.last-run.json`；先前独立回归 17.8 秒及 API 隔离附件保留于 `.ai-bridge/iter8-mock-final/report.json` |
+
+Python 两项跳过均与此解释器未安装 Playwright 有关（一个 collection skip、一个 runtime-profile case）；不据此宣称 Python 探针或真实游戏运行已验收。Node Playwright 的真实产品浏览器验收独立执行。新增两条可达性临时例外：旧 `ProgressStore` 已被持久事件替代、`run_by_engine` 不再对原游戏执行不安全的运行探针；到期日均为 2026-10-08，后续需审查移除或按隔离工件重新接入。
+
+失败记录没有删除：最初 mock 固定 8765 导致 18765 请求穿透、8 例失败，已改为 context 层拦截所有 `/api/` 请求；独立回归的 79 条 API 请求全部被拦截、无未处理路由。修复后 5 worker 出现 GPU stall 与 4 条导航超时，单 worker 同断言全过，因此默认使用单 worker；资源争用为有证据支持的推断，不声称已经完成 GPU 根因分析。失败工件分别保留在 `.ai-bridge/iter8-mock-initial-failure/`、`.ai-bridge/iter8-mock-parallel-first/`。旧受跟踪 `.last-run.json` 内容恢复为原基线，仅留末尾换行差异，不将其作为本轮通过证据。
+
+研究与集成链路索引：`.ai-bridge/ITER8-PIPELINE.md`。Sol 两个标签页分别进行了 2 轮可信执行研究、3 轮事件研究/编码/缺陷返工；直接收获并整合的 Sol 源码为 `web/lib/api/job-event-state.ts` 一份，其余实现由本地并行代理完成并统一验证。研究是对给定源码与复现的审查，不包装成外部文献核验或模型思考时长证明。
+
+### 12.7 后续义务与完成口径
+
+本轮完成必须覆盖 A1–A10；不会因实现部分模块或通过单元测试而缩减验收。以下是继续保留的产品路线义务，其“未纳入本批”不表示已经清偿：
+
+| 后续事项 | 来源与当前边界 | 下一阶段需要的证据 |
+|---|---|---|
+| 可选 LLM 意图候选、预算、超时与本地模型对照 | COG-LLM-01..03、iter7 M5-PR2/PR3；本批确定性入口修复不等于 LLM 已接入 | 真实入口有/无 Key 行为、失败降级、候选裁决与离线对照报告 |
+| 真实商业游戏或合法引擎 demo 的运行验收 | REAL-GAME-01/02；本批合成资产与本地真实 HTTP 是不同证据等级 | 资产合法来源、实际游戏启动观测与改造后可运行结果 |
+| 多引擎浏览器产品化 | 通用 Pipeline 的 RPGMV 修复、Godot 探针能力不能替代 JobRunner 全链路 | 每引擎从感知到 Patch、工件、运行验证、包与恢复的独立验收 |
+| 多 Mod 安装依赖与冲突可视化 | iter6 V5 与 MOD-STACK 系列；本批不把空冲突列表视为已检查 | 真实已装 Mod 状态、冲突裁决及可操作 UI |
+| 精确 SourceSpan 与基准扩展 | 文件级证据仍须诚实展示；iter7 M3-PR4 pass-to-pass 的长期基准维护继续保留 | 精确定位验证与 golden case 非目标字节断言，不伪造行号 |
+| 全量孤儿清偿、覆盖率 70% 与远端 CI | iter7 冻结基线到期审查、批次 6 及判据 7 | 按范围清偿并复核可达性；实际覆盖率与远端运行记录 |
+
+在这些义务完成前，只能宣称本轮选定的 miu2d 本地闭环通过，不能宣称长期 PRD、真实游戏运行能力或整个内容平台已完成。

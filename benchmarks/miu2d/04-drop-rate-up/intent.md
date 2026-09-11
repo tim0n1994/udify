@@ -1,3 +1,3 @@
 # 04-drop-rate-up
 
-提高Boss掉落率
+Boss 掉落率翻倍

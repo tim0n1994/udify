@@ -1,3 +1,3 @@
 # 05-potion-nerf
 
-削弱治疗道具效果
+Potion Value 减半

@@ -29,6 +29,12 @@ class ErrorModel(BaseModel):
     suggested_action: str = ""
 
 
+class ClarifyRequest(BaseModel):
+    """Explicit candidate selection for an ambiguous target."""
+
+    target_ids: list[str] = Field(min_length=1)
+
+
 class Envelope(BaseModel):
     """所有 JSON 端点的统一信封（包下载除外）。"""
 
@@ -38,4 +44,4 @@ class Envelope(BaseModel):
     meta: dict[str, Any] | None = None
 
 
-__all__ = ["CreateJobRequest", "Envelope", "ErrorModel", "RejectRequest"]
+__all__ = ["ClarifyRequest", "CreateJobRequest", "Envelope", "ErrorModel", "RejectRequest"]

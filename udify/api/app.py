@@ -11,6 +11,7 @@ ADR-v3-008：进度靠轮询 ``GET /jobs/{id}``（事件流支持 after_seq 增�
 
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 import threading
@@ -26,7 +27,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 from fastapi.responses import FileResponse, JSONResponse
 
-from udify.api.schemas import CreateJobRequest, Envelope, RejectRequest
+from udify.api.schemas import ClarifyRequest, CreateJobRequest, Envelope, RejectRequest
 from udify.core.orchestration import (
     InvalidTransitionError,
     JobError,
@@ -49,10 +50,6 @@ class ApiState:
         self.state_dir = state_dir
         self.store = JobStore(state_dir / "jobs.db")
         self.runner = JobRunner(self.store, state_dir / "jobs")
-        # SSE 进度流（iter4 M4 PR2）：独立 sqlite 文件，崩溃可恢复
-        from udify.core.orchestration.progress import ProgressStore  # noqa: PLC0415
-
-        self.progress_store = ProgressStore(str(state_dir / "progress.db"))
         # ponytail: 2 个工作线程对单用户本地场景绰绰有余；多用户是非目标（红线 #11）
         self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="udify-job")
         self.inflight: set[str] = set()
@@ -69,8 +66,12 @@ class ApiState:
         def _run() -> None:
             try:
                 fn()
-            except Exception:
+            except Exception as exc:
                 logger.exception("background task failed for job %s", job_id)
+                try:
+                    self.runner.record_failure(job_id, exc)
+                except Exception:
+                    logger.exception("could not persist failure for job %s", job_id)
             finally:
                 with self.lock:
                     self.inflight.discard(job_id)
@@ -118,9 +119,14 @@ def _err(error: JobError, status_code: int) -> JSONResponse:
 def _status_for(code: str) -> int:
     if "_NOT_FOUND" in code or "_NOT_READY" in code or "_NOT_AVAILABLE" in code:
         return 404
-    if code.startswith("JOB_INPUT_"):
+    if code.startswith("JOB_INPUT_") or code == "JOB_CLARIFICATION_INVALID_TARGET":
         return 400
-    if "_STATE_" in code or "_BUSY" in code:
+    if (
+        "_STATE_" in code
+        or "_BUSY" in code
+        or code
+        in {"JOB_AUDIT_INVALID", "JOB_GRAPH_VERSION_MISMATCH", "JOB_PACKAGE_INTEGRITY_FAILED"}
+    ):
         return 409
     return 500
 
@@ -142,6 +148,7 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
                     JobStatus.APPLYING,
                     JobStatus.VALIDATING,
                     JobStatus.PACKAGING,
+                    JobStatus.COMPENSATING,
                 }
             )
         )
@@ -149,8 +156,10 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
             state.submit_exclusive(job.job_id, partial(state.runner.resume, job.job_id))
         if stuck:
             logger.info("recovering %d incomplete jobs", len(stuck))
-        yield
-        state.shutdown()
+        try:
+            yield
+        finally:
+            state.shutdown()
 
     app = FastAPI(
         title="Udify API",
@@ -161,7 +170,7 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
     )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+        allow_origin_regex=r"http://(?:localhost|127\.0\.0\.1)(?::[0-9]+)?",
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -210,13 +219,14 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
 
     @app.get(f"{prefix}/jobs/{{job_id}}", response_model=Envelope)
     async def get_job(job_id: str, after_seq: int = 0) -> JSONResponse:
-        job = _require_job(state, job_id)
-        events = state.store.events(job_id, after_seq=after_seq)
+        job, events, audit_chain_valid = state.store.read_detail(job_id, after_seq)
+        if job is None:
+            raise JobInputError(_not_found(job_id))
         return _ok(
             {
                 "job": job.to_dict(),
                 "events": [e.to_dict() for e in events],
-                "audit_chain_valid": state.store.verify_chain(job_id),
+                "audit_chain_valid": audit_chain_valid,
             }
         )
 
@@ -238,14 +248,52 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
                     suggested_action="轮询 GET /jobs/{id} 查看当前状态",
                 )
             )
+        if not state.store.verify_chain(job_id):
+            raise JobInputError(
+                JobError(
+                    code="JOB_AUDIT_INVALID",
+                    message="任务审计链校验失败，无法批准执行",
+                    owner_module="api",
+                    retryable=False,
+                    suggested_action="保留当前任务用于排查，并重新创建任务",
+                )
+            )
         if not state.submit_exclusive(job_id, lambda: state.runner.approve(job_id)):
+            raise JobInputError(_busy(job_id))
+        return _ok(job.to_dict(), status_code=202)
+
+    @app.post(f"{prefix}/jobs/{{job_id}}/clarify", response_model=Envelope, status_code=202)
+    async def clarify(job_id: str, body: ClarifyRequest) -> JSONResponse:
+        job = _require_job(state, job_id)
+        if job.status != JobStatus.AWAITING_CLARIFICATION:
+            raise JobInputError(
+                JobError(
+                    code="JOB_STATE_INVALID_TRANSITION",
+                    message=f"clarify 仅在 awaiting_clarification 状态可用（当前: {job.status.value}）",
+                    owner_module="api",
+                    retryable=False,
+                    suggested_action="查询任务当前状态后重新选择目标",
+                )
+            )
+        state.runner.validate_clarification(job_id, body.target_ids)
+        if not state.submit_exclusive(
+            job_id, lambda: state.runner.clarify(job_id, body.target_ids)
+        ):
             raise JobInputError(_busy(job_id))
         return _ok(job.to_dict(), status_code=202)
 
     @app.post(f"{prefix}/jobs/{{job_id}}/reject", response_model=Envelope)
     async def reject(job_id: str, body: RejectRequest | None = None) -> JSONResponse:
         reason = body.reason if body else ""
-        job = state.runner.reject(job_id, reason=reason)
+        with state.lock:
+            if not state._accepting or job_id in state.inflight:
+                raise JobInputError(_busy(job_id))
+            state.inflight.add(job_id)
+        try:
+            job = state.runner.reject(job_id, reason=reason)
+        finally:
+            with state.lock:
+                state.inflight.discard(job_id)
         return _ok(job.to_dict())
 
     @app.get(f"{prefix}/jobs/{{job_id}}/report", response_model=Envelope)
@@ -266,7 +314,7 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
     async def get_package(job_id: str) -> FileResponse:
         job = _require_job(state, job_id)
         package = job.checkpoint.get("package")
-        if not package or not Path(package).exists():
+        if job.status != JobStatus.COMPLETED or not package or not Path(package).is_file():
             raise JobInputError(
                 JobError(
                     code="JOB_PACKAGE_NOT_AVAILABLE",
@@ -276,12 +324,34 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
                     suggested_action="确认任务处于 completed 状态",
                 )
             )
+        expected_hash = job.checkpoint.get("package_sha256")
+        if expected_hash:
+            with Path(package).open("rb") as package_file:
+                actual_hash = hashlib.file_digest(package_file, "sha256").hexdigest()
+            if actual_hash != expected_hash:
+                raise JobInputError(
+                    JobError(
+                        code="JOB_PACKAGE_INTEGRITY_FAILED",
+                        message="ModPackage 内容与任务完成时的校验值不一致",
+                        owner_module="api",
+                        retryable=False,
+                        suggested_action="保留任务工件用于排查，并重新生成 ModPackage",
+                    )
+                )
         return FileResponse(package, media_type="application/zip", filename=Path(package).name)
 
     @app.post(f"{prefix}/jobs/{{job_id}}/rollback", response_model=Envelope)
     async def rollback(job_id: str) -> JSONResponse:
         # ponytail: 同步执行（感知+checksum，小游戏毫秒级）；大游戏慢了再改后台
-        job = state.runner.rollback(job_id)
+        with state.lock:
+            if not state._accepting or job_id in state.inflight:
+                raise JobInputError(_busy(job_id))
+            state.inflight.add(job_id)
+        try:
+            job = state.runner.rollback(job_id)
+        finally:
+            with state.lock:
+                state.inflight.discard(job_id)
         return _ok(job.to_dict())
 
     @app.get(f"{prefix}/mods", response_model=Envelope)
@@ -331,16 +401,18 @@ def create_app(state_dir: Path | None = None) -> FastAPI:
 def _require_job(state: ApiState, job_id: str) -> Any:
     job = state.store.get(job_id)
     if job is None:
-        raise JobInputError(
-            JobError(
-                code="JOB_QUERY_NOT_FOUND",
-                message=f"任务不存在: {job_id}",
-                owner_module="api",
-                retryable=False,
-                suggested_action="用 GET /jobs 查看任务列表",
-            )
-        )
+        raise JobInputError(_not_found(job_id))
     return job
+
+
+def _not_found(job_id: str) -> JobError:
+    return JobError(
+        code="JOB_QUERY_NOT_FOUND",
+        message=f"任务不存在: {job_id}",
+        owner_module="api",
+        retryable=False,
+        suggested_action="用 GET /jobs 查看任务列表",
+    )
 
 
 def _read_artifact(artifacts_dir: str, name: str) -> dict[str, Any]:

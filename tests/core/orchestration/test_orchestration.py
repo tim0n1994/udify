@@ -307,7 +307,7 @@ class TestJobRunnerHappyPath:
             runner.approve(job.job_id)
 
     def test_rollback_after_completed(self, runner: JobRunner, game_root: Path) -> None:
-        job = runner.create_job(str(game_root), "翻倍血量")
+        job = runner.create_job(str(game_root), "Boss血量翻倍")
         runner.advance_to_review(job.job_id)
         job = runner.approve(job.job_id)
         package = Path(job.checkpoint["package"])
@@ -368,9 +368,9 @@ class TestJobRunnerRecovery:
     def test_recover_incomplete_scans_all(
         self, store: JobStore, runner: JobRunner, game_root: Path
     ) -> None:
-        j1 = runner.create_job(str(game_root), "翻倍血量")
+        j1 = runner.create_job(str(game_root), "Boss血量翻倍")
         store.transition(j1, JobStatus.PERCEIVING, event="stage_started")
-        runner.create_job(str(game_root), "掉落翻倍")  # 停在 created
+        runner.create_job(str(game_root), "Boss掉落翻倍")  # 停在 created
 
         recovered = runner.recover_incomplete()
         assert {j.status for j in recovered} == {JobStatus.AWAITING_REVIEW}

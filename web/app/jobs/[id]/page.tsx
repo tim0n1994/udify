@@ -28,6 +28,10 @@ import { useConfig, type JobTab } from "@/lib/config";
 import { fmtTime, shortHash } from "@/lib/ui";
 import { useSound } from "@/lib/sound";
 import { AuditTreatySeal } from "@/features/jobs/cockpit/AuditTreatySeal";
+import { JobProgressPanel } from "@/components/jobs/job-progress-panel";
+import { ClarificationForm } from "@/features/jobs/review/ClarificationForm";
+import { ReportEvidence } from "@/features/jobs/review/ReportEvidence";
+import { rollbackEvidenceSchema } from "@/lib/api/schema";
 
 export default function JobPage() {
   return (
@@ -47,6 +51,7 @@ function JobPageContent() {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [selectedOp, setSelectedOp] = useState<number | null>(null);
   const [actionError, setActionError] = useState<ApiError | null>(null);
+  const [lifecycle, setLifecycle] = useState(0);
 
   const requestedTab = searchParams.get("tab");
   const tab: JobTab = isJobTab(requestedTab) ? requestedTab : config.defaultJobTab;
@@ -69,6 +74,7 @@ function JobPageContent() {
       ),
   });
   const job = detail.data?.job;
+  const rollbackEvidence = rollbackEvidenceSchema.safeParse(job?.checkpoint.rollback);
   const planReady = Boolean(
     job &&
       ([
@@ -103,12 +109,14 @@ function JobPageContent() {
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: queryKeys.job(id) }),
       queryClient.invalidateQueries({ queryKey: queryKeys.report(id) }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.plan(id) }),
       queryClient.invalidateQueries({ queryKey: queryKeys.jobs }),
     ]);
   };
   const mutationOptions = {
     onSuccess: async () => {
       setActionError(null);
+      setLifecycle((value) => value + 1);
       await invalidate();
     },
     onError: (error: unknown) => {
@@ -121,6 +129,7 @@ function JobPageContent() {
     ...mutationOptions,
     onSuccess: async () => {
       sound.play("approve");
+      setLifecycle((value) => value + 1);
       await invalidate();
       setActionError(null);
     },
@@ -130,11 +139,13 @@ function JobPageContent() {
     onError: mutationOptions.onError,
     onSuccess: async () => {
       sound.play("reject");
+      setLifecycle((value) => value + 1);
       await invalidate();
       setActionError(null);
     },
   });
   const rollback = useMutation({ mutationFn: () => api.rollback(id), ...mutationOptions });
+  const clarify = useMutation({ mutationFn: (targetIds: string[]) => api.clarifyJob(id, targetIds), ...mutationOptions });
 
   const selectedDiff =
     plan.data?.diffs.find((diff) => diff.path === selectedFile) ?? plan.data?.diffs[0] ?? null;
@@ -221,6 +232,7 @@ function JobPageContent() {
         <JobActions
           job={job}
           plan={plan.data}
+          auditValid={detail.data?.audit_chain_valid ?? null}
           highestRisk={highestRisk}
           approvePending={approve.isPending}
           rejectPending={reject.isPending}
@@ -236,9 +248,12 @@ function JobPageContent() {
   );
 
   const reportPanel = report.data ? (
-    <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(340px,0.75fr)]">
-      <ValidationView v={report.data.static_validation} />
-      <ProbeView report={report.data} />
+    <div className="space-y-5">
+      <ReportEvidence report={report.data} />
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(340px,0.75fr)]">
+        <ValidationView v={report.data.static_validation} />
+        <ProbeView report={report.data} />
+      </div>
     </div>
   ) : report.isError ? (
     <ErrorState
@@ -275,13 +290,36 @@ function JobPageContent() {
               <span className="max-w-lg truncate font-mono" title={job.game_root}>{job.game_root}</span>
             </div>
           </div>
-          {job.status === "completed" ? (
-            <Button asChild variant="primary">
-              <a href={api.packageUrl(id)}><Download className="h-4 w-4" aria-hidden /> 下载 ModPackage</a>
-            </Button>
+          {job.status === "completed" && typeof job.checkpoint.package === "string" && !job.checkpoint.package_revoked ? (
+            <div className="flex max-w-xs flex-col gap-2">
+              <Button asChild variant="primary">
+                <a href={api.packageUrl(id)}><Download className="h-4 w-4" aria-hidden /> 下载 ModPackage</a>
+              </Button>
+              <p className="text-xs text-muted">{report.data?.delivery ? report.data.delivery.tier === "STATIC_ONLY" ? "仅静态检查 · 未安装到游戏" : "Mod 包 · 未安装到游戏" : "验证范围尚未确认"}</p>
+            </div>
           ) : null}
         </div>
       </header>
+
+      <JobProgressPanel jobId={id} lifecycleKey={String(lifecycle)} status={job.status} />
+
+      {job.status === "awaiting_clarification" ? (
+        <ClarificationForm
+          key={`${id}:${JSON.stringify(job.checkpoint.clarification)}`}
+          clarification={job.checkpoint.clarification}
+          pending={clarify.isPending}
+          onSubmit={(ids) => clarify.mutate(ids)}
+        />
+      ) : null}
+      {job.status === "rolled_back" ? (
+        <div role="status" className="border border-edge p-3 text-sm text-muted">
+          Mod 包已作废，不能再下载；未对游戏执行安装或反向安装。
+          {rollbackEvidence.success ? <p className="mt-1">{rollbackEvidence.data.source_integrity_reason}</p> : null}
+          {detail.data?.events.filter((event) => event.event === "rolled_back").slice(-1).map((event) => (
+            <p key={event.seq} className="mt-1">原目录校验：{event.payload.checksum_intact === true ? "与任务基线一致" : event.payload.checksum_intact === false ? "与任务基线不一致" : "未能核验"}</p>
+          ))}
+        </div>
+      ) : null}
 
       {!detail.data?.audit_chain_valid ? (
         <div role="alert" className="flex gap-2 border border-err/60 bg-err/10 p-3 text-sm text-err">

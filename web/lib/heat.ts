@@ -11,6 +11,7 @@ export interface HeatCell {
 
 const HEAT_ORDER: readonly [JobStatus, string, HeatCellTone][] = [
   ["awaiting_review", "待审阅", "gate"],
+  ["awaiting_clarification", "待确认目标", "gate"],
   ["perceiving", "感知", "active"],
   ["planning", "规划", "active"],
   ["applying", "应用", "active"],

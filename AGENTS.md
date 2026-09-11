@@ -14,7 +14,36 @@
 
 ---
 
-## 2. 技术栈
+## 2. 门禁与契约（修改前必读）
+
+### Python 门禁
+
+```bash
+ruff check udify/ tests/
+bash scripts/typecheck.sh        # blocking mypy：15 文件 v3 子集（清单与 .github/workflows/ci.yml 一致）
+python3 -m pytest tests/ -q
+```
+
+- `scripts/typecheck.sh` 是唯一 blocking 的 mypy 门禁，`--follow-imports=silent` 只查自包含 v3 模块；全包 `mypy udify/` 仍有历史类型债，仅作非阻塞报告，不得据此宣称 strict 通过。
+- 文档中的测试数量仅为快照（2026-09-03 `.venv` 实跑 860 通过 / 2 跳过）；宣称“全绿”必须以当场实跑为准。注意：用 Homebrew `python3` 直跑时，Playwright 运行时探针 4 例因该解释器的浏览器环境超时失败，统一以 `.venv` 为准。
+
+### Web 门禁
+
+Web 门禁（install/audit/lint/typecheck/unit/build/E2E）、`sharp`/`postcss` 供应链 override 约束与 `NEXT_PUBLIC_*` 运行时配置契约，统一见 [web/AGENTS.md](web/AGENTS.md)。
+
+### 编码规范
+
+- **类型注解**: 所有函数必须有完整的 type hints（blocking 范围见 `scripts/typecheck.sh`；存量全包 strict 是历史债）
+- **不可变性优先**: 使用 `frozen=True` dataclass 表示核心数据结构
+- **纯函数优先**: 副作用显式标记，状态修改函数命名用动词（`apply_`, `update_`）
+- **错误处理**: 明确异常路径，不使用裸 `except`
+- **文档字符串**: 所有公共类/方法使用 Google-style docstring
+- **TDD**: 新功能先写测试；fixture 共享测试数据；同场景用 `@pytest.mark.parametrize`
+- **覆盖率**: 目标 80%+（CI 当前门槛 62%）
+
+---
+
+## 3. 技术栈
 
 | 层级 | 技术 | 说明 |
 |------|------|------|
@@ -36,258 +65,26 @@
 
 ---
 
-## 3. 目录结构
+## 4. 目录结构（速览）
 
 ```
 udify/
-├── pyproject.toml              # 项目配置
-├── docs/                       # 架构文档（30+ 份）
-│   ├── VISION.md               # 项目愿景（多学科根基）
-│   ├── PLAN.md                 # 四阶段路线图
-│   ├── ARCHITECTURE-v2.md      # v2.0 核心架构
-│   ├── ARCHITECTURE-GAME-MOD-v1.md      # 游戏魔改特化架构
-│   ├── ARCHITECTURE-GAME-MOD-v1.1-REVIEW.md  # 架构审查报告（47盲点+12模块）
-│   ├── PROGRESS-SESSION-2.md   # 最新进展报告
-│   └── ...
-├── udify/                      # 主包
-│   ├── __init__.py
-│   ├── cli.py                  # 命令行入口
-│   ├── models/                 # 数据模型
-│   │   ├── content_graph.py    # ContentGraph / ContentNode / ContentEdge / ContentAsset（+v3 证据链字段、checksum）
-│   │   ├── cdl_patch.py        # CDLPatch / PatchOperation(+ExecutionMode) / PatchValidator / PatchApplicator / GraphDiffer
-│   │   └── source.py           # v3 证据链原语：SourceSpan / Provenance / Confidence / Evidence / ToolRunRef
-│   └── core/                   # 核心引擎
-│       ├── pipeline.py         # 统一端到端管道 UdifyPipeline（旧 pipeline_v2.AutomatedModPipeline 已合并，保留为别名）
-│       ├── miu2d_pipeline.py   # miu2d 闭环编排器（NL→语义图→file_patch→VFS 预览，批次 2）
-│       ├── adapters/           # v3 引擎适配器层（EngineAdapter 协议 + miu2d 实现）
-│       │   ├── base.py         # EngineAdapter Protocol / DetectionResult
-│       │   ├── miu2d.py        # Miu2dAdapter（复用现有 parser，输出带 SourceSpan）
-│       │   ├── miu2d_dsl.py    # DslCommandRegistry（miu2d DSL 命令表，ADAPT-MIU2D-05）
-│       │   └── miu2d_world.py  # GameWorldGraphBuilder（感知+提升+关系推断，ADAPT-MIU2D-06）
-│       ├── tool_gateway/       # v3 Secure Tool Gateway（所有外部工具调用唯一入口）
-│       │   ├── gateway.py      # ToolGateway（策略→沙箱→执行→消毒→审计）
-│       │   ├── policy.py       # ToolPolicy / RiskLevel(R0-R4) / 路径 allowlist
-│       │   ├── audit.py        # ToolAuditChain（链式哈希审计）
-│       │   └── lockfile.py     # ToolLockfile / ToolPin（version+sha256 pin）
-│       ├── llm_client.py       # LLMClient（OpenAI/Anthropic 统一接口）
-│       ├── perception/         # 感知引擎
-│       │   ├── engine_detector.py
-│       │   ├── resource_extractor.py
-│       │   ├── mechanism_analyzer.py
-│       │   ├── incremental_perception.py   # 增量感知（P0）
-│       │   ├── semantic_lifter.py          # 语义提升器（PER-LIFT-01..04：标签+证据+置信度）
-│       │   └── parsers/        # miu2d 特化解析器
-│       │       ├── ini_parser.py
-│       │       ├── obj_parser.py
-│       │       ├── npc_parser.py
-│       │       ├── lua_parser.py
-│       │       └── lua_ts_parser.py        # Tree-sitter Lua（ADAPT-MIU2D-04：函数/调用/危险 API）
-│       ├── planning/           # 规划引擎
-│       │   ├── state.py        # PlanState / Intent / PlanContext
-│       │   ├── action_space.py # ActionSpace
-│       │   ├── action_schemas.py # 动作 Schema（PLAN-ACTION-01..04：numeric/script/reward）
-│       │   ├── patch_synthesizer.py # Patch 合成器（PATCH-SYN-01..06：SourceSpan+INI/Lua/DSL+reverse）
-│       │   ├── value_function.py # ValueFunction / HeuristicValueFunction
-│       │   ├── mcts.py         # MCTSNode / MCTSTree
-│       │   ├── planner.py      # Planner / PlanResult
-│       │   └── cost_controller.py # 成本控制器（P0）
-│       ├── infrastructure/     # 基础设施层
-│       │   ├── event_bus.py    # EventBus / EventType
-│       │   ├── config_center.py # ConfigCenter
-│       │   ├── config_loader.py # YAML/JSON 配置加载
-│       │   ├── audit_log.py    # AuditLog（链式哈希）
-│       │   ├── cache_manager.py # CacheManager（L1/L2/L3）
-│       │   ├── state_persistence.py # 会话/图谱持久化
-│       │   ├── backup_manager.py # 自动备份管理
-│       │   └── preview_formatter.py # 预览格式化
-│       ├── security/           # 安全层
-│       │   └── sanitizer.py    # InputSanitizer / OutputValidator
-│       ├── session/            # 会话管理
-│       │   └── session_manager.py # ModSession / SessionManager
-│       ├── knowledge/          # 知识图谱
-│       │   └── knowledge_graph.py # GameKnowledgeGraph
-│       ├── execution/          # 执行引擎
-│       │   ├── vfs.py          # VirtualFileSystem（预览模式）
-│       │   ├── sandbox.py      # SandboxExecutor
-│       │   ├── patch_executor.py # PatchExecutor（Patch→VFS）
-│       │   ├── scheduler.py    # ExecutionScheduler（依赖图/并行执行/回滚）
-│       │   ├── tool_registry.py # ToolRegistry
-│       │   ├── builtin_tools.py # 内置工具
-│       │   └── mcp_server.py   # MCP 协议服务端
-│       ├── memory/             # 记忆系统
-│       │   └── memory_store.py # MemoryStore / MemoryEnricher
-│       ├── feedback/           # 反馈闭环
-│       │   └── feedback_loop.py # FeedbackLoop / LearningEngine
-│       ├── mod_manager/        # 多 Mod 管理
-│       │   ├── mod_manager.py  # MultiModManager / ModStack
-│       │   └── mod_exporter.py # ModExporter / ModManifest
-│       └── validation/         # 验证引擎
-│           ├── enhanced_validator.py # EnhancedValidator（v2）
-│           ├── static_validator.py   # StaticValidatorV3（VAL-STATIC-01..05：schema/引用/数值/语法/危险API）
-│           └── runtime_probe.py      # HeadlessRuntimeProbe（VAL-RUNTIME-01..05：ProbeSpec/启动/状态/报错/报告）
-├── web/                        # Next.js 15 本地工作台
-│   ├── app/                    # 任务控制台与 /jobs/[id] 审阅页
-│   ├── config/ lib/config/     # v1 默认值、Zod 配置契约与诊断
-│   ├── lib/api/                # envelope/data runtime decode、query/polling
-│   ├── features/jobs/          # console/review 专用 feature 组件
-│   ├── test/                   # Vitest/RTL/MSW（不进 production import graph）
-│   └── e2e/                    # Playwright Chromium desktop/mobile
-└── tests/                      # Python 测试（399 个，全绿）
-    ├── perception/ models/ infrastructure/          # v2 基础（含 test_source.py 证据链）
-    ├── cognition/ evaluation/ toolchain/            # Session 4 测试债清偿（批次 0）
-    └── core/
-        ├── adapters/ tool_gateway/ perception/      # 批次 1-2（协议/网关/语义提升）
-        ├── planning/（含 test_batch2_planning.py）   # 批次 2（动作 Schema/Patch 合成）
-        └── validation/（含 test_batch3_validation.py，内含 UdifyBench 10 golden case）
+├── udify/models/        # ContentGraph / CDLPatch / v3 证据链（source.py）
+├── udify/core/          # pipeline、perception/、planning/、tool_gateway/、validation/、
+│                        #   orchestration/（mod_job / job_store / job_runner / gate_orchestrator / progress）、
+│                        #   adapters/、evaluation/、execution/ 等核心引擎
+├── udify/api/           # 薄 API（FastAPI app / schemas / job_events，`udify serve`）
+├── web/                 # Next.js 15 审阅工作台（门禁见 web/AGENTS.md）
+├── scripts/             # typecheck.sh（mypy 子集门禁）、check_reachability.py 等
+├── tests/               # Python 测试
+└── docs/                # 架构文档；活跃集见 docs/ITERATION-PLAN-2026-08.md
 ```
 
 ---
 
-## 4. 快速开始
+## 5. 当前状态快照
 
-### 安装依赖
-
-项目使用 `pyproject.toml`，当前阶段依赖极少（仅 numpy）：
-
-```bash
-# 开发模式安装
-pip install -e ".[dev]"
-
-# 或仅安装核心依赖
-pip install -e .
-```
-
-### 运行测试
-
-```bash
-# 全部 Python 测试（当前 399 个）
-python3 -m pytest tests/ -v
-
-# 特定模块
-python3 -m pytest tests/perception/ -v
-python3 -m pytest tests/models/ -v
-python3 -m pytest tests/core/planning/ -v
-python3 -m pytest tests/infrastructure/ -v
-
-# 覆盖率
-python3 -m pytest tests/ --cov=udify --cov-report=term-missing
-```
-
-### 类型检查
-
-```bash
-mypy udify/
-```
-
-### 代码风格
-
-```bash
-ruff check udify/ tests/
-ruff format udify/ tests/
-```
-
-### Web 门禁
-
-```bash
-cd web
-pnpm install --frozen-lockfile
-pnpm audit:prod
-pnpm lint
-pnpm typecheck
-pnpm test --run
-pnpm build
-pnpm test:e2e
-```
-
-Playwright E2E 通过 route interception 使用明确的 mock API；真实本地验收需要另启 `udify serve`。公开配置来自 `NEXT_PUBLIC_UDIFY_CONFIG` 与无凭据、根级回环 `NEXT_PUBLIC_UDIFY_API`，必须经过 Zod 运行时解码；localStorage 异常必须保留内存安全配置与可见诊断。
-
-供应链约束：Node.js ≥20.9（CI 22）；`pnpm.overrides` 将 Next 的 `sharp` 固定到 0.35.3、`postcss` 固定到 8.5.25。原因是 Next 15.5.22 已是当前 15.5 最新 patch，但其声明范围仍会解析到受 GHSA-f88m-g3jw-g9cj / GHSA-6g55-p6wh-862q / GHSA-r28c-9q8g-f849 影响的版本。不得删除 override 而不同时证明 production audit、build 与 E2E。
-
----
-
-## 5. 核心数据流
-
-```
-[原始游戏目录]
-    ↓
-InputSanitizer.sanitize(intent) → SanitizationResult
-    ↓
-IncrementalPerception.perceive(path) → ContentGraph
-    ↓
-SessionManager.create_session() → ModSession
-    ↓
-IntentClassifier.classify() → Intent / StructuredIntent（认知层）
-    ↓
-ReferenceResolver.resolve_from_structured_intent() → [Reference]
-    ↓
-ConflictDetector.detect() → [Conflict]
-    ↓
-Planner.plan(graph, intent) → PlanResult
-    ↓
-CostController.plan_with_budget() → PlanResult（预算控制）
-    ↓
-PlanResult.to_patch() → CDLPatch
-    ↓
-EnhancedValidator.validate(patch) → ValidationReport
-    ↓
-GameKnowledgeGraph.validate_mod_against_knowledge() → KnowledgeWarnings
-    ↓
-VirtualFileSystem.write_file() → 预览模式
-    ↓
-IntentAlignmentEvaluator.evaluate() → 对齐评分（评估层）
-    ↓
-PatchApplicator.apply(patch, graph) → ContentGraph（修改后）
-    ↓
-SandboxExecutor.validate_script_safety() → SafetyReport
-    ↓
-MultiModManager.install_mod() → ModStack
-    ↓
-FeedbackLoop.collect_feedback() → LearningEngine 优化
-    ↓
-[修改后的游戏文件]
-```
-
----
-
-## 6. 编码规范
-
-### Python
-
-- **类型注解**: 所有函数必须有完整的 type hints（mypy strict mode）
-- **不可变性优先**: 使用 `frozen=True` dataclass 表示核心数据结构
-- **纯函数优先**: 副作用显式标记，状态修改函数命名用动词（`apply_`, `update_`）
-- **错误处理**: 明确异常路径，不使用裸 `except`
-- **文档字符串**: 所有公共类/方法使用 Google-style docstring
-
-### 测试
-
-- **TDD**: 新功能先写测试
-- **Fixture**: 使用 pytest fixture 共享测试数据
-- **参数化**: 类似场景使用 `@pytest.mark.parametrize`
-- **覆盖率**: 目标 80%+
-
-### 提交规范（建议）
-
-```
-<type>: <description>
-
-<body>
-
-type:
-  - feat: 新功能
-  - fix: 修复
-  - docs: 文档
-  - test: 测试
-  - refactor: 重构
-  - perf: 性能优化
-  - chore: 构建/工具链
-```
-
----
-
-## 7. 当前状态快照
-
-**截至 2026-07-29**（批次 5B 本地门禁完成；详见 docs/ITERATION-PLAN-2026-08.md §11）：
+**截至 2026-09-03**（批次 0-5 完成；验收台账见 docs/ITERATION-PLAN-2026-08.md §11）：
 
 | 模块 | 状态 | 测试 |
 |------|------|------|
@@ -324,13 +121,15 @@ type:
 | 前端工作台 (web/, Next.js 15) | ✅ 可配置审阅切片 | 31 unit/component + 4 mocked E2E |
 | JobStore 并发与关闭协议 | ✅ 完成 | API/编排 59；竞态循环 40/40 |
 
-**当前门禁快照**: Python 399 测试全绿；Web ESLint/tsc/Vitest/production build/Playwright desktop+mobile 全绿。全包 mypy 仍有历史债，只宣称迭代方案指定的 15 文件子集通过。
+**当前门禁快照**: Python `.venv` 实跑 860 通过 / 2 跳过（2026-09-03 当场实跑；历史基线见 docs/ITERATION-PLAN-2026-08.md §11）；Web ESLint/tsc/Vitest/production build/Playwright desktop+mobile 全绿（同上基线）。全包 mypy 仍有历史债，只宣称迭代方案指定的 15 文件子集通过。
 
 **产品入口**：`udify serve`（API，127.0.0.1:8765）+ `cd web && pnpm dev`（工作台，localhost:3000）。状态目录 `./.udify/`（jobs.db + 任务工件）。
 
+**iter8 产品契约（2026-09-09）**：实际 API 仅支持 miu2d 静态 ModPackage；不运行或安装到原游戏。新增 `awaiting_clarification` 与 `POST /jobs/{id}/clarify`，目标候选和图版本持久化；SSE `event: job` 与轮询共用 `job_events.seq`，`JobStore.read_detail` 提供一致快照。批准绑定审阅及源文件摘要，下载校验包摘要；rollback 是可恢复的包撤销。状态数据库与工件目录必须位于游戏目录外。验收与仍未实现的能力见 `docs/ITERATION-PLAN-2026-08.md` §12。
+
 ---
 
-## 8. 关键设计决策
+## 6. 关键设计决策
 
 ### D1: CDL Patch 作为核心抽象
 
@@ -346,17 +145,17 @@ type:
 
 ---
 
-## 9. 环境信息
+## 7. 环境信息
 
 - **操作系统**: macOS (darwin)
-- **Python**: 3.14.4 (Homebrew)
-- **工作目录**: `/workspace/udify` (根据实际部署环境调整)
+- **Python**: 3.14 系列（本机 `.venv` 为 3.14.6；mypy/pytest/ruff 以 `.venv` 为准）
+- **工作目录**: `/Users/chillbit/Proj/udify`
 - **Git 仓库**: 是
-- **虚拟环境**: 未强制要求（当前依赖极少）
+- **虚拟环境**: `.venv`（`scripts/typecheck.sh` 优先使用 `.venv/bin/mypy`）
 
 ---
 
-## 10. 联系与决策
+## 8. 联系与决策
 
 - **项目所有者**: JC
 - **核心需求来源**: `docs/VISION.md`, `docs/PLAN.md`, `docs/ARCHITECTURE-v2.md`
@@ -365,7 +164,7 @@ type:
 
 ---
 
-## 11. JC 的协作风格偏好
+## 9. JC 的协作风格偏好
 
 JC 对架构和文档工作的核心诉求是：先理解项目初心，再从宏观愿景、产业格局、开源生态和底层技术栈一路下钻到可执行工程细节。偏好的输出不是轻量建议，而是厚重、系统、可落地的技术文档体系。
 

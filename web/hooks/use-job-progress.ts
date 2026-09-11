@@ -1,144 +1,143 @@
-/**
- * iter4 M4 PR3 — useJobProgress(jobId)：SSE 主、轮询兜底的进度订阅。
- *
- * 策略（T4 研究结论）：
- * - 优先 EventSource 连接 /api/v0/jobs/{id}/events，实时接收 ProgressEvent。
- * - EventSource 不可用或连续失败 N 次 → 降级轮询 GET /jobs/{id}?after_seq=N。
- * - 用 after_seq 做断线重连，不丢事件、不重复。
- * - 任务进入终态（done 事件或 status 属于终态集合）→ 停止订阅。
- */
-import { useCallback, useEffect, useRef, useState } from "react";
-import { BUILD_CONFIG } from "@/lib/config/build";
-import { call } from "@/lib/api/client";
-import { jobDetailSchema } from "@/lib/api/schema";
-import {
-  progressEventSchema,
-  SSE_EVENT_DONE,
-  SSE_EVENT_PROGRESS,
-  type ProgressEvent_,
-} from "@/lib/api/job-progress";
-import { ACTIVE_STATUSES } from "@/lib/api/query";
+"use client";
 
-const MAX_SSE_FAILURES = 3;
+import { useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useConfig } from "@/lib/config";
+import { call } from "@/lib/api/client";
+import { jobDetailSchema, jobEventSchema, jobStatusSchema } from "@/lib/api/schema";
+import { jobDoneSchema } from "@/lib/api/job-progress";
+import { queryKeys } from "@/lib/api/query";
+import { isTerminalStatus, mergeJobEvents } from "@/lib/api/job-event-state";
+import type { JobEvent, JobStatus } from "@/lib/api/types";
 
 export interface JobProgressState {
-  events: ProgressEvent_[];
-  latest: ProgressEvent_ | null;
+  events: JobEvent[];
+  latest: JobEvent | null;
+  status: JobStatus | null;
   isDone: boolean;
-  /** 当前是否走 SSE（false = 已降级到轮询）。 */
   usingSse: boolean;
+  connected: boolean;
   error: string | null;
 }
 
-export function useJobProgress(jobId: string | null | undefined): JobProgressState {
-  const [state, setState] = useState<JobProgressState>({
-    events: [],
-    latest: null,
-    isDone: false,
-    usingSse: true,
-    error: null,
-  });
-  const failures = useRef(0);
-  const lastSeq = useRef(0);
-  const closed = useRef(false);
+function emptyState(status: JobStatus | null = null): JobProgressState {
+  return { events: [], latest: null, status, isDone: isTerminalStatus(status), usingSse: true, connected: false, error: null };
+}
 
-  const appendEvent = useCallback((evt: ProgressEvent_) => {
-    if (closed.current) return;
-    lastSeq.current = Math.max(lastSeq.current, evt.seq);
-    setState((prev) => ({
-      ...prev,
-      events: [...prev.events, evt],
-      latest: evt,
-    }));
-  }, []);
-
-  const pollFallback = useCallback(
-    async (id: string) => {
-      // 轮询兜底：GET /jobs/{id} 返回 events，按 after_seq 增量取
-      try {
-        const detail = await call(
-          `/api/v0/jobs/${id}?after_seq=${lastSeq.current}`,
-          jobDetailSchema,
-        );
-        if (closed.current) return;
-        for (const e of detail.events) {
-          // JobEvent 与 ProgressEvent 形状不同，只取可映射字段
-          appendEvent({
-            job_id: e.job_id,
-            stage: (e.stage as ProgressEvent_["stage"]) ?? "planning",
-            detail: e.event,
-            pct: 0,
-            current: 0,
-            total: 0,
-            timestamp: new Date(e.ts).toISOString(),
-            seq: e.seq,
-          });
-        }
-        if (!ACTIVE_STATUSES.includes(detail.job.status)) {
-          setState((prev) => ({ ...prev, isDone: true }));
-        }
-      } catch {
-        setState((prev) => ({ ...prev, error: "polling failed" }));
-      }
-    },
-    [appendEvent],
-  );
+/** Both transports consume the persisted JobStore sequence. Each subscription owns its requests. */
+export function useJobProgress(
+  jobId: string | null | undefined,
+  lifecycleKey = "",
+  initialStatus?: JobStatus,
+): JobProgressState {
+  const { config } = useConfig();
+  const queryClient = useQueryClient();
+  const [state, setState] = useState<JobProgressState>(emptyState);
+  const initial = useRef(initialStatus);
+  initial.current = initialStatus;
 
   useEffect(() => {
+    setState(emptyState(initial.current ?? null));
     if (!jobId) return;
-    closed.current = false;
-    setState({ events: [], latest: null, isDone: false, usingSse: true, error: null });
-    const base = BUILD_CONFIG.config.apiBase;
-    const url = `${base}/api/v0/jobs/${jobId}/events?after_seq=${lastSeq.current}`;
+    let alive = true;
+    let seq = 0;
+    let events: JobEvent[] = [];
+    let status = initial.current ?? null;
+    let failures = 0;
+    let polling = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let es: EventSource | undefined;
+    const controller = new AbortController();
 
-    let es: EventSource | null = null;
-    let pollTimer: ReturnType<typeof setInterval> | null = null;
-
-    const startSse = () => {
-      try {
-        es = new EventSource(url);
-      } catch {
-        failures.current = MAX_SSE_FAILURES;
-        degradeToPoll();
-        return;
+    const invalidate = () => {
+      for (const queryKey of [queryKeys.job(jobId), queryKeys.jobs, queryKeys.report(jobId), queryKeys.plan(jobId)]) {
+        void queryClient.invalidateQueries({ queryKey });
       }
-      es.addEventListener(SSE_EVENT_PROGRESS, (msg) => {
-        failures.current = 0;
-        try {
-          const parsed = progressEventSchema.parse(JSON.parse((msg as MessageEvent).data));
-          appendEvent(parsed);
-        } catch {
-          /* 忽略格式错误的事件，不中断流 */
-        }
-      });
-      es.addEventListener(SSE_EVENT_DONE, () => {
-        if (closed.current) return;
-        setState((prev) => ({ ...prev, isDone: true }));
-        es?.close();
-      });
-      es.onerror = () => {
-        failures.current += 1;
-        if (failures.current >= MAX_SSE_FAILURES) {
-          es?.close();
-          degradeToPoll();
-        }
-      };
     };
-
-    const degradeToPoll = () => {
-      setState((prev) => ({ ...prev, usingSse: false }));
-      void pollFallback(jobId);
-      pollTimer = setInterval(() => void pollFallback(jobId), 1500);
-    };
-
-    startSse();
-
-    return () => {
-      closed.current = true;
+    const stop = () => {
       es?.close();
-      if (pollTimer) clearInterval(pollTimer);
+      clearTimeout(timer);
     };
-  }, [jobId, appendEvent, pollFallback]);
+    const update = (incoming: JobEvent[], nextStatus: JobStatus | null) => {
+      if (!alive) return;
+      const merged = mergeJobEvents(events, incoming, jobId);
+      const nextSeq = merged.at(-1)?.seq ?? seq;
+      const changed = nextSeq !== seq || status !== nextStatus;
+      events = merged;
+      seq = nextSeq;
+      status = nextStatus;
+      setState((prev) => ({ ...prev, events, latest: events.at(-1) ?? null, status, isDone: isTerminalStatus(status), connected: isTerminalStatus(status) ? false : prev.connected, error: null }));
+      if (changed) invalidate();
+      if (isTerminalStatus(status)) stop();
+    };
+    const snapshot = async () => {
+      try {
+        const detail = await call(`/api/v0/jobs/${jobId}?after_seq=${seq}`, jobDetailSchema,
+          { signal: controller.signal }, config.apiBase);
+        if (!alive || detail.job.job_id !== jobId) return;
+        // An older in-flight snapshot must not roll a newer SSE status backward.
+        const newest = detail.events.at(-1)?.seq ?? 0;
+        update(detail.events, newest >= seq ? detail.job.status : status);
+      } catch {
+        if (alive) setState((prev) => ({ ...prev, error: "暂时无法读取任务状态" }));
+      }
+    };
+    const poll = async () => {
+      await snapshot();
+      if (alive && polling && !isTerminalStatus(status)) timer = setTimeout(() => void poll(), 1500);
+    };
+    const degrade = () => {
+      if (!alive || polling || isTerminalStatus(status)) return;
+      polling = true;
+      es?.close();
+      setState((prev) => ({ ...prev, usingSse: false, connected: false }));
+      void poll();
+    };
+
+    void snapshot();
+    if (!isTerminalStatus(status) || lifecycleKey !== "") {
+      try {
+        es = new EventSource(`${config.apiBase}/api/v0/jobs/${jobId}/events?after_seq=0`);
+        es.onopen = () => { if (alive) setState((prev) => ({ ...prev, connected: true })); };
+        es.addEventListener("job", (message) => {
+          if (!alive) return;
+          try {
+            const event = jobEventSchema.parse(JSON.parse((message as MessageEvent).data));
+            if (event.job_id !== jobId || event.seq <= seq) return;
+            failures = 0;
+            const parsedStatus = jobStatusSchema.safeParse(event.stage);
+            update([event], parsedStatus.success ? parsedStatus.data : status);
+          } catch {
+            degrade();
+          }
+        });
+        es.addEventListener("done", (message) => {
+          if (!alive) return;
+          try {
+            const done = jobDoneSchema.parse(JSON.parse((message as MessageEvent).data));
+            if (done.job_id !== jobId || done.seq < seq) return;
+            update([], done.status);
+            void snapshot();
+          } catch {
+            degrade();
+          }
+        });
+        es.onerror = () => {
+          if (!alive) return;
+          setState((prev) => ({ ...prev, connected: false }));
+          failures += 1;
+          if (failures >= 3) degrade();
+        };
+      } catch {
+        degrade();
+      }
+    }
+    return () => {
+      alive = false;
+      stop();
+      controller.abort();
+    };
+  }, [jobId, lifecycleKey, config.apiBase, queryClient]);
 
   return state;
 }

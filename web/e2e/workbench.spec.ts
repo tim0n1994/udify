@@ -1,10 +1,20 @@
-import { expect, test } from "@playwright/test";
-import { installMockApi } from "./mock-api";
+import { expect, test, type Page } from "@playwright/test";
+import { installMockApi, type MockApiAudit } from "./mock-api";
 
 const DETAIL_INTENT = "让第一个 Boss 更难，但不要单纯翻倍血量";
+const mockAudits = new WeakMap<Page, MockApiAudit>();
 
 test.beforeEach(async ({ page }) => {
-  await installMockApi(page);
+  mockAudits.set(page, await installMockApi(page));
+});
+
+test.afterEach(async ({ page }, testInfo) => {
+  const audit = mockAudits.get(page);
+  await testInfo.attach("mock-api-isolation", {
+    body: JSON.stringify(audit, null, 2), contentType: "application/json",
+  });
+  expect(audit?.intercepted.length).toBeGreaterThan(0);
+  expect(audit?.unhandled).toEqual([]);
 });
 
 test("cockpit filters, opens review, persists tab URL and confirms approval", async ({
@@ -72,17 +82,13 @@ test("cockpit filters, opens review, persists tab URL and confirms approval", as
 });
 
 test("offline API shows a retryable ErrorRecord", async ({ page }) => {
-  await page.unrouteAll({ behavior: "wait" });
-  let attempts = 0;
-  await page.route("http://127.0.0.1:8765/api/v0/**", async (route) => {
-    attempts += 1;
-    await route.abort("connectionrefused");
-  });
+  const audit = mockAudits.get(page)!;
+  audit.offline = true;
   await page.goto("/");
   await expect(page.getByText("API_CONN_REFUSED")).toBeVisible();
-  const before = attempts;
+  const before = audit.intercepted.length;
   await page.getByRole("button", { name: /重试/ }).click();
-  await expect.poll(() => attempts).toBeGreaterThan(before);
+  await expect.poll(() => audit.intercepted.length).toBeGreaterThan(before);
 });
 
 test("OpsMatrix deep-links to newest matching job", async ({ page }) => {

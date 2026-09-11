@@ -3,6 +3,16 @@
 # 过期日期把「展期」从静默动作变成必须显式续签的动作。
 
 [[allow]]
+symbol = "module:udify.core.orchestration.progress"
+reason = "iter8 replaced the unused ProgressStore transport with canonical JobStore events; retain legacy utility tests until explicit removal review (docs/ITERATION-PLAN-2026-08.md section 12)."
+expires = 2026-10-08
+
+[[allow]]
+symbol = "udify.core.validation.runtime_probe:run_by_engine"
+reason = "iter8 miu2d API delivers static-only packages; removed original-game execution and false engine coverage. Real engine execution requires isolated patched artifacts and its own product acceptance before reconnecting."
+expires = 2026-10-08
+
+[[allow]]
 symbol = "module:udify.core.cognition.intent_trace"
 reason = "iter7 基线：接线前的已知债务，由 iter7 M2/M3 清零"
 expires = 2026-11-13

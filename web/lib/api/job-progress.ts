@@ -7,6 +7,11 @@
  * - 心跳为 SSE comment（`: ping`），不触发 onmessage。
  */
 import { z } from "zod";
+import { jobStatusSchema } from "./schema";
+
+export const jobDoneSchema = z.object({
+  job_id: z.string(), status: jobStatusSchema, seq: z.number().int().min(0),
+});
 
 export const progressStageSchema = z.enum([
   "perceiving",

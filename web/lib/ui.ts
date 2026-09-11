@@ -8,6 +8,7 @@ export const STATUS_META: Record<
   created: { label: "已创建", tone: "muted" },
   perceiving: { label: "感知中", tone: "active" },
   planning: { label: "规划中", tone: "active" },
+  awaiting_clarification: { label: "待确认目标", tone: "gate" },
   awaiting_review: { label: "待审阅", tone: "gate" },
   applying: { label: "应用中", tone: "active" },
   validating: { label: "验证中", tone: "active" },

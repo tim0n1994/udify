@@ -7,6 +7,7 @@ import type { JobFilter } from "./filters";
 
 const OPTIONS: readonly [JobFilter, string][] = [
   ["all", "全部状态"],
+  ["awaiting_clarification", "待确认目标"],
   ["awaiting_review", "待审阅"],
   ["active", "进行中"],
   ["completed", "已完成"],
