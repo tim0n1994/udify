@@ -100,13 +100,13 @@ Udiface 上线。创作者经济、社区治理、开放 API。
 
 ## 快速开始（5 分钟）
 
-> 当前能力：miu2d 引擎游戏的"自然语言 → 带证据修改计划 → 人工审阅 → 验证 → 可回滚 ModPackage"完整产品闭环（本地单用户）。
+> 当前产品入口：miu2d 的明确数值意图 → 目标澄清或带证据计划 → 人工批准 → 静态检查 → ModPackage（本地单用户）。生成包不会安装或改写原游戏；撤销包会禁用后续下载，不会收回用户已另存的 ZIP。真实游戏运行、LLM 意图增强与其他引擎的浏览器支持仍在后续路线中。
 
 ```bash
 # 1. 安装（Python 3.12+）
 pip install -e ".[dev]"
 
-# 2. 跑后端测试（当前 399 个）
+# 2. 跑后端测试（使用安装项目依赖的虚拟环境）
 python3 -m pytest tests/ -q
 
 # 3a. 命令行方式：直接对游戏目录下达意图（VFS 预览，不碰原文件）
@@ -123,9 +123,11 @@ pnpm lint && pnpm typecheck && pnpm test --run
 pnpm build && pnpm test:e2e
 ```
 
-工作台流程：填游戏目录 + 一句话意图 → 看文件 DIFF / 操作证据 / 风险档位 → 批准 → 静态验证 + 运行时探针 → 下载 ModPackage（可回滚）。
+工作台流程：填游戏目录 + 明确意图（例如“把第一个 Boss 的攻击力翻倍”）→ 有歧义时选择候选 → 看文件 DIFF / 操作证据 / 风险档位 → 批准 → 静态产物检查 → 下载或撤销 ModPackage。序数依据相对 INI 文件路径及文件内 section 顺序，不代表游戏剧情出场顺序；目标排除、多个不同选择器等未支持语句会明确要求重新描述，不猜测修改。
 
-公开配置使用 `NEXT_PUBLIC_UDIFY_CONFIG`（v1 JSON）与 `NEXT_PUBLIC_UDIFY_API`（仅接受无凭据、根级回环 HTTP URL，可带端口）；非法值或不可用 localStorage 会回退到内存安全配置并在设置面板显示诊断。Playwright E2E 使用可重复的 mock API；真实 FastAPI 链路需按上面的后端 + 前端双进程方式单独验收。
+可使用仓库内合成资产 `tests/fixtures/miu2d/product` 试用。API 的 `--state-dir` 必须在游戏目录外；审阅计划、原文件与下载包均有摘要校验，源文件发生变化时需重新创建任务。澄清与审阅等待状态可以在刷新和后端重启后继续。
+
+公开配置使用 `NEXT_PUBLIC_UDIFY_CONFIG`（v1 JSON）与 `NEXT_PUBLIC_UDIFY_API`（仅接受无凭据、根级回环 HTTP URL，可带端口）；非法值或不可用 localStorage 会回退到内存安全配置并在设置面板显示诊断。`pnpm test:e2e` 使用 mock API；`pnpm exec playwright test -c playwright.real.config.ts` 另起真实 FastAPI 与前端，使用隔离的合成游戏和状态目录，验证下载包字节、澄清、历史与撤销。默认真实验收端口为 13180/18765，可以通过 `REAL_E2E_PORT`/`REAL_E2E_API_PORT` 覆盖；不复用已有服务。
 
 Web 要求 Node.js ≥20.9（CI 使用 Node 22）。Next 15.5.22 当前上游仍声明易受新公告影响的 `sharp ^0.34.3` 与 `postcss 8.4.31`，因此 lockfile 通过定向 pnpm override 固定 Next 的传递依赖为 `sharp 0.35.3`、`postcss 8.5.25`；修改 override 后必须重新运行 frozen install、`pnpm audit:prod`、build 和 E2E。
 

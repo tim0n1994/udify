@@ -10,6 +10,8 @@
 from __future__ import annotations
 
 import io
+import json
+import sqlite3
 import threading
 import time
 import zipfile
@@ -20,7 +22,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 from udify.api.app import create_app
-from udify.core.orchestration import JobStore
+from udify.core.orchestration import JobStatus, JobStore
+from udify.core.orchestration.mod_job import ModJob
 
 
 @pytest.fixture
@@ -135,7 +138,9 @@ class TestJobLifecycle:
         assert client.get(f"/api/v0/jobs/{job_id}/package").status_code == 404
 
     def test_reject_flow(self, client: TestClient, game_root: Path) -> None:
-        r = client.post("/api/v0/jobs", json={"game_root": str(game_root), "intent": "掉落翻倍"})
+        r = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "Boss掉落翻倍"}
+        )
         job_id = r.json()["data"]["job_id"]
         _wait_status(client, job_id, "awaiting_review")
 
@@ -166,14 +171,14 @@ class TestJobLifecycle:
         assert r.json()["error"]["retryable"] is True
 
     def test_approve_before_review_409(self, client: TestClient, game_root: Path) -> None:
-        r = client.post("/api/v0/jobs", json={"game_root": str(game_root), "intent": "翻倍血量"})
-        job_id = r.json()["data"]["job_id"]
-        # 立刻 approve：状态还在 created/perceiving/planning（后台驱动中）
+        job_id = client.app.state.udify.runner.create_job(str(game_root), "Boss血量翻倍").job_id
         r = client.post(f"/api/v0/jobs/{job_id}/approve")
         assert r.status_code == 409
 
     def test_events_incremental_pull(self, client: TestClient, game_root: Path) -> None:
-        r = client.post("/api/v0/jobs", json={"game_root": str(game_root), "intent": "翻倍血量"})
+        r = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "Boss血量翻倍"}
+        )
         job_id = r.json()["data"]["job_id"]
         _wait_status(client, job_id, "awaiting_review")
         all_events = client.get(f"/api/v0/jobs/{job_id}").json()["data"]["events"]
@@ -248,3 +253,177 @@ class TestOpenApi:
             "/api/v0/jobs/{job_id}/rollback",
         }
         assert expected <= paths
+
+
+class TestCanonicalApiSafety:
+    def test_detail_does_not_mix_status_and_newer_events(
+        self, client: TestClient, game_root: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        state = client.app.state.udify
+        job = state.runner.create_job(str(game_root), "Boss血量翻倍")
+        writer = JobStore(state.store.db_path)
+        original_get = state.store.get
+        committed = False
+
+        def get_then_commit(job_id: str) -> ModJob | None:
+            nonlocal committed
+            snapshot = original_get(job_id)
+            if not committed:
+                writer.transition(job, JobStatus.FAILED, event="concurrent_failure")
+                committed = True
+            return snapshot
+
+        monkeypatch.setattr(state.store, "get", get_then_commit)
+        try:
+            detail = client.get(f"/api/v0/jobs/{job.job_id}").json()["data"]
+            assert committed
+            assert detail["job"]["status"] == "created"
+            assert [event["stage"] for event in detail["events"]] == ["created"]
+            assert detail["audit_chain_valid"] is True
+            head = detail["events"][-1]["seq"]
+            next_detail = client.get(f"/api/v0/jobs/{job.job_id}?after_seq={head}").json()["data"]
+            assert next_detail["job"]["status"] == "failed"
+            assert [event["stage"] for event in next_detail["events"]] == ["failed"]
+        finally:
+            writer.close()
+
+    def test_ambiguous_target_clarifies_then_completes(
+        self, client: TestClient, game_root: Path
+    ) -> None:
+        original = (game_root / "characters.ini").read_bytes()
+        response = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "血量翻倍"}
+        )
+        job_id = response.json()["data"]["job_id"]
+        job = _wait_status(client, job_id, "awaiting_clarification")
+        assert (game_root / "characters.ini").read_bytes() == original
+        candidates = job["checkpoint"]["clarification"]["candidates"]
+        assert len(candidates) >= 2
+        selected = next(item["node_id"] for item in candidates if "Boss" in item["display_name"])
+        assert client.post(f"/api/v0/jobs/{job_id}/approve").status_code == 409
+        invalid = client.post(f"/api/v0/jobs/{job_id}/clarify", json={"target_ids": ["unknown"]})
+        assert invalid.status_code == 400
+        assert (
+            client.get(f"/api/v0/jobs/{job_id}").json()["data"]["job"]["status"]
+            == "awaiting_clarification"
+        )
+        response = client.post(f"/api/v0/jobs/{job_id}/clarify", json={"target_ids": [selected]})
+        assert response.status_code == 202
+        _wait_status(client, job_id, "awaiting_review")
+        plan = client.get(f"/api/v0/jobs/{job_id}/plan").json()["data"]
+        assert {op["target_id"] for op in plan["operations"]} == {selected}
+        assert client.post(f"/api/v0/jobs/{job_id}/approve").status_code == 202
+        _wait_status(client, job_id, "completed")
+        assert (game_root / "characters.ini").read_bytes() == original
+        stream = client.get(f"/api/v0/jobs/{job_id}/events")
+        events = client.get(f"/api/v0/jobs/{job_id}").json()["data"]["events"]
+        frames = [frame for frame in stream.text.split("\n\n") if "event: job\n" in frame]
+        assert [json.loads(frame.split("data: ", 1)[1]) for frame in frames] == events
+
+    def test_clarification_can_be_rejected(self, client: TestClient, game_root: Path) -> None:
+        response = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "血量翻倍"}
+        )
+        job_id = response.json()["data"]["job_id"]
+        _wait_status(client, job_id, "awaiting_clarification")
+        response = client.post(f"/api/v0/jobs/{job_id}/reject")
+        assert response.status_code == 200
+        assert response.json()["data"]["status"] == "rejected"
+
+    def test_tampered_audit_blocks_approval(self, client: TestClient, game_root: Path) -> None:
+        response = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "Boss血量翻倍"}
+        )
+        job_id = response.json()["data"]["job_id"]
+        _wait_status(client, job_id, "awaiting_review")
+        with sqlite3.connect(client.app.state.udify.state_dir / "jobs.db") as db:
+            db.execute(
+                "UPDATE job_events SET event = 'tampered' WHERE job_id = ? AND seq = 1", (job_id,)
+            )
+        response = client.post(f"/api/v0/jobs/{job_id}/approve")
+        assert response.status_code == 409
+        assert response.json()["error"]["code"] == "JOB_AUDIT_INVALID"
+        assert (
+            client.get(f"/api/v0/jobs/{job_id}").json()["data"]["job"]["status"]
+            == "awaiting_review"
+        )
+
+    def test_package_denied_when_failed_even_if_path_exists(
+        self, client: TestClient, game_root: Path, tmp_path: Path
+    ) -> None:
+        state = client.app.state.udify
+        job = state.runner.create_job(str(game_root), "Boss血量翻倍")
+        package = tmp_path / "stale.zip"
+        package.write_bytes(b"stale")
+        state.store.transition(
+            job, JobStatus.FAILED, event="failed", checkpoint_update={"package": str(package)}
+        )
+        assert client.get(f"/api/v0/jobs/{job.job_id}/package").status_code == 404
+
+    def test_unhandled_background_failure_is_persisted(
+        self, client: TestClient, game_root: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        def fail(job_id: str) -> None:
+            raise OSError("disk unavailable")
+
+        monkeypatch.setattr(client.app.state.udify.runner, "advance_to_review", fail)
+        response = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "Boss血量翻倍"}
+        )
+        job = _wait_status(client, response.json()["data"]["job_id"], "failed")
+        assert job["error"]["code"] == "JOB_ARTIFACT_IO_FAILED"
+
+    def test_package_tampering_denied(self, client: TestClient, game_root: Path) -> None:
+        response = client.post(
+            "/api/v0/jobs", json={"game_root": str(game_root), "intent": "Boss血量翻倍"}
+        )
+        job_id = response.json()["data"]["job_id"]
+        _wait_status(client, job_id, "awaiting_review")
+        assert client.post(f"/api/v0/jobs/{job_id}/approve").status_code == 202
+        job = _wait_status(client, job_id, "completed")
+        assert job["checkpoint"]["package_sha256"]
+        Path(job["checkpoint"]["package"]).write_bytes(b"corrupted package")
+        response = client.get(f"/api/v0/jobs/{job_id}/package")
+        assert response.status_code == 409
+        assert response.json()["error"]["code"] == "JOB_PACKAGE_INTEGRITY_FAILED"
+
+    def test_compensating_job_is_recovered(self, tmp_path: Path, game_root: Path) -> None:
+        state_dir = tmp_path / "recovery"
+        app = create_app(state_dir)
+        state = app.state.udify
+        job = state.runner.create_job(str(game_root), "Boss血量翻倍")
+        job = state.store.transition(job, JobStatus.FAILED, event="failed")
+        state.store.transition(job, JobStatus.COMPENSATING, event="rollback_started")
+        with TestClient(app) as recovery_client:
+            _wait_status(recovery_client, job.job_id, "rolled_back")
+
+    @pytest.mark.parametrize("action", ["reject", "approve", "rollback"])
+    def test_mutations_respect_exclusive_job_guard(
+        self, client: TestClient, game_root: Path, action: str
+    ) -> None:
+        state = client.app.state.udify
+        job = state.runner.create_job(str(game_root), "Boss血量翻倍")
+        state.runner.advance_to_review(job.job_id)
+        state.inflight.add(job.job_id)
+        try:
+            response = client.post(f"/api/v0/jobs/{job.job_id}/{action}")
+            assert response.status_code == 409
+            assert response.json()["error"]["code"] == "JOB_STATE_BUSY"
+        finally:
+            state.inflight.discard(job.job_id)
+
+    @pytest.mark.parametrize("origin", ["http://localhost:41239", "http://127.0.0.1:49812"])
+    def test_loopback_development_origins(self, client: TestClient, origin: str) -> None:
+        response = client.options(
+            "/api/v0/jobs", headers={"Origin": origin, "Access-Control-Request-Method": "POST"}
+        )
+        assert response.status_code == 200
+        assert response.headers["access-control-allow-origin"] == origin
+
+    def test_remote_origin_denied(self, client: TestClient) -> None:
+        response = client.options(
+            "/api/v0/jobs",
+            headers={"Origin": "http://example.com:3000", "Access-Control-Request-Method": "POST"},
+        )
+        assert response.status_code == 400
+        assert "access-control-allow-origin" not in response.headers

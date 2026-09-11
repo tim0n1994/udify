@@ -41,10 +41,11 @@ export async function call<T extends z.ZodType>(
   path: string,
   schema: T,
   init?: RequestInit,
+  apiBase = BUILD_CONFIG.config.apiBase,
 ): Promise<z.infer<T>> {
   let response: Response;
   try {
-    response = await fetch(`${BUILD_CONFIG.config.apiBase}${path}`, {
+    response = await fetch(`${apiBase}${path}`, {
       ...init,
       headers: { "Content-Type": "application/json", ...init?.headers },
     });
@@ -132,6 +133,10 @@ export const api = {
   listJobs: () => call("/api/v0/jobs", z.array(jobSchema)),
   getJob: (id: string) => call(`/api/v0/jobs/${id}`, jobDetailSchema),
   getPlan: (id: string) => call(`/api/v0/jobs/${id}/plan`, planSchema),
+  clarifyJob: (id: string, targetIds: string[]) =>
+    call(`/api/v0/jobs/${id}/clarify`, jobSchema, {
+      method: "POST", body: JSON.stringify({ target_ids: targetIds }),
+    }),
   approve: (id: string) => call(`/api/v0/jobs/${id}/approve`, jobSchema, { method: "POST" }),
   reject: (id: string, reason: string) =>
     call(`/api/v0/jobs/${id}/reject`, jobSchema, {

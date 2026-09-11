@@ -84,6 +84,13 @@ class Miu2dAdapter:
         npc = NPCScriptParser()
         lua = LuaParser()
         extractor = ToolRunRef(tool_id="miu2d_parsers", version=self._parser_version)
+        source_paths = sorted(
+            str((Path(root) / filename).relative_to(game_root))
+            for root, _, files in _walk(game_root)
+            for filename in files
+            if Path(filename).suffix.lower() == ".ini"
+        )
+        source_indices = {path: index for index, path in enumerate(source_paths)}
 
         for root, _, files in _walk(game_root):
             for filename in files:
@@ -93,7 +100,10 @@ class Miu2dAdapter:
                 before = len(graph.nodes)
 
                 if ext == ".ini":
-                    ini.parse(file_path, rel_path, graph)
+                    parsed_nodes = ini.parse(file_path, rel_path, graph)
+                    for section_index, node in enumerate(parsed_nodes):
+                        node.properties["db_index"] = [source_indices[rel_path], section_index]
+                        node.properties["source_order_domain"] = "relative_path_then_ini_section"
                 elif ext == ".obj":
                     obj.parse(file_path, rel_path, graph)
                 elif ext in (".txt", ".npc"):

@@ -80,14 +80,15 @@ def test_explicit_player_target():
     assert "hero_01" in ids
 
 
-def test_high_hp_boosts_score():
+def test_hp_difference_does_not_resolve_unspecified_boss():
     g = _graph(
         ContentNode(id="wb", type=NodeType.CHARACTER, properties={"is_boss": True, "hp": 50000}),
         ContentNode(id="sb", type=NodeType.CHARACTER, properties={"is_boss": True, "hp": 500}),
     )
     res = resolve_targets(g, "Boss")
-    assert res.chosen is not None
-    assert res.chosen.node_id == "wb"
+    assert res.chosen is None
+    assert res.ambiguous is True
+    assert {candidate.node_id for candidate in res.candidates} == {"wb", "sb"}
 
 
 def test_ambiguous_flag_when_tie():

@@ -26,18 +26,18 @@ export function AuditTreatySeal({
   const latest = events.at(-1);
   return (
     <span
-      className="treaty-seal inline-flex items-center gap-2 px-2.5 py-1 font-mono text-[10px] tracking-widest"
-      data-valid={valid !== false}
+      className={`${valid === null ? "border border-edge text-muted" : "treaty-seal"} inline-flex items-center gap-2 px-2.5 py-1 font-mono text-[10px] tracking-widest`}
+      data-valid={valid === true ? "true" : valid === false ? "false" : "unknown"}
       role="status"
       aria-label={
-        valid === false
+        valid === null ? `任务 ${jobId} 审计链尚未校验` : valid === false
           ? `任务 ${jobId} 审计链校验失败`
           : `任务 ${jobId} 审计链完整，${events.length} 条事件`
       }
     >
       <Fingerprint className="h-3 w-3" aria-hidden />
       <span>
-        {valid === false ? "链失配" : "链完整"} · {events.length} 事件
+        {valid === null ? "尚未校验" : valid === false ? "链失配" : "链完整"} · {events.length} 事件
       </span>
       {latest ? <span aria-hidden>#{latest.seq} {latest.record_hash.slice(0, 8)}</span> : null}
     </span>

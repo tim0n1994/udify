@@ -66,7 +66,8 @@ class VirtualFileSystem:
         # 2. 从实际文件系统读取
         full_path = self.base_path / path
         if full_path.exists():
-            content = full_path.read_text(encoding="utf-8")
+            with full_path.open(encoding="utf-8", newline="") as source:
+                content = source.read()
             # 缓存到 VFS
             self._files[path] = VFSNode(path=path, content=content)
             self._originals[path] = content
@@ -101,7 +102,8 @@ class VirtualFileSystem:
         full_path = self.base_path / path
         if full_path.exists():
             # 读取原始内容备份
-            self._originals[path] = full_path.read_text(encoding="utf-8")
+            with full_path.open(encoding="utf-8", newline="") as source:
+                self._originals[path] = source.read()
             self._files[path] = VFSNode(path=path, is_deleted=True)
             return True
 

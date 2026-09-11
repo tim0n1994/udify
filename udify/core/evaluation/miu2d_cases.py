@@ -77,14 +77,14 @@ def get_miu2d_golden_cases() -> list[BenchmarkCase]:
         # 4. 物品掉落率提高
         _case(
             "04-drop-rate-up",
-            "提高Boss掉落率",
+            "Boss 掉落率翻倍",
             expected=[{"key": "DropRate"}],
             constraints=["factor <= 10.0"],
         ),
         # 5. 治疗道具削弱
         _case(
             "05-potion-nerf",
-            "削弱治疗道具效果",
+            "Potion Value 减半",
             expected=[{"key": "Value"}],
             constraints=["factor >= 0.1"],
         ),

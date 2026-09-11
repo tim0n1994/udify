@@ -130,6 +130,11 @@ class JobStore:
 
     # ------------------------------------------------------------------ jobs
 
+    @property
+    def db_path(self) -> Path:
+        """Return the storage path so callers can prevent writes into source content."""
+        return self._db_path
+
     def save(self, job: ModJob) -> None:
         """插入或整行覆盖 job 快照。"""
         with self._lock:
@@ -183,6 +188,19 @@ class JobStore:
                 (limit, offset),
             ).fetchall()
         return [self._row_to_job(r) for r in rows]
+
+    def read_detail(
+        self, job_id: str, after_seq: int = 0
+    ) -> tuple[ModJob | None, list[JobEvent], bool]:
+        """Read the job, event cursor, and audit result from one SQLite snapshot."""
+        with self._lock:
+            self._ensure_open_unlocked()
+            with self._conn:
+                self._conn.execute("BEGIN")
+                job = self.get(job_id)
+                events = self.events(job_id, after_seq)
+                valid = self.verify_chain(job_id)
+                return job, events, valid
 
     def list_by_status(self, statuses: frozenset[JobStatus]) -> list[ModJob]:
         if not statuses:

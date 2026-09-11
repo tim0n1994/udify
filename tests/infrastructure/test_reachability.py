@@ -167,10 +167,11 @@ class TestRealRepoCalibration:
         orphan_modules, _ = scan
         assert module not in orphan_modules
 
-    def test_iter7_wired_symbol_run_by_engine(self, scan: tuple[set[str], set[str]]) -> None:
-        """M3-PR2 把引擎分派接进 job_runner，报告从此带 engine_coverage。"""
+    def test_static_package_path_does_not_execute_original_game(
+        self, scan: tuple[set[str], set[str]]
+    ) -> None:
         _, orphan_symbols = scan
-        assert "udify.core.validation.runtime_probe:run_by_engine" not in orphan_symbols
+        assert "udify.core.validation.runtime_probe:run_by_engine" in orphan_symbols
 
     def test_known_orphan_symbol_still_detected(self, scan: tuple[set[str], set[str]]) -> None:
         """正对照：模块可达但方法是死的——符号层的存在理由。

@@ -167,7 +167,7 @@ def gate_sandbox(ctx: GateContext) -> GateResult:
             name=GateName.SANDBOX,
             lifecycle=GateLifecycle.DECIDED,
             verdict=GateVerdict.PASS,
-            evidence="sandbox-exec unavailable; scripts not executed (static-only)",
+            evidence="scripts not executed; no sandbox execution claimed (static-only)",
             delivery_tier=DeliveryTier.STATIC_ONLY,
         )
     # No scripts to run -> sandbox gate is trivially satisfied at full tier.
@@ -184,7 +184,7 @@ def gate_runtime_validation(ctx: GateContext) -> GateResult:
     """Check the runtime validation report."""
     validation_passed = getattr(ctx, "validation_passed", None)
     validation_skipped = getattr(ctx, "validation_skipped", False)
-    if validation_passed is True:
+    if validation_passed is True and not validation_skipped:
         return GateResult(
             name=GateName.RUNTIME_VALIDATION,
             lifecycle=GateLifecycle.DECIDED,
@@ -212,6 +212,14 @@ def gate_runtime_validation(ctx: GateContext) -> GateResult:
 def gate_dependency(ctx: GateContext) -> GateResult:
     """Check for dependency conflicts before install."""
     conflicts = getattr(ctx, "dependency_conflicts", [])
+    if getattr(ctx, "package_only", False):
+        return GateResult(
+            name=GateName.DEPENDENCY,
+            lifecycle=GateLifecycle.DECIDED,
+            verdict=GateVerdict.PASS,
+            evidence="installation dependencies not evaluated: package-only delivery",
+            delivery_tier=DeliveryTier.UNVERIFIED_ARTIFACT,
+        )
     has_cycle = any(getattr(c, "kind", None) == "CYCLE" for c in conflicts)
     has_missing = any(getattr(c, "kind", None) == "MISSING" for c in conflicts)
     if has_cycle or has_missing:

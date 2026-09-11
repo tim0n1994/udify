@@ -20,12 +20,32 @@ from pathlib import Path
 from typing import Any
 
 from udify.core.adapters.miu2d_world import GameWorldGraphBuilder
+from udify.core.cognition.target_resolver import resolve_targets_grounded
 from udify.core.execution.patch_executor import PatchExecutor
 from udify.core.execution.vfs import VirtualFileSystem
 from udify.core.planning.action_schemas import ActionKind, ActionSchemaRegistry
 from udify.core.planning.patch_synthesizer import PatchSynthesizer, PlannedAction
 from udify.models.cdl_patch import CDLPatch
-from udify.models.content_graph import ContentGraph
+from udify.models.content_graph import ContentGraph, ContentNode
+
+
+class IntentClarificationError(ValueError):
+    """A plan cannot proceed until the user resolves its target or numeric instruction.
+
+    Attributes:
+        question: User-facing question persisted by the job runner.
+        candidates: Current legal choices with node_id and display_name keys.
+        reason: Stable reason code for the review contract.
+    """
+
+    def __init__(self, question: str, candidates: list[dict[str, str]], reason: str) -> None:
+        super().__init__(question)
+        self.question = question
+        self.candidates = candidates
+        self.reason = reason
+
+
+IntentClarification = IntentClarificationError
 
 
 @dataclass
@@ -74,14 +94,17 @@ class Miu2dClosedLoop:
         return self.world_builder.build(self.game_root)
 
     def plan(
-        self, graph: ContentGraph, intent: str
+        self, graph: ContentGraph, intent: str, *, target_ids: list[str] | None = None
     ) -> tuple[list[PlannedAction], CDLPatch | None, list[str]]:
         """阶段 2：意图 → 动作 → file_patch 计划。
 
         Returns:
             (actions, patch, errors)。patch 为 None 时 errors 非空。
+
+        Raises:
+            IntentClarification: 目标歧义、选择越界或数值指令不明确。
         """
-        actions = self._intent_to_actions(intent, graph)
+        actions = self._intent_to_actions(intent, graph, target_ids=target_ids)
         if not actions:
             return [], None, ["无法从意图推导出可应用的动作"]
 
@@ -123,7 +146,11 @@ class Miu2dClosedLoop:
             return result
         result.graph = graph
 
-        actions, patch, plan_errors = self.plan(graph, intent)
+        try:
+            actions, patch, plan_errors = self.plan(graph, intent)
+        except IntentClarification as exc:
+            result.errors.append(exc.question)
+            return result
         result.actions = actions
         if patch is None:
             result.errors.extend(plan_errors)
@@ -140,51 +167,17 @@ class Miu2dClosedLoop:
         result.success = len(result.errors) == 0
         return result
 
-    def _intent_to_actions(self, intent: str, graph: ContentGraph) -> list[PlannedAction]:
+    def _intent_to_actions(
+        self, intent: str, graph: ContentGraph, *, target_ids: list[str] | None = None
+    ) -> list[PlannedAction]:
         """把自然语言意图映射为针对语义图节点的 PlannedAction 列表。"""
         actions: list[PlannedAction] = []
-        intent_lower = intent.lower()
-
-        # 解析"翻倍/×N"等倍数
-        factor = 2.0
-        m = re.search(r"(\d+(?:\.\d+)?)\s*倍", intent)
-        if m:
-            factor = float(m.group(1))
-        elif "翻倍" in intent:
-            factor = 2.0
-        elif "减半" in intent:
-            factor = 0.5
-
-        for pattern, schema_name, defaults in _INTENT_PATTERNS:
-            if re.search(pattern, intent_lower):
-                params = dict(defaults)
-                params["factor"] = factor
-                # 找到目标节点（带匹配标签 + 数值类别）
-                for node in graph.nodes:
-                    if not node.semantic_tags:
-                        continue
-                    # schema 要求的标签
-                    applicable = self.schemas.find_applicable(
-                        tuple(node.semantic_tags),
-                        numeric_kind=params.get("numeric_kind"),
-                        kind=ActionKind.NUMERIC_SCALE,
-                    )
-                    target_schema = next((s for s in applicable if s.name == schema_name), None)
-                    if target_schema is None:
-                        continue
-                    # 约束检查
-                    if not self._check_constraint(factor, target_schema.constraints):
-                        # factor 超出 schema 约束（如 >5.0），跳过该节点
-                        continue
-                    actions.append(
-                        PlannedAction(
-                            schema_name=schema_name,
-                            target_node_id=node.id,
-                            params=params,
-                            reason=f"意图「{intent}」→ {schema_name} factor={factor}",
-                        )
-                    )
-                break  # 一个意图模式匹配即可
+        if any(re.search(pattern, intent, re.I) for pattern, _, _ in _INTENT_PATTERNS):
+            return self._numeric_actions(intent, graph, target_ids)
+        if target_ids is not None:
+            raise IntentClarification(
+                "此操作不支持目标选择，请重新描述修改。", [], "unsupported_selection"
+            )
 
         # 内容新增类意图（优先于 DSL，因为 "新增商店物品" 应产生 ADD）
         if not actions:
@@ -202,6 +195,213 @@ class Miu2dClosedLoop:
             actions.extend(script_actions)
 
         return actions
+
+    def _numeric_actions(
+        self, intent: str, graph: ContentGraph, target_ids: list[str] | None
+    ) -> list[PlannedAction]:
+        clauses = re.split(r"[,，;；。]|\band\b|同时|并且", intent, flags=re.I)
+        exclusion = bool(re.search(r"除了|除外|不包括|排除|\bexcept\b|\bexclud\w*", intent, re.I))
+        for clause in clauses:
+            negative = re.search(
+                r"不要|不改|别改|保持|不变|do\s+not|don't|unchanged|\bkeep\b", clause, re.I
+            )
+            if negative is None:
+                continue
+            remaining = clause[negative.end() :]
+            mentions_target = any(
+                node.name and re.search(re.escape(node.name), remaining, re.I)
+                for node in graph.nodes
+            ) or bool(
+                re.search(r"boss|首领|主角|hero|player|玩家|敌人|enemy|怪物", remaining, re.I)
+            )
+            preserves_field = any(
+                re.search(pattern, remaining, re.I) for pattern, _, _ in _INTENT_PATTERNS
+            )
+            exclusion = exclusion or mentions_target or not preserves_field
+        if exclusion:
+            raise IntentClarification(
+                "暂不支持目标排除语句，请明确列出需要修改的目标后重新描述。",
+                [],
+                "unsupported_target_exclusion",
+            )
+        if resolve_targets_grounded(graph, intent).reason == "unsupported_compound_selector":
+            raise IntentClarification(
+                "请一次指定一个目标选择条件，或同一类别的全部目标。",
+                [],
+                "unsupported_compound_selector",
+            )
+        active = [
+            clause
+            for clause in clauses
+            if not re.search(
+                r"不要|不改|别改|保持|不变|do\s+not|don't|unchanged|\bkeep\b", clause, re.I
+            )
+        ]
+        instruction = " ".join(active)
+        if re.search(
+            r"[-−]\s*\d|(?:增加|减少)\s*\d.*倍|删除|新增|添加|\b(?:delete|remove|add)\b",
+            instruction,
+            re.I,
+        ):
+            raise IntentClarification(
+                "请把数值缩放和其他修改分别描述，并使用明确的目标倍数。",
+                [],
+                "unsupported_numeric_instruction",
+            )
+        mutation = re.sub(
+            r"(?:血量|生命|hp|攻击|attack)\s*(?:最[高低多少]|max|min)|"
+            r"(?:highest|lowest|max|min)\s*(?:hp|health|attack)",
+            "",
+            instruction,
+            flags=re.I,
+        )
+        matches = [
+            (schema, defaults)
+            for pattern, schema, defaults in _INTENT_PATTERNS
+            if re.search(pattern, mutation, re.I)
+        ]
+        if len(matches) != 1:
+            raise IntentClarification(
+                "请一次指定一个要修改的数值，以及明确的倍数。",
+                [],
+                "unsupported_numeric_instruction",
+            )
+        for clause in clauses:
+            if clause in active:
+                continue
+            if any(
+                schema == matches[0][0] and re.search(pattern, clause, re.I)
+                for pattern, schema, _ in _INTENT_PATTERNS
+            ):
+                raise IntentClarification(
+                    "同一数值同时要求修改和保持不变，请明确需要保留的约束。",
+                    [],
+                    "conflicting_numeric_constraint",
+                )
+        factors = [
+            float(a or b)
+            for a, b in re.findall(
+                r"(\d+(?:\.\d+)?)\s*倍|(?:\bx|×|\*)\s*(\d+(?:\.\d+)?)", instruction, re.I
+            )
+        ]
+        if re.search(r"翻倍|\bdouble\b", instruction, re.I):
+            factors.append(2.0)
+        if re.search(r"减半|\bhalf\b|\bhalve\b", instruction, re.I):
+            factors.append(0.5)
+        if len(factors) != 1:
+            raise IntentClarification(
+                "请指定一个明确倍数，例如翻倍、减半或 1.5 倍。",
+                [],
+                "unsupported_numeric_instruction",
+            )
+        factor = factors[0]
+        schema_name, defaults = matches[0]
+        params = {**defaults, "factor": factor}
+        applicable = {}
+        for node in graph.nodes:
+            schemas = self.schemas.find_applicable(
+                tuple(node.semantic_tags),
+                numeric_kind=params.get("numeric_kind"),
+                kind=ActionKind.NUMERIC_SCALE,
+            )
+            schema = next((item for item in schemas if item.name == schema_name), None)
+            if schema is not None:
+                applicable[node.id] = (node, schema)
+        resolution = resolve_targets_grounded(graph, instruction)
+        target_description = instruction
+        if not resolution.candidates and not re.search(
+            r"boss|首领|头目|主角|hero|player|玩家|敌人|enemy|enemies|怪物", instruction, re.I
+        ):
+            prefixes = [
+                re.split(r"不要|不改|别改|do\s+not|don't", clause, flags=re.I)[0]
+                for clause in clauses
+                if clause not in active
+                and re.search(r"不要|不改|别改|do\s+not|don't", clause, re.I)
+            ]
+            target_description = " ".join(prefixes + [instruction])
+            resolution = resolve_targets_grounded(graph, target_description)
+        candidate_ids = {
+            candidate.node_id for candidate in resolution.candidates
+        } & applicable.keys()
+        if not resolution.candidates and not re.search(
+            r"boss|首领|头目|主角|hero|player|玩家|敌人|enemy|enemies|怪物",
+            target_description,
+            re.I,
+        ):
+            candidate_ids = set(applicable)
+        candidates = [
+            {"node_id": node.id, "display_name": node.name or node.id}
+            for node in graph.nodes
+            if node.id in candidate_ids
+        ]
+        if target_ids is not None:
+            if (
+                not target_ids
+                or len(set(target_ids)) != len(target_ids)
+                or not set(target_ids) <= candidate_ids
+            ):
+                raise IntentClarification(
+                    "所选目标已失效或不符合意图，请重新选择。", candidates, "invalid_selection"
+                )
+            chosen_ids = set(target_ids)
+        elif resolution.ambiguous or not resolution.chosen_ids():
+            raise IntentClarification(
+                "请选择要修改的目标。", candidates, resolution.reason or "target_required"
+            )
+        else:
+            chosen_ids = set(resolution.chosen_ids())
+            if not chosen_ids <= candidate_ids:
+                raise IntentClarification(
+                    "目标没有可修改的指定数值。", candidates, "unsupported_target"
+                )
+        actions = []
+        for node, schema in applicable.values():
+            if node.id not in chosen_ids:
+                continue
+            if not self._check_constraint(factor, schema.constraints):
+                raise IntentClarification(
+                    "倍数超出该数值允许的范围。", candidates, "factor_out_of_range"
+                )
+            numeric_key = self._requested_numeric_key(node, mutation, str(params["numeric_kind"]))
+            if numeric_key is None:
+                raise IntentClarification(
+                    f"{node.name} 缺少唯一可识别的目标数值，请明确字段。",
+                    candidates,
+                    "missing_numeric_property",
+                )
+            actions.append(
+                PlannedAction(
+                    schema_name=schema_name,
+                    target_node_id=node.id,
+                    params={**params, "numeric_key": numeric_key},
+                    reason=f"意图「{intent}」→ {schema_name} factor={factor}; "
+                    + "; ".join(
+                        reason
+                        for candidate in resolution.candidates
+                        if candidate.node_id == node.id
+                        for reason in candidate.reasons
+                    ),
+                )
+            )
+        return actions
+
+    def _requested_numeric_key(self, node: ContentNode, instruction: str, kind: str) -> str | None:
+        from udify.core.perception.semantic_lifter import _NUMERIC_ATTRIBUTES, _norm
+
+        numeric_keys = [
+            key
+            for key, value in node.properties.items()
+            if isinstance(value, (int, float)) and not isinstance(value, bool)
+        ]
+        explicit_keys = [
+            key
+            for key in numeric_keys
+            if re.search(r"(?<![a-z0-9_])" + re.escape(key) + r"(?![a-z0-9_])", instruction, re.I)
+        ]
+        if explicit_keys:
+            return explicit_keys[0] if len(explicit_keys) == 1 else None
+        matching = [key for key in numeric_keys if _NUMERIC_ATTRIBUTES.get(_norm(key)) == kind]
+        return matching[0] if len(matching) == 1 else None
 
     def _intent_to_dsl_actions(self, intent: str, graph: ContentGraph) -> list[PlannedAction]:
         """把奖励/技能/对话类意图映射为 DSL 命令动作。"""
@@ -307,7 +507,7 @@ class Miu2dClosedLoop:
                 )
         return actions
 
-    def _first_tagged_node(self, graph: ContentGraph, tags: tuple[str, ...]):
+    def _first_tagged_node(self, graph: ContentGraph, tags: tuple[str, ...]) -> ContentNode | None:
         """找第一个带指定标签的节点。"""
         for node in graph.nodes:
             if any(t in node.semantic_tags for t in tags):
@@ -326,4 +526,4 @@ class Miu2dClosedLoop:
         return True
 
 
-__all__ = ["Miu2dClosedLoop", "Miu2dPlanResult"]
+__all__ = ["IntentClarification", "Miu2dClosedLoop", "Miu2dPlanResult"]

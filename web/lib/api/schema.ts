@@ -14,6 +14,7 @@ export const jobStatusSchema = z.enum([
   "created",
   "perceiving",
   "planning",
+  "awaiting_clarification",
   "awaiting_review",
   "applying",
   "validating",
@@ -125,8 +126,35 @@ export const probeResultSchema = z.object({
 });
 
 export const reportSchema = z.object({
+  engine_coverage: z.string().optional(),
+  delivery: z.object({
+    kind: z.literal("package"),
+    installed: z.literal(false),
+    tier: z.enum(["STATIC_ONLY", "UNVERIFIED_ARTIFACT", "VERIFIED_ARTIFACT"]),
+    reason: z.string(),
+  }).optional(),
+  artifact_validation: z.object({
+    passed: z.boolean(),
+    checks: z.array(z.object({ name: z.string(), passed: z.boolean(), detail: z.string() })),
+  }).optional(),
+  artifacts: z.array(z.object({ name: z.string(), sha256: z.string() })).optional(),
+  approval: z.object({
+    plan_sha256: z.string(),
+    patch_sha256: z.string(),
+    source_files: z.array(z.object({ name: z.string(), sha256: z.string() })),
+  }).optional(),
+  gate_verdict: z.object({
+    final_tier: z.number(),
+    final_tier_reason: z.string(),
+    gates: z.array(z.object({
+      name: z.string(), lifecycle: z.string(), verdict: z.string(),
+      evidence: z.unknown(), delivery_tier: z.number(),
+    })),
+  }).optional(),
   static_validation: staticValidationSchema,
   probe: z.object({
+    skipped: z.boolean().optional(),
+    reason: z.string().optional(),
     passed: z.boolean(),
     game_started: z.boolean(),
     state_readable: z.boolean(),
@@ -136,6 +164,19 @@ export const reportSchema = z.object({
   }),
   graph_checksum_before: z.string().nullable(),
   graph_checksum_applied_on: z.string(),
+});
+
+export const clarificationSchema = z.object({
+  question: z.string(),
+  candidates: z.array(z.object({ node_id: z.string().min(1), display_name: z.string() })),
+  reason: z.string(),
+  graph_checksum: z.string(),
+});
+
+export const rollbackEvidenceSchema = z.object({
+  checksum_intact: z.boolean().nullable(),
+  source_integrity_reason: z.string(),
+  package_revoked: z.string().nullable(),
 });
 
 export const healthSchema = z.object({

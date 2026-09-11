@@ -32,6 +32,7 @@ class JobStatus(StrEnum):
     CREATED = "created"
     PERCEIVING = "perceiving"
     PLANNING = "planning"
+    AWAITING_CLARIFICATION = "awaiting_clarification"
     AWAITING_REVIEW = "awaiting_review"
     APPLYING = "applying"
     VALIDATING = "validating"
@@ -49,6 +50,7 @@ _PROGRESSING: frozenset[JobStatus] = frozenset(
         JobStatus.CREATED,
         JobStatus.PERCEIVING,
         JobStatus.PLANNING,
+        JobStatus.AWAITING_CLARIFICATION,
         JobStatus.AWAITING_REVIEW,
         JobStatus.APPLYING,
         JobStatus.VALIDATING,
@@ -59,7 +61,12 @@ _PROGRESSING: frozenset[JobStatus] = frozenset(
 ALLOWED_TRANSITIONS: dict[JobStatus, frozenset[JobStatus]] = {
     JobStatus.CREATED: frozenset({JobStatus.PERCEIVING, JobStatus.FAILED}),
     JobStatus.PERCEIVING: frozenset({JobStatus.PLANNING, JobStatus.FAILED}),
-    JobStatus.PLANNING: frozenset({JobStatus.AWAITING_REVIEW, JobStatus.FAILED}),
+    JobStatus.PLANNING: frozenset(
+        {JobStatus.AWAITING_REVIEW, JobStatus.AWAITING_CLARIFICATION, JobStatus.FAILED}
+    ),
+    JobStatus.AWAITING_CLARIFICATION: frozenset(
+        {JobStatus.PLANNING, JobStatus.REJECTED, JobStatus.FAILED}
+    ),
     JobStatus.AWAITING_REVIEW: frozenset(
         {JobStatus.APPLYING, JobStatus.REJECTED, JobStatus.FAILED}
     ),

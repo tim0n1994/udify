@@ -2,6 +2,11 @@ import { makeJob } from "@/test/fixtures";
 import { buildHeatCells, dominantCell } from "./heat";
 
 describe("heat matrix", () => {
+  it("keeps persisted clarification tasks visible as a waiting gate", () => {
+    const job = makeJob({ status: "awaiting_clarification" });
+    expect(buildHeatCells([job]).find((cell) => cell.status === "awaiting_clarification"))
+      .toMatchObject({ label: "待确认目标", tone: "gate", jobs: [job] });
+  });
   it("groups jobs by status in canonical order", () => {
     const cells = buildHeatCells([
       makeJob({ job_id: "a", status: "completed" }),
