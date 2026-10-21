@@ -10,6 +10,7 @@
 
 from __future__ import annotations
 
+import threading
 from pathlib import Path
 
 import pytest
@@ -165,6 +166,30 @@ class TestJobStore:
         store.save(job)
         with pytest.raises(InvalidTransitionError):
             store.transition(job, JobStatus.COMPLETED, event="nope")
+
+    def test_close_waits_for_inflight_write(self, store: JobStore) -> None:
+        # 回归：API 关停时后台线程仍在写库，close() 若不等锁会在 execute 中途关连接 → 段错误
+        holding = threading.Event()
+        release = threading.Event()
+
+        def hold_lock() -> None:
+            with store._lock:
+                holding.set()
+                release.wait(timeout=5)
+
+        writer = threading.Thread(target=hold_lock)
+        writer.start()
+        holding.wait(timeout=5)
+        closer = threading.Thread(target=store.close)
+        closer.start()
+        closer.join(timeout=0.2)
+        assert closer.is_alive(), (
+            "close() must not close the connection while a write holds the lock"
+        )
+        release.set()
+        closer.join(timeout=5)
+        writer.join(timeout=5)
+        assert not closer.is_alive()
 
 
 # === 4A-4 JobRunner 全流程 ====================================================
