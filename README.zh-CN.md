@@ -43,7 +43,7 @@ Udify 把 AI 魔改当成**编译器问题，而不是聊天问题**：
 
 ```mermaid
 flowchart TD
-    A["意图<br/>“让Boss更难”"] --> B["感知<br/>把配置和脚本<br/>解析成内容图谱"]
+    A["意图<br/>让Boss更难"] --> B["感知<br/>把配置和脚本<br/>解析成内容图谱"]
     B --> C["接地与规划<br/>指代消解<br/>MCTS 搜索"]
     C --> D["CDL Patch<br/>带类型的操作 + 证据"]
     D --> E["预览<br/>VFS Diff"]
