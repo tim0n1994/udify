@@ -6,6 +6,24 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## English Overview
+
+**Udify lets non-programmers mod games by describing what they want in plain language — safely, verifiably, and reversibly.**
+
+Instead of letting an LLM rewrite files directly, Udify turns an intent like *"double the boss's HP"* into a pipeline:
+
+1. **Perceive** — parse the game's configs/scripts into a content graph where every node carries source spans and provenance.
+2. **Plan** — ground the intent against that graph and search for edits with MCTS (LLMs plug in as the value function).
+3. **Patch** — emit a structured, reversible **CDL Patch** with evidence for every operation, never a blind file rewrite.
+4. **Review & verify** — preview in a virtual file system, pass a human approval gate, then run static validation and a headless runtime probe.
+5. **Package** — export a rollback-safe ModPackage.
+
+All external tool calls go through a **Secure Tool Gateway** (R0–R4 risk tiers, path allowlists, hash-chained audit log).
+
+**Status:** end-to-end loop working for the miu2d engine (CLI + local API + Next.js review workbench). ~24k lines of Python, 395 passing tests, and **UdifyBench**, a 10-case golden benchmark for agentic content modification. Next: RPG Maker / Godot / Unity adapters and a larger public benchmark.
+
+Quick start: `pip install -e ".[dev]" && python3 -m pytest tests/ -q` — see [快速开始](#快速开始5-分钟) below.
+
 ---
 
 ## 这是什么？
