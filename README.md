@@ -6,9 +6,10 @@
 
 **Intent-driven game modding — plain language in, a verified, reversible, evidence-backed patch out.**
 
+[![CI](https://github.com/tim0n1994/udify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tim0n1994/udify/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-395%20passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-396%20passing-brightgreen.svg)](tests/)
 [![UdifyBench](https://img.shields.io/badge/UdifyBench-10%20golden%20cases-8A2BE2.svg)](benchmarks/miu2d/)
 [![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](#roadmap)
 
@@ -69,7 +70,7 @@ git clone https://github.com/tim0n1994/udify.git
 cd udify
 pip install -e ".[dev]"
 
-# Run the test suite (395 tests, ~2s)
+# Run the test suite (396 tests, ~2s)
 python3 -m pytest tests/ -q
 ```
 
