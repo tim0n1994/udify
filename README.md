@@ -42,7 +42,7 @@ Udify treats AI modding as a **compiler problem, not a chat problem**:
 ## How it works
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["Intent<br/>'make the boss harder'"] --> B["Perceive<br/>parse configs and scripts<br/>into a content graph"]
     B --> C["Ground and Plan<br/>resolve references<br/>MCTS search"]
     C --> D["CDL Patch<br/>typed ops + evidence"]
