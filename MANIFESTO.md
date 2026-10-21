@@ -3,7 +3,7 @@
 # 改变的权利
 # The Right to Change
 
-**机器负责可能，人类负责想要。**
+**机器负责可能，人类负责想要。**<br/>
 **Machines make it possible. Humans make it wanted.**
 
 [中文](#中文) · [English](#english)
@@ -72,7 +72,7 @@ one where only the few create, and one where machines create for everyone.
 
 <div align="center">
 
-**意志、好奇、品味——这三样，不外包。**
+**意志、好奇、品味——这三样，不外包。**<br/>
 **Will. Wonder. Taste. Never outsourced.**
 
 [Udify](README.md) · [hi@udify.games](mailto:hi@udify.games)
