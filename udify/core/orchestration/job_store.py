@@ -152,30 +152,33 @@ class JobStore:
             )
 
     def get(self, job_id: str) -> ModJob | None:
-        row = self._conn.execute(
-            "SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            " artifacts_dir, error_json, checkpoint_json FROM jobs WHERE job_id = ?",
-            (job_id,),
-        ).fetchone()
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                " artifacts_dir, error_json, checkpoint_json FROM jobs WHERE job_id = ?",
+                (job_id,),
+            ).fetchone()
         return self._row_to_job(row) if row else None
 
     def list_jobs(self, limit: int = 50, offset: int = 0) -> list[ModJob]:
-        rows = self._conn.execute(
-            "SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            " artifacts_dir, error_json, checkpoint_json FROM jobs"
-            " ORDER BY created_at DESC LIMIT ? OFFSET ?",
-            (limit, offset),
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                " artifacts_dir, error_json, checkpoint_json FROM jobs"
+                " ORDER BY created_at DESC LIMIT ? OFFSET ?",
+                (limit, offset),
+            ).fetchall()
         return [self._row_to_job(r) for r in rows]
 
     def list_by_status(self, statuses: frozenset[JobStatus]) -> list[ModJob]:
         placeholders = ",".join("?" for _ in statuses)
-        rows = self._conn.execute(
-            f"SELECT job_id, game_root, intent, status, created_at, updated_at,"
-            f" artifacts_dir, error_json, checkpoint_json FROM jobs"
-            f" WHERE status IN ({placeholders}) ORDER BY created_at",
-            tuple(s.value for s in statuses),
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                f"SELECT job_id, game_root, intent, status, created_at, updated_at,"
+                f" artifacts_dir, error_json, checkpoint_json FROM jobs"
+                f" WHERE status IN ({placeholders}) ORDER BY created_at",
+                tuple(s.value for s in statuses),
+            ).fetchall()
         return [self._row_to_job(r) for r in rows]
 
     @staticmethod
@@ -226,11 +229,12 @@ class JobStore:
         return JobEvent(job_id, seq, ts, stage, event, payload, prev, record_hash)
 
     def events(self, job_id: str, after_seq: int = 0) -> list[JobEvent]:
-        rows = self._conn.execute(
-            "SELECT job_id, seq, ts, stage, event, payload_json, prev_hash, record_hash"
-            " FROM job_events WHERE job_id = ? AND seq > ? ORDER BY seq",
-            (job_id, after_seq),
-        ).fetchall()
+        with self._lock:
+            rows = self._conn.execute(
+                "SELECT job_id, seq, ts, stage, event, payload_json, prev_hash, record_hash"
+                " FROM job_events WHERE job_id = ? AND seq > ? ORDER BY seq",
+                (job_id, after_seq),
+            ).fetchall()
         return [JobEvent(r[0], r[1], r[2], r[3], r[4], json.loads(r[5]), r[6], r[7]) for r in rows]
 
     def verify_chain(self, job_id: str) -> bool:
@@ -270,7 +274,10 @@ class JobStore:
         return new_job
 
     def close(self) -> None:
-        self._conn.close()
+        # 必须持锁：后台线程可能正在 execute，并发 close 会让 sqlite3 段错误；
+        # 持锁后关闭，之后的写入只会抛 ProgrammingError（由调用方记录）。
+        with self._lock:
+            self._conn.close()
 
 
 __all__ = ["JobEvent", "JobStore"]
