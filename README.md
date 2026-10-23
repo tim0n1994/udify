@@ -2,9 +2,9 @@
 
 # Udify
 
-### Mod any game by describing what you want.
+### Tell a game what to change. Approve the patch before it touches your files.
 
-**Intent-driven game modding — plain language in, a verified, reversible, evidence-backed patch out.**
+**Intent-driven game modding: plain language in, an evidence-backed, reversible patch out.**
 
 [![CI](https://github.com/tim0n1994/udify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tim0n1994/udify/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -23,7 +23,9 @@
 udify --game-root ./my-game mod "Make the boss harder, but keep the map reachable"
 ```
 
-Udify reads the game, finds the boss, plans the edit, shows you **every changed line and why**, waits for your approval, validates the result, and hands you a mod package you can roll back at any time. The original files are never touched until you say yes.
+Udify turns a modding intent into a reviewable patch. It reads the game, finds the right content, explains every changed line, waits for approval, validates the result, and packages a rollback. Your original files stay untouched until you approve the change.
+
+**Current scope:** the end-to-end loop currently supports `miu2d` engine games. More engines are on the roadmap.
 
 ## Why Udify?
 
