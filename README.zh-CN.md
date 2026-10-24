@@ -2,9 +2,11 @@
 
 # Udify
 
-### 用一句话，魔改任何游戏。
+### 说出想改什么，批准补丁再让它碰你的文件。
 
 **意图驱动的游戏魔改引擎：输入自然语言，输出可验证、可回滚、每一步都有证据的补丁。**
+
+**当前范围：** 目前端到端闭环支持 `miu2d` 引擎游戏；更多引擎在[路线图](#路线图)中。
 
 [![CI](https://github.com/tim0n1994/udify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tim0n1994/udify/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
