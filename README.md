@@ -11,7 +11,7 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/tests-396%20passing-brightgreen.svg)](tests/)
 [![UdifyBench](https://img.shields.io/badge/UdifyBench-10%20golden%20cases-8A2BE2.svg)](benchmarks/miu2d/)
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](#roadmap)
+[![Status](https://img.shields.io/badge/status-alpha-orange.svg)](#current-scope)
 
 **English** · [简体中文](README.zh-CN.md) · [Website](https://udify.games) · [Docs](docs/TECHNICAL-DOCUMENTATION-INDEX.md) · [Contact](mailto:hi@udify.games)
 
@@ -25,7 +25,18 @@ udify --game-root ./my-game mod "Make the boss harder, but keep the map reachabl
 
 Udify turns a modding intent into a reviewable patch. It reads the game, finds the right content, explains every changed line, waits for approval, validates the result, and packages a rollback. Your original files stay untouched until you approve the change.
 
-**Current scope:** the end-to-end loop currently supports `miu2d` engine games. More engines are on the roadmap.
+**Current scope:** this is a public technical preview. The end-to-end loop currently supports `miu2d` engine games; more engines are on the roadmap.
+
+## Technical preview
+
+The first public preview is intentionally narrow:
+
+- The supported end-to-end path is the `miu2d` engine.
+- The Python package is distributed as a GitHub Release asset; the web workbench remains a source checkout.
+- Every proposed change is previewed before apply, and the package includes validation and rollback paths.
+- RPG Maker, Godot, Unity, Unreal, PyPI publication, and production hosting are outside this preview.
+
+Install the preview wheel from the [latest release](https://github.com/tim0n1994/udify/releases), then follow the [five-minute path](#what-you-can-see-in-5-minutes).
 
 ## Why Udify?
 
