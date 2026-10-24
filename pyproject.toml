@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "udify"
-version = "0.1.0"
-description = "Intent-driven automated content transformation platform"
+version = "0.1.0a1"
+description = "Intent-driven game modding: generate verified, reversible patches from plain-language requests"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.12"
@@ -14,7 +14,7 @@ authors = [
 ]
 keywords = ["ai", "modding", "content", "diff", "patch", "mcts", "llm"]
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
