@@ -6,14 +6,14 @@
 
 **意图驱动的游戏魔改引擎：输入自然语言，输出可验证、可回滚、每一步都有证据的补丁。**
 
-**当前范围：** 目前端到端闭环支持 `miu2d` 引擎游戏；更多引擎在[路线图](#路线图)中。
+**当前范围：** 这是一个公开技术预览。目前端到端闭环支持 `miu2d` 引擎游戏；更多引擎在[路线图](#路线图)中。
 
 [![CI](https://github.com/tim0n1994/udify/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tim0n1994/udify/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/tests-396%20passing-brightgreen.svg)](tests/)
 [![UdifyBench](https://img.shields.io/badge/UdifyBench-10%20golden%20cases-8A2BE2.svg)](benchmarks/miu2d/)
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)](#路线图)
+[![Status](https://img.shields.io/badge/status-alpha-orange.svg)](#当前范围)
 
 [English](README.md) · **简体中文** · [官网](https://udify.games) · [文档](docs/TECHNICAL-DOCUMENTATION-INDEX.md) · [联系我们](mailto:hi@udify.games)
 
@@ -26,6 +26,17 @@ udify --game-root ./my-game mod "让Boss更难，但保持地图可达"
 ```
 
 Udify 会读懂游戏、找到 Boss、规划修改，把**每一行改动及其理由**摆在你面前，等你批准后再做验证，最后交给你一个随时可以回滚的 Mod 包。在你点头之前，原始文件一个字节都不会被改动。
+
+## 公开技术预览
+
+第一版公开预览故意保持窄范围：
+
+- 当前完整闭环只支持 `miu2d` 引擎。
+- Python 包通过 GitHub Release 附件分发；Web 工作台仍需从源码启动。
+- 所有改动都先预览再应用，交付物包含验证和回滚路径。
+- RPG Maker、Godot、Unity、Unreal、PyPI 发布和生产托管不属于本次预览范围。
+
+请从[最新 Release](https://github.com/tim0n1994/udify/releases)下载 wheel，再按[五分钟体验路径](#五分钟体验)运行。
 
 ## 为什么是 Udify？
 
