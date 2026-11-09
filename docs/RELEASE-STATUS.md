@@ -11,7 +11,7 @@ Release identity:
 ## Verified before release
 
 - Local Python 3.14 validation: Ruff check, Ruff format check, blocking mypy, 396 tests, 64.05% coverage, and sdist/wheel build.
-- GitHub Actions validation: Python 3.12 and 3.13 jobs passed in [CI run 40042818412](https://github.com/tim0n1994/udify/actions/runs/40042818412).
+- GitHub Actions validation: Python 3.12 and 3.13 jobs passed in [historical CI archived privately; current workflow](https://github.com/tim0n1994/udify/actions/workflows/ci.yml).
 - The release workflow builds the same sdist and wheel shape and runs `twine check` before creating the GitHub Release.
 - License file is present and the package metadata declares MIT.
 - The README and Chinese entry point describe the same scope and the same release boundary.
